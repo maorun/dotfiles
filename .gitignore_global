@@ -1,0 +1,12 @@
+*~
+.DS_Store
+.idea
+.vscode
+.not-commit
+.vscode
+.not-commit
+.vimrc_project
+Session.vim
+*.swp
+tags
+.tmux.conf
