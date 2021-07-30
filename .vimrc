@@ -3,9 +3,11 @@ nnoremap gx yiW:!open <cWORD><CR><CR>
 
 inoremap jk <Esc>
 
+" Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
-:source .vimrc_project
+    :source .vimrc_project
 endif
+" }}}
 
 " Session-Handling {{{
 function LoadSession()
@@ -14,9 +16,9 @@ if filereadable(expand("Session.vim"))
 endif
 endfunction
 
-nnoremap <leader>sessl :call LoadSession()<cr>
+nnoremap <silent> <leader>s :call LoadSession()<cr>:echo "Session loaded"<cr>
 nnoremap <leader>sesss :Obsession<cr>
-nnoremap <leader>sessd :Obsessioness<cr>
+nnoremap <leader>sessd :Obsession!<cr>
 " }}}
 
 syntax enable
@@ -43,6 +45,7 @@ let g:netrw_liststyle=3		" tree-view
 :set ruler
 :set cul
 :set splitright
+:set splitbelow
 
 " searching
 :set hls
@@ -56,8 +59,8 @@ nnoremap <silent> <BS> :nohlsearch<cr>
 :hi ColorColumn ctermbg=green
 :call matchadd('ColorColumn', '\%81v', 100)
 
-":nnoremap <leader>c :50vs|view ~/.vim/cheatsheet.vim<CR><C-W>w
-nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>
+nnoremap <leader>chea :50vs ~/.vim/cheatsheet.vim<cr><C-W>w
+nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
 :nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 
 noremap <leader>te :tabfind<Space>**/
@@ -77,16 +80,17 @@ set shiftwidth=4
 set expandtab
 
 command! GW :wa | :G add . | :G commit -m "wip" | :G push
-command! GA :G add . | :G commit --amend
-command! GR :G rebase origin/master
 command! GP :G push --force
+command! GA :G add . | :G commit --amend
+command! GAP :GA | :GP
+command! GR :G rebase origin/master
 command! GL :G log --invert-grep --grep Automated --grep "Phoenix" --oneline --decorate
 command! -nargs=+ GN :G checkout origin/master | :G switch -c <q-args>
 
 let g:hardtime_default_on = 1
 let g:list_of_disabled_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-
-" Plugins  {{{
+" 
+" Plugins {{{
 " vim plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
 silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -129,6 +133,7 @@ Plug 'tpope/vim-obsession'
 "Plug 'phpactor/phpactor'
 " git plugins
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 "Plug 'mhinz/vim-signify'
 " outline
 "Plug 'majutsushi/tagbar'
@@ -142,6 +147,14 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'}
 call plug#end()
 " }}}
+nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
+
+" Git {{{
+if has("autocmd")
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+endif
+set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
+" }}}
 
 let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIKglU3BicSkfm55l5o5AmuIQ8'
 
@@ -150,9 +163,9 @@ noremap <silent><expr> <TAB>
 \ <SID>check_back_space() ? "\<TAB>" :
 \ coc#refresh()
 if has('nvim')
-inoremap <silent><expr> <c-space> coc#refresh()
+    inoremap <silent><expr> <c-space> coc#refresh()
 else
-inoremap <silent><expr> <c-@> coc#refresh()
+    inoremap <silent><expr> <c-@> coc#refresh()
 endif
 highlight CocFloating ctermbg=black
 
