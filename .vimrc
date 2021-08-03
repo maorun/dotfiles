@@ -1,7 +1,9 @@
+noremap <C-;> :normal :
 " Bug in Vim 8 => https://github.com/vim/vim/issues/4738
 nnoremap gx yiW:!open <cWORD><CR><CR>
 
 inoremap jk <Esc>
+inoremap <Esc> <Nop>
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
@@ -116,6 +118,7 @@ Plug 'takac/vim-hardtime'
 "Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-surround'
 " project-management
 "Plug 'amiorin/vim-project'
 "Plug 'mhinz/vim-startify'
