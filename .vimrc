@@ -73,6 +73,7 @@ noremap <leader>vs :vs<Space>**/
 :noremap <leader>p :cp<Enter>
 :noremap <leader>w :w<Enter>
 :noremap <leader>wa :wa<Enter>
+nnoremap zff $zf%
 
 noremap <leader>h :tab h<Space>
 
@@ -85,9 +86,9 @@ command! GW :wa | :G add . | :G commit -m "wip" | :G push
 command! GP :G push --force
 command! GA :G add . | :G commit --amend
 command! GAP :GA | :GP
-command! GR :G rebase origin/master
+command! GR :G fetch | :G rebase origin/master
 command! GL :G log --invert-grep --grep Automated --grep "Phoenix" --oneline --decorate
-command! -nargs=+ GN :G checkout origin/master | :G switch -c <q-args>
+command! -nargs=+ GN :G fetch | :G checkout origin/master | :G switch -c <q-args>
 
 let g:hardtime_default_on = 1
 let g:list_of_disabled_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
