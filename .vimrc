@@ -1,9 +1,10 @@
-noremap <C-;> :normal :
 " Bug in Vim 8 => https://github.com/vim/vim/issues/4738
 nnoremap gx yiW:!open <cWORD><CR><CR>
 
+cnoremap ww w<cr>
 inoremap jk <Esc>
-inoremap <Esc> <Nop>
+" with Esc on Nop : no arrow-keys in insert-mode (autocomplete)
+" inoremap <Esc> <Nop> 
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
@@ -41,6 +42,10 @@ let g:netrw_liststyle=3		" tree-view
 " }}}
 
 :set foldmethod=marker
+autocmd BufRead *.php :set foldmethod=indent
+autocmd BufRead *.php :set nofoldenable
+
+set number
 :set relativenumber
 :set showcmd
 :set title
@@ -48,6 +53,9 @@ let g:netrw_liststyle=3		" tree-view
 :set cul
 :set splitright
 :set splitbelow
+
+set list
+set listchars=tab:!·,trail:·
 
 " searching
 :set hls
@@ -62,7 +70,6 @@ nnoremap <silent> <BS> :nohlsearch<cr>
 :call matchadd('ColorColumn', '\%81v', 100)
 
 nnoremap <leader>chea :50vs ~/.vim/cheatsheet.vim<cr><C-W>w
-nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
 :nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 
 noremap <leader>te :tabfind<Space>**/
@@ -74,20 +81,22 @@ noremap <leader>vs :vs<Space>**/
 :noremap <leader>w :w<Enter>
 :noremap <leader>wa :wa<Enter>
 nnoremap zff $zf%
-
+nnoremap <leader>fj :%!jq .<Enter>
 noremap <leader>h :tab h<Space>
 
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+set autoindent
+filetype plugin indent on
 
 command! GW :wa | :G add . | :G commit -m "wip" | :G push
 command! GP :G push --force
 command! GA :G add . | :G commit --amend
 command! GAP :GA | :GP
 command! GR :G fetch | :G rebase origin/master
-command! GL :G log --invert-grep --grep Automated --grep "Phoenix" --oneline --decorate
+command! GL :GlLog --invert-grep --grep Automated --grep "Phoenix"
 command! -nargs=+ GN :G fetch | :G checkout origin/master | :G switch -c <q-args>
 
 let g:hardtime_default_on = 1
@@ -137,7 +146,8 @@ Plug 'tpope/vim-surround'
 "Plug 'phpactor/phpactor'
 " git plugins
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-rhubarb' " enable :GBrowse to github
+" Plug 'tpope/vim-dadbod' " Database
 "Plug 'mhinz/vim-signify'
 " outline
 "Plug 'majutsushi/tagbar'
@@ -155,10 +165,19 @@ nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
 
 " Git {{{
 if has("autocmd")
+augroup fugitive
     autocmd BufReadPost fugitive://* set bufhidden=delete
+augroup END
 endif
 set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
 " }}}
+
+nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
+augroup vimrc
+    au!
+    au! BufWritePost $MYVIMRC silent source $MYVIMRC | redraw | echo $MYVIMRC . " reloaded"
+    au! BufWritePost .vimrc_project source $MYVIMRC | redraw | echo $MYVIMRC . ' reloaded'
+augroup END
 
 let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIKglU3BicSkfm55l5o5AmuIQ8'
 
@@ -172,4 +191,4 @@ else
     inoremap <silent><expr> <c-@> coc#refresh()
 endif
 highlight CocFloating ctermbg=black
-
+nohlsearch
