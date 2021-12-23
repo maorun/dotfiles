@@ -101,6 +101,8 @@ augroup ProjectDrawer
     autocmd VimEnter * wincmd l
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
+let NERDTreeShowHidden=1
+
 let g:netrw_winsize = 25
 let g:netrw_keepdir=0
 let g:netrw_banner=0  		" 0 = disable top-banner
@@ -305,7 +307,7 @@ endif
 command! GW :wa | :G add -A | :G commit -m "wip" | :GP
 command! GP :execute ":G push origin " . fugitive#head() | :execute ":G branch --set-upstream-to=origin/" . fugitive#head() . " " . fugitive#head()
 command! GPF :execute ":G push --force origin " . fugitive#head()
-command! GA :G add -A | :G commit --amend
+command! GA :G add -A | :G commit --amend --no-edit
 command! GAP :execute "GA" | :GPF
 command! GR :G fetch | :G rebase origin/master
 command! GL :GlLog --invert-grep --grep Automated --grep "Phoenix"

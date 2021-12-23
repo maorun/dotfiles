@@ -76,7 +76,6 @@ plugins=(
   brew
   thefuck
   autojump
-#  docker-compose
 #  helm
 #  nvm
   zsh-navigation-tools
@@ -117,5 +116,3 @@ source $ZSH/oh-my-zsh.sh
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
 export GPG_TTY=$(tty)
-
-if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi

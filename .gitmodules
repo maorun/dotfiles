@@ -1,4 +1,7 @@
-[submodule "axelspringer"]
-    path = axelspringer
-    url = git@github.com:maorun/dotfiles-axelspringer.git
+[submodule "personal"]
+	path = personal
+	url = git@github.com:maorun/dotfiles-personal.git
 
+[submodule "axelspringer"]
+	path = axelspringer
+	url = git@github.com:maorun/dotfiles-axelspringer.git
