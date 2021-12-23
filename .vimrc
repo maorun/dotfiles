@@ -8,18 +8,19 @@ nnoremap gx yiW:!open <cWORD><CR><CR>
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
-    :source .vimrc_project
+    autocmd VimEnter * source .vimrc_project
 endif
 " }}}
 
 " Session-Handling {{{
 function LoadSession()
     if filereadable(expand("Session.vim"))
-        :source Session.vim "from vim-obsession
+        source Session.vim "from vim-obsession
     endif
 endfunction
+" autocmd VimEnter * call LoadSession()
 
-nnoremap <silent> <leader>s :call LoadSession()<cr>:echo "Session loaded"<cr>
+nnoremap <silent> <leader>ss :call LoadSession()<cr>:echo "Session loaded"<cr>
 nnoremap <leader>sesss :Obsession<cr>
 nnoremap <leader>sessd :Obsession!<cr>
 " }}}
@@ -34,22 +35,74 @@ command! TunnelblickStop :call CallAppleScript("/Applications/Tunnelblick.app", 
 command! SpotifyToggle :call CallAppleScript("Spotify", "playpause")
 "}}}
 
+" got to indention level {{{
+function! s:indent_len(str)
+    return type(a:str) == 1 ? len(matchstr(a:str, '^\s*')) : 0
+endfunction
+function! s:go_indent(times, dir)
+    for _ in range(a:times)
+        let l = line('.')
+        let x = line('$')
+        let i = s:indent_len(getline(l))
+        let e = empty(getline(l))
+
+        while l >= 1 && l <= x
+            let line = getline(l + a:dir)
+            let l += a:dir
+            if s:indent_len(line) != i || empty(line) != e
+                break
+            endif
+        endwhile
+        let l = min([max([1, l]), x])
+        execute 'normal! '. l .'G^'
+    endfor
+endfunction "}}}
+nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
+nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
+
 function StartUp ()
     :TunnelblickStart
-    :call CallAppleScript("Spotify", "play")
+    let choice = confirm("Spotify ?", "&Yes\n&No\n", 2)
+    if choice == 1
+        :call CallAppleScript("Spotify", "play")
+    endif
+
     :call CallAppleScript('Microsoft Outlook', 'activate')
     :call CallAppleScript('Microsoft Teams', 'activate')
 endfunction
 command! StartUp :call StartUp()
 
+function! ShowCmdInNewBuffer (cmd) abort "{{{
+    let res = system(a:cmd)
+    :call NewBuffer()
+    silent put=res
+    :normal gg
+    silent :normal dd
+endfunction "}}}
+
 " finding files
 set path+=**
+set wildmode=longest,list,full
 set wildmenu
+set wildignore+=**/node_modules/*,**/vendor/*
 
 " CTAGS
-command! MakeTags silent execute "!ctags -R --exclude=node_modules --exclude=vendor . &" | redraw! | echom "CTAGS generated"
+command! MakeTags execute "!ctags -R --exclude=node_modules --exclude=vendor . &" | redraw! | echom "CTAGS generated"
+augroup CTags
+    autocmd!
+    autocmd BufWritePost * silent execute "!ctags -a %"
+augroup END
 
 " File Browsing {{{
+augroup ProjectDrawer
+    autocmd!
+    " autocmd VimEnter * :Vexplore
+    autocmd VimEnter * :NERDTree
+    autocmd VimEnter * wincmd l
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup END
+let g:netrw_winsize = 25
+let g:netrw_keepdir=0
 let g:netrw_banner=0  		" 0 = disable top-banner
 let g:netrw_browse_split=4 	" open in prior window
 let g:netrw_altv=1		" open splits to the right
@@ -58,9 +111,25 @@ let g:netrw_liststyle=3		" tree-view
 
 set nofoldenable
 set foldmethod=indent
-autocmd BufRead .vimrc* :set foldmethod=marker
-autocmd BufRead .vimrc* :set foldenable
-autocmd BufRead *.json :set foldmethod=syntax
+augroup VimRcRead
+    autocmd!
+    autocmd BufRead .vimrc* setlocal foldmethod=marker
+    autocmd BufRead .vimrc* setlocal foldenable
+    autocmd BufRead *.json setlocal foldmethod=syntax
+augroup END
+
+autocmd BufRead *.txt setlocal nospell spelllang=de,en foldmethod=marker foldenable
+
+" z= = suggest word
+" zg = add word under cursor to good word in 'spellfile'
+" zug = undo zg
+" ]s = next misspelled word
+
+" vim-dadbod fold result
+autocmd FileType dbout setlocal nofoldenable
+
+autocmd FileType typescriptreact setlocal formatprg=prettier\ --parser\ typescript
+autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 
 "set clipboard^=unnamed,unnamedplus
 syntax enable
@@ -84,6 +153,7 @@ set complete+=kspell
 " searching
 :set hls
 :set incsearch
+set ignorecase
 set smartcase
 nnoremap <silent> <BS> :nohlsearch<cr>
 
@@ -95,28 +165,30 @@ nnoremap <silent> <BS> :nohlsearch<cr>
 
 nnoremap go o<Esc>
 nnoremap gO O<Esc>
-nnoremap ;; :
-nnoremap ;w mw:w<cr>:e<cr>`w
+nnoremap <leader>w mw:w<cr>:e<cr>`wzv
+inoremap ;w <Esc>mw:w<cr>:e<cr>`wzva
 nnoremap <C-E> <C-B>
-cnoremap ww w<cr>
 inoremap jk <Esc>
+vnoremap jk <Esc>
+cnoremap jk <Esc>
 
-nnoremap <leader>chea :50vs ~/.vim/cheatsheet.vim<cr><C-W>w
 :nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 
-noremap <leader>te :tabfind<Space>**/
-noremap ]te :tabfind<Space>**/
-noremap <leader>vs :vs<Space>**/
-
-:noremap <Leader>n :cn<Enter>
-:noremap <leader>p :cp<Enter>
-:noremap <leader>w :w<Enter>
-:noremap <leader>wa :wa<Enter>
+:noremap <Leader>n :cn<Enter>zzzv
+:noremap <leader>b :cp<Enter>zzzv
+" format json
 nnoremap <leader>fj :%!jq .<Enter>
-noremap <leader>h :tab h<Space>
+" grep word under cursor
 nnoremap <leader>] :silent execute "grep! -R " . shellescape(expand("<cword>")) . " . "<cr>:copen<cr><C-L>
 nnoremap n nzzzv
 nnoremap N Nzzzv
+" execute line under cursor (shellescape does not work)
+nnoremap <leader>ex :execute '!' .(expand(getline('.')))<cr>
+
+" yank and paste to/from system-clipboard (Mac)
+vnoremap ç "+y
+nnoremap √ "+p
+inoremap √ <Esc>"+pa
 
 " moving lines
 vnoremap J :m '>+1<cr>gv=gv
@@ -127,10 +199,10 @@ nnoremap <leader>k mk:m .-2<cr>==`k
 nnoremap <leader>j mk:m .+1<cr>==`k
 
 " undo break-points
-inoremap , ,<C-g>u
-inoremap . .<C-g>u
-inoremap ! !<C-g>u
-inoremap ? ?<C-g>u
+" inoremap , ,<C-g>u
+" inoremap . .<C-g>u
+" inoremap ! !<C-g>u
+" inoremap ? ?<C-g>u
 
 set tabstop=4
 set softtabstop=4
@@ -147,7 +219,7 @@ endfunction
 command! Snip :tabnew | :call NewBuffer()
 command! BufferAllWipeout :%bd|e#
 
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
 let g:list_of_disabled_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 " 
 " Plugins {{{
@@ -164,8 +236,9 @@ Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
 Plug 'junegunn/vim-plug'
 " common
 "Plug 'junegunn/vim-peekaboo'
-"Plug 'junegunn/fzf'
-"Plug 'scrooloose/nerdtree'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree'
 "Plug 'ludovicchabant/vim-gutentags'
 
 " Vim HardTime
@@ -174,6 +247,7 @@ Plug 'takac/vim-hardtime'
 " Plug 'bfredl/nvim-miniyank'
 "Plug 'moll/vim-bbye'
 "Plug 'itchyny/lightline.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
@@ -181,7 +255,8 @@ Plug 'tpope/vim-surround'
 "Plug 'amiorin/vim-project'
 "Plug 'mhinz/vim-startify'
 " syntax
-"Plug 'StanAngeloff/php.vim'
+" Plug 'vim-scripts/phpfolding.vim'
+" Plug 'StanAngeloff/php.vim'
 "Plug 'stephpy/vim-php-cs-fixer'
 " autocomplete
 "Plug 'ncm2/ncm2'
@@ -193,11 +268,13 @@ Plug 'tpope/vim-surround'
 "Plug 'adoy/vim-php-refactoring-toolbox'
 "Plug 'phpactor/phpactor'
 " git plugins
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat' " repeat all plugins with .
+Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-rhubarb' " enable :GBrowse to github
 Plug 'tpope/vim-dadbod' " Database
 Plug 'kristijanhusak/vim-dadbod-ui' " Database-UI
 "Plug 'mhinz/vim-signify'
+Plug 'vim-scripts/ReplaceWithRegister' " replace with register - gr
 " outline
 "Plug 'majutsushi/tagbar'
 " debugger
@@ -208,6 +285,12 @@ Plug 'kristijanhusak/vim-dadbod-ui' " Database-UI
 "    \}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'}
+
+" graphql
+Plug 'jparise/vim-graphql'
+
+" typescript
+Plug 'leafgarland/typescript-vim'
 call plug#end()
 " }}}
 nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
@@ -218,16 +301,31 @@ augroup fugitive
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 endif
-set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
-command! GW :wa | :G add . | :G commit -m "wip" | :G push
-command! GP :execute ":G push origin " . fugitive#head()
+
+command! GW :wa | :G add -A | :G commit -m "wip" | :GP
+command! GP :execute ":G push origin " . fugitive#head() | :execute ":G branch --set-upstream-to=origin/" . fugitive#head() . " " . fugitive#head()
 command! GPF :execute ":G push --force origin " . fugitive#head()
-command! GA :G add . | :G commit --amend
-command! GAP :GA | :GPF
+command! GA :G add -A | :G commit --amend
+command! GAP :execute "GA" | :GPF
 command! GR :G fetch | :G rebase origin/master
 command! GL :GlLog --invert-grep --grep Automated --grep "Phoenix"
-command! -nargs=+ GN :G fetch | :G checkout origin/master | :G switch -c <q-args>
+command! -nargs=+ GN :silent execute ":G fetch | :G checkout origin/master | :G switch -c "<q-args>
 " }}}
+
+nnoremap <leader>gf :GFiles<cr>
+nnoremap <leader>gr :Rg<cr>
+
+set statusline=
+set statusline+=%<
+set statusline+=%f
+set statusline+=\ %h " help-buffer
+set statusline+=%m " modified-flag
+set statusline+=%r " read-onlyflag
+set statusline+=%{FugitiveStatusline()}
+set statusline+=%=
+set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
+set statusline+=\ %-14.(%l,%c%V%)\ %P
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
 augroup vimrc
@@ -238,6 +336,10 @@ augroup END
 
 let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIKglU3BicSkfm55l5o5AmuIQ8'
 
+" not waiting too long
+set updatetime=500
+
+"{{{ Coc-Configs
 noremap <silent><expr> <TAB>
 \ pumvisible() ? "\<C-n>" :
 \ <SID>check_back_space() ? "\<TAB>" :
@@ -248,7 +350,72 @@ else
     inoremap <silent><expr> <c-@> coc#refresh()
 endif
 highlight CocFloating ctermbg=black
+" let g:coc_start_at_startup = v:false
+set shortmess+=c
+
+"{{{ Coc Float scrolling
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+"}}}
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>qf <Plug>(coc-fix-current)
+nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>gs <Plug>(coc-references)
+nmap <leader>gi <Plug>(coc-implementation)
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+
+function! ShowDocIfNoDiagnostic()
+  if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
+    silent call CocActionAsync('doHover')
+  endif
+endfunction
+
+function! s:show_hover_doc()
+    call ShowDocIfNoDiagnostic()
+  " call timer_start(500, 'ShowDocIfNoDiagnostic')
+endfunction
+
+augroup Cursor
+    autocmd!
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+    autocmd CursorHoldI * :call <SID>show_hover_doc()
+    autocmd CursorHold * :call <SID>show_hover_doc()
+augroup END
+"}}}
+
+autocmd FileType typescriptreact setlocal signcolumn=yes
+autocmd FileType typescript setlocal signcolumn=yes
+
 nohlsearch
+
+"{{{ Template-Logik
+ab pubf public function
+ab privf private function
+ab protf protected function
+
+inoremap <leader>tt <Esc>/<++><cr>zzzvcf>
+function! GetTemplate (type)
+    :execute "r ~/.vim/templates/" . a:type .".tpl"
+    :normal kdd
+    let @/ = '<++>'
+    :normal nzzzvcf>
+endfunction
+command! TplClass :call GetTemplate('class')
+command! -nargs=1 Tpl :call GetTemplate(<q-args>)
+"}}}
 
 if exists("*PostVimRc")
     :call PostVimRc()
