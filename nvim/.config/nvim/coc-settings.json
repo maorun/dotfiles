@@ -1,0 +1,7 @@
+{
+    "tailwindCSS.headwind.defaultSortOrder": [],
+    "diagnostic.checkCurrentLine": true,
+    "diagnostic.floatConfig": { "border" : true, "maxWidth": 110},
+    "hover.floatConfig": {"border": true},
+    "coc.preferences.formatOnSaveFiletypes": ["typescript", "typescriptreact"]
+}
