@@ -293,6 +293,9 @@ Plug 'jparise/vim-graphql'
 
 " typescript
 Plug 'leafgarland/typescript-vim'
+if has('nvim')
+	Plug 'ThePrimeagen/vim-be-good'
+endif
 call plug#end()
 " }}}
 nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>

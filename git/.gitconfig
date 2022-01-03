@@ -10,3 +10,7 @@
 [commit]
     template = /Users/mdriemel/.gitmessage
     gpgsign = true
+[user]
+	name = Marco Driemel
+	email = marco.driemel@axelspringer.com
+	signingkey = D5F7A5B998553EE0

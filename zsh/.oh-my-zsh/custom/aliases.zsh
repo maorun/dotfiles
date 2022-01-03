@@ -4,3 +4,4 @@
 
  alias lls='ls -latr'
 
+alias nv='nvim'
