@@ -18,7 +18,7 @@ curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
 
 brew install stow
 brew install thefuck autojump watch htop # little helper
-brew install vim ctags tmux tmuxinator ripgrep # vim
+brew install fd nvim ctags tmux tmuxinator ripgrep # vim
 brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
 # music: youtube-dl mps-youtube epv
 
@@ -31,6 +31,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # add zsh-plugins
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+# change to zsh
+chsh -s /bin/zsh
 
 brew install gh
 gh completion -s zsh > ~/.oh-my-zsh/custom/github-completion.zsh

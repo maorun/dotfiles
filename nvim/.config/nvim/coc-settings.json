@@ -3,5 +3,44 @@
     "diagnostic.checkCurrentLine": true,
     "diagnostic.floatConfig": { "border" : true, "maxWidth": 110},
     "hover.floatConfig": {"border": true},
-    "coc.preferences.formatOnSaveFiletypes": ["typescript", "typescriptreact"]
+    "coc.preferences.formatOnSaveFiletypes": ["typescript", "typescriptreact"],
+    "languageserver": {
+        "tailwind-lsp": {
+            "command": "tailwindcss-language-server",
+            "args": ["--stdio"],
+
+            "filetypes": [
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact"
+            ],
+
+            "rootPatterns": [
+                "tailwind.config.js",
+                "tailwind.config.ts",
+                "postcss.config.js",
+                "postcss.config.ts",
+                "package.json",
+                "node_modules",
+                ".git"
+            ],
+            "settings": {
+                "tailwindCSS": {
+                    "validate": true,
+                    "lint": {
+                        "cssConflict": "warning",
+                        "invalidApply": "error",
+                        "invalidScreen": "error",
+                        "invalidVariant": "error",
+                        "invalidConfigPath": "error",
+                        "invalidTailwindDirective": "error",
+                        "recommendedVariantOrder": "warning"
+                    },
+                    "classAttributes": ["class", "className", "classList", "ngClass"],
+                    "experimental": {}
+                }
+            }
+        }
+    }
 }

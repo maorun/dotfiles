@@ -1,3 +1,85 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = {"lua","html","php","javascript","typescript","bash","make","markdown","regex","vim","yaml"},
+    syncinstall = true,
+    highlight = {
+        enable = true
+    },
+}
+EOF
+
+lua <<EOF
+local finders = require "telescope.finders"
+local pickers = require "telescope.pickers"
+local previewers = require "telescope.previewers"
+local conf = require("telescope.config").values
+local action_state = require("telescope.actions.state")
+
+local colors = function(opts)
+  opts = opts or { 
+    attach_mappings = function(propt_bugnr, map)
+        map("i", "<cr>", function()
+            print("SELECTED", vim.inspect(action_state.get_selected_entry()))
+        end)
+        return true
+    end
+  }
+  pickers.new(opts, {
+    prompt_title = "colors",
+    finder = finders.new_table {
+      results = {
+        { "red", "#ff0000" },
+        { "green", "#00ff00" },
+        { "blue", "#0000ff" },
+      },
+      entry_maker = function(entry)
+        return {
+          value = entry,
+          display = entry[1],
+          ordinal = entry[2],
+        }
+      end
+    },
+    sorter = conf.generic_sorter(opts)
+  }):find()
+end
+require('telescope.builtin').foobar = colors
+EOF
+" cwd = "~/dotfiles/",
+
+lua require('package-info').setup()
+lua << EOF
+    require("which-key").setup { }
+EOF
+
+augroup package.json
+    au!
+    au! BufRead package.json lua require('package-info').show({force = true})
+augroup END
+
+" gelguy/wilder.nvim
+call wilder#setup({'modes': [':', '/', '?']})
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#cmdline_pipeline({
+      \       'language': 'python',
+      \       'fuzzy': 1,
+      \     }),
+      \     wilder#python_search_pipeline({
+      \       'pattern': wilder#python_fuzzy_pattern(),
+      \       'sorter': wilder#python_difflib_sorter(),
+      \       'engine': 're',
+      \     }),
+      \   ),
+      \ ])
+call wilder#set_option('renderer', wilder#popupmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ 'separator': ' · ',
+      \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
+      \ 'right': [' ', wilder#wildmenu_index()],
+      \ }))
+

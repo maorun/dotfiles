@@ -5,3 +5,5 @@
  alias lls='ls -latr'
 
 alias nv='nvim'
+alias vi='nvim'
+alias vim='nvim'

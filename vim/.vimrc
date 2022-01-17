@@ -96,12 +96,13 @@ augroup END
 " File Browsing {{{
 augroup ProjectDrawer
     autocmd!
-    " autocmd VimEnter * :Vexplore
     autocmd VimEnter * :NERDTree
     autocmd VimEnter * wincmd l
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 let NERDTreeShowHidden=1
+nnoremap <leader>tf :NERDTreeFind<cr>
+nnoremap <leader>t :NERDTree<cr>
 
 let g:netrw_winsize = 25
 let g:netrw_keepdir=0
@@ -130,8 +131,8 @@ autocmd BufRead *.txt setlocal nospell spelllang=de,en foldmethod=marker foldena
 " vim-dadbod fold result
 autocmd FileType dbout setlocal nofoldenable
 
-autocmd FileType typescriptreact setlocal formatprg=prettier\ --parser\ typescript
-autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+" autocmd FileType typescriptreact setlocal formatprg=prettier\ --parser\ typescript
+" autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 
 "set clipboard^=unnamed,unnamedplus
 syntax enable
@@ -167,14 +168,14 @@ nnoremap <silent> <BS> :nohlsearch<cr>
 
 nnoremap go o<Esc>
 nnoremap gO O<Esc>
-nnoremap <leader>w mw:w<cr>:e<cr>`wzv
+nnoremap <leader>w mw:w<cr>:e<cr>`wzvzz
 inoremap ;w <Esc>mw:w<cr>:e<cr>`wzva
 nnoremap <C-E> <C-B>
 inoremap jk <Esc>
 vnoremap jk <Esc>
 cnoremap jk <Esc>
 
-:nnoremap <leader>ev :tabnew $MYVIMRC<cr>
+:nnoremap <leader>ev :tabnew ~/.vimrc<cr><C-W>v:e ~/.config/nvim/init.vim<cr>3gg0w<c-w>w
 
 :noremap <Leader>n :cn<Enter>zzzv
 :noremap <leader>b :cp<Enter>zzzv
@@ -195,8 +196,8 @@ inoremap √ <Esc>"+pa
 " moving lines
 vnoremap J :m '>+1<cr>gv=gv
 vnoremap K :m '<-2<cr>gv=gv
-inoremap <C-j> <Esc>mk:m .+1<cr>==`ka
-inoremap <C-k> <Esc>mk:m .-2<cr>==`ka
+inoremap <C-S-j> <Esc>mk:m .+1<cr>==`ka
+inoremap <C-S-k> <Esc>mk:m .-2<cr>==`ka
 nnoremap <leader>k mk:m .-2<cr>==`k
 nnoremap <leader>j mk:m .+1<cr>==`k
 
@@ -236,11 +237,20 @@ call plug#begin('~/nvim/plugged')
 Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
 
 Plug 'junegunn/vim-plug'
+
+" File
+if has('nvim-0.6.0')
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+else
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
+endif
+Plug 'preservim/nerdtree'
+
 " common
 "Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdtree'
 "Plug 'ludovicchabant/vim-gutentags'
 
 " Vim HardTime
@@ -287,6 +297,7 @@ Plug 'vim-scripts/ReplaceWithRegister' " replace with register - gr
 "    \}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'}
+Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
 
 " graphql
 Plug 'jparise/vim-graphql'
@@ -294,11 +305,40 @@ Plug 'jparise/vim-graphql'
 " typescript
 Plug 'leafgarland/typescript-vim'
 if has('nvim')
-	Plug 'ThePrimeagen/vim-be-good'
+    " Training
+    Plug 'tjdevries/train.nvim'
+    Plug 'ThePrimeagen/vim-be-good'
+    " Vim Script
+    Plug 'folke/which-key.nvim'
 endif
+
+" package.json version
+Plug 'MunifTanjim/nui.nvim'
+Plug 'vuki656/package-info.nvim'
+
+" wildermenu for :e and /
+if has('nvim')
+    function! UpdateRemotePlugins(...)
+        " Needed to refresh runtime files
+        let &rtp=&rtp
+        UpdateRemotePlugins
+    endfunction
+
+    Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+else
+    Plug 'gelguy/wilder.nvim'
+
+    " To use Python remote plugin features in Vim, can be skipped
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+" css-color
+Plug 'ap/vim-css-color'
 call plug#end()
 " }}}
 nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
+
 
 " Git {{{
 if has("autocmd")
@@ -317,11 +357,21 @@ command! GL :GlLog --invert-grep --grep Automated --grep "Phoenix"
 command! -nargs=+ GN :silent execute ":G fetch | :G checkout origin/master | :G switch -c "<q-args>
 " }}}
 
-nnoremap <leader>gf :GFiles<cr>
-nnoremap <leader>gr :Rg<cr>
+" {{{ FZF
+" nnoremap <leader>gf :GFiles<cr>
+" nnoremap <leader>gr :Rg<cr>
+" }}}
+
+" {{{ Telescope
+nnoremap <leader>gg <cmd>lua require'telescope.builtin'.git_files{}<cr>
+nnoremap <leader>gb <cmd>lua require'telescope.builtin'.git_branches{}<cr>
+nnoremap <leader>gf <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>gr <cmd>lua require('telescope.builtin').live_grep()<cr> 
+" }}}
 
 set statusline=
 set statusline+=%<
+set statusline+=%=
 set statusline+=%f
 set statusline+=\ %h " help-buffer
 set statusline+=%m " modified-flag
@@ -337,6 +387,7 @@ augroup vimrc
     au!
     au! BufWritePost $MYVIMRC silent source $MYVIMRC | redraw! | echo $MYVIMRC . " reloaded"
     au! BufWritePost .vimrc_project source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
+    au! BufWritePost .vimrc source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
 augroup END
 
 let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIKglU3BicSkfm55l5o5AmuIQ8'
@@ -345,15 +396,23 @@ let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIK
 set updatetime=500
 
 "{{{ Coc-Configs
-noremap <silent><expr> <TAB>
-\ pumvisible() ? "\<C-n>" :
-\ <SID>check_back_space() ? "\<TAB>" :
-\ coc#refresh()
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 if has('nvim')
     inoremap <silent><expr> <c-space> coc#refresh()
 else
     inoremap <silent><expr> <c-@> coc#refresh()
 endif
+
 highlight CocFloating ctermbg=black
 " let g:coc_start_at_startup = v:false
 set shortmess+=c
@@ -382,15 +441,15 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 
-function! ShowDocIfNoDiagnostic()
+function! ShowDocIfNoDiagnostic(args)
   if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
     silent call CocActionAsync('doHover')
   endif
 endfunction
 
 function! s:show_hover_doc()
-    call ShowDocIfNoDiagnostic()
-  " call timer_start(500, 'ShowDocIfNoDiagnostic')
+    " call ShowDocIfNoDiagnostic()
+    call timer_start(500, 'ShowDocIfNoDiagnostic')
 endfunction
 
 augroup Cursor
@@ -404,12 +463,27 @@ augroup END
 autocmd FileType typescriptreact setlocal signcolumn=yes
 autocmd FileType typescript setlocal signcolumn=yes
 
+let g:w1 = @%
+let g:w2 = @%
+let g:w3 = @%
+let g:w4 = @%
+noremap <leader>a1 :let g:w1 = @%<cr>
+noremap <leader>a2 :let g:w2 = @%<cr>:echo g:w2<cr>
+noremap <leader>a3 :let g:w3 = @%<cr>:echo g:w3<cr>
+noremap <leader>a4 :let g:w4 = @%<cr>:echo g:w4<cr>
+function! OpenFileBasedOnGlobal(file)
+    if (a:file != '')
+        :execute "buffer ".a:file
+    endif
+endfunction
+noremap ¡ :call OpenFileBasedOnGlobal(g:w1)<cr>
+noremap ™ :call OpenFileBasedOnGlobal(g:w2)<cr>
+noremap £ :call OpenFileBasedOnGlobal(g:w3)<cr>
+noremap ¢ :call OpenFileBasedOnGlobal(g:w4)<cr>
+
 nohlsearch
 
 "{{{ Template-Logik
-ab pubf public function
-ab privf private function
-ab protf protected function
 
 inoremap <leader>tt <Esc>/<++><cr>zzzvcf>
 function! GetTemplate (type)
@@ -425,3 +499,6 @@ command! -nargs=1 Tpl :call GetTemplate(<q-args>)
 if exists("*PostVimRc")
     :call PostVimRc()
 endif
+" <silent> :CocRestart
+
+source ~/.vim/abbreviate.vim
