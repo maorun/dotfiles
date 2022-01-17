@@ -12,7 +12,6 @@ set -e
 
 brew install cask # now you can install applications such as phpstorm
 brew install alfred iterm2 sourcetree tunnelblick # here are the applications to install
-#todo: add alfred-licence-code
 
 curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
 
