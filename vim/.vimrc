@@ -310,6 +310,8 @@ if has('nvim')
     Plug 'ThePrimeagen/vim-be-good'
     " Vim Script
     Plug 'folke/which-key.nvim'
+    " google keep
+    Plug 'stevearc/gkeep.nvim', { 'do': ':UpdateRemotePlugins' }
 endif
 
 " package.json version
@@ -485,7 +487,8 @@ nohlsearch
 
 "{{{ Template-Logik
 
-inoremap <leader>tt <Esc>/<++><cr>zzzvcf>
+inoremap <> <Esc>/<++><cr>zzzvcf>
+
 function! GetTemplate (type)
     :execute "r ~/.vim/templates/" . a:type .".tpl"
     :normal kdd

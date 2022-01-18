@@ -5,7 +5,7 @@ set -e
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # xcode-command-line-tool
-# https://developer.apple.com/download/more/
+open 'https://developer.apple.com/download/all/?q=command%20line%20tools'
 
 # ssh-key-gen => in github eintragen
 # ssh-add

@@ -48,8 +48,23 @@ local colors = function(opts)
   }):find()
 end
 require('telescope.builtin').foobar = colors
+vim.api.nvim_set_keymap('n', '<leader>of', ":lua require('telescope.builtin').foobar()<cr>", {noremap = true})
 EOF
-" cwd = "~/dotfiles/",
+lua <<EOF
+require("telescope").setup({
+  -- You can optionally configure the search method for each of the pickers.
+  -- Below are the default values.
+  extensions = {
+    gkeep = {
+      find_method = "all_text",
+      link_method = "title",
+    },
+  },
+})
+-- Load the extension
+require('telescope').load_extension('gkeep')
+vim.api.nvim_set_keymap('n', '<leader>tg', ":Telescope gkeep<cr>", {noremap = true})
+EOF
 
 lua require('package-info').setup()
 lua << EOF
