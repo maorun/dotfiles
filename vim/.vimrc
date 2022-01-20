@@ -8,7 +8,7 @@ nnoremap gx yiW:!open <cWORD><CR><CR>
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
-    autocmd VimEnter * source .vimrc_project
+    source .vimrc_project
 endif
 " }}}
 
@@ -168,14 +168,14 @@ nnoremap <silent> <BS> :nohlsearch<cr>
 
 nnoremap go o<Esc>
 nnoremap gO O<Esc>
-nnoremap <leader>w mw:w<cr>:e<cr>`wzvzz
-inoremap ;w <Esc>mw:w<cr>:e<cr>`wzva
+nnoremap <leader>w :w<cr>:e<cr>zvzz
+inoremap ;w <Esc>:w<cr>:e<cr>zva
 nnoremap <C-E> <C-B>
 inoremap jk <Esc>
 vnoremap jk <Esc>
 cnoremap jk <Esc>
 
-:nnoremap <leader>ev :tabnew ~/.vimrc<cr><C-W>v:e ~/.config/nvim/init.vim<cr>3gg0w<c-w>w
+:nnoremap <leader>ev :tabnew ~/dotfiles/vim/.vimrc<cr><C-W>v:e ~/dotfiles/nvim/.config/nvim/init.vim<cr>3gg0w<c-w>w
 
 :noremap <Leader>n :cn<Enter>zzzv
 :noremap <leader>b :cp<Enter>zzzv
@@ -298,10 +298,10 @@ Plug 'vim-scripts/ReplaceWithRegister' " replace with register - gr
 "    \       "/mySuperProject": "/home/mySuperUser/workspace/mySuperProject"
 "    \}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'}
-Plug 'neoclide/coc-html', {'do': 'npm install'}
+" Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'} " only with node 16.X
+" Plug 'neoclide/coc-html', {'do': 'npm install'} " only with 12.22.9
 " Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
-" CocInstall coc-html-css-support coc-tsserver coc-json
+" CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier
 " Plug 'neoclide/coc-tabnine'
 " Plug 'neoclide/coc-html'
 "
@@ -363,7 +363,7 @@ augroup fugitive
 augroup END
 endif
 
-command! GW :wa | :G add -A | :G commit -m "wip" | :GP
+command! GW :wa | :G add -A | :G commit -m "wip"
 command! GP :execute ":G push origin " . fugitive#head() | :execute ":G branch --set-upstream-to=origin/" . fugitive#head() . " " . fugitive#head()
 command! GPF :execute ":G push --force origin " . fugitive#head()
 command! GA :G add -A | :G commit --amend --no-edit
@@ -371,6 +371,7 @@ command! GAP :execute "GA" | :GPF
 command! GR :G fetch | :G rebase origin/master
 command! GL :GlLog --invert-grep --grep Automated --grep "Phoenix"
 command! -nargs=+ GN :silent execute ":G fetch | :G checkout origin/master | :G switch -c "<q-args>
+command! GF :execute ":Flogsplit -all -date=short" | :execute "/HEAD -> " . fugitive#head() | :nohlsearch
 " }}}
 
 " {{{ FZF
@@ -394,18 +395,23 @@ set statusline+=%m " modified-flag
 set statusline+=%r " read-onlyflag
 set statusline+=%{FugitiveStatusline()}
 set statusline+=%=
-set statusline+=CodeStatsXp:\ %{CodeStatsXp()}\ 
+set statusline+=%{CodeStatsXp()}\ 
 set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
 set statusline+=\ %-14.(%l,%c%V%)\ %P
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
+nnoremap <silent> <leader>sv :w<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
+function! ReloadVimRc()
+    silent source $MYVIMRC
+    redraw!
+    echo $MYVIMRC . " reloaded"
+endfunction
 augroup vimrc
     au!
-    au! BufWritePost $MYVIMRC silent source $MYVIMRC | redraw! | echo $MYVIMRC . " reloaded"
-    au! BufWritePost .vimrc_project source .vimrc_project | source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
-    au! BufWritePost .vimrc source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
-    au! BufWritePost ~/.vimrc_personal.vim source ~/.vimrc_personal.vim | redraw! | echo $MYVIMRC . ' reloaded'
+    au! BufWritePost $MYVIMRC call ReloadVimRc()
+    au! BufWritePost .vimrc_project call ReloadVimRc()
+    au! BufWritePost .vimrc call ReloadVimRc()
+    au! BufWritePost ~/.vimrc_personal.vim call ReloadVimRc()
 augroup END
 
 " not waiting too long
@@ -503,7 +509,7 @@ nohlsearch
 
 "{{{ Template-Logik
 
-inoremap <+> <Esc>/<++><cr>zzzvcf>
+inoremap ++ <Esc>/<++><cr>zzzvcf>
 
 function! GetTemplate (type)
     :execute "r ~/.vim/templates/" . a:type .".tpl"
@@ -524,6 +530,6 @@ source ~/.vim/abbreviate.vim
 
 " Personal-vimrc {{{
 if filereadable(expand("~/.vimrc_personal.vim"))
-    autocmd VimEnter * source ~/.vimrc_personal.vim
+    source ~/.vimrc_personal.vim
 endif
 " }}}

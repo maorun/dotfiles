@@ -4,7 +4,7 @@ source ~/.vimrc
 
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = {"lua","html","php","javascript","tsx", "typescript","bash","make","markdown","regex","vim","yaml"},
+    ensure_installed = {"lua","html","php","javascript", "tsx", "typescript","bash","make","markdown","regex","vim","yaml"},
     syncinstall = true,
     highlight = {
         enable = true

@@ -1,6 +1,5 @@
 {
     "tailwindCSS.headwind.runOnSave": false,
-    "diagnostic.checkCurrentLine": true,
     "diagnostic.floatConfig": { "border" : true, "maxWidth": 110},
     "hover.floatConfig": {"border": true},
     "coc.preferences.formatOnSaveFiletypes": ["typescriptreact", "typescript"],
