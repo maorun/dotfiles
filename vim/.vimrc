@@ -243,6 +243,7 @@ if has('nvim-0.6.0')
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+    Plug 'nvim-treesitter/playground'
 else
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
@@ -282,6 +283,7 @@ Plug 'tpope/vim-surround'
 " git plugins
 Plug 'tpope/vim-repeat' " repeat all plugins with .
 Plug 'tpope/vim-fugitive' " Git
+Plug 'rbong/vim-flog' " Git-Tree
 Plug 'tpope/vim-rhubarb' " enable :GBrowse to github
 Plug 'tpope/vim-dadbod' " Database
 Plug 'kristijanhusak/vim-dadbod-ui' " Database-UI
@@ -297,8 +299,16 @@ Plug 'vim-scripts/ReplaceWithRegister' " replace with register - gr
 "    \}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'}
-Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
+Plug 'neoclide/coc-html', {'do': 'npm install'}
+" Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
+" CocInstall coc-html-css-support coc-tsserver coc-json
+" Plug 'neoclide/coc-tabnine'
+" Plug 'neoclide/coc-html'
+"
+" Plug 'jwalton512/vim-blade'
 
+" % matches also on if/while
+" Plug 'andymass/vim-matchup'
 " graphql
 Plug 'jparise/vim-graphql'
 
@@ -337,10 +347,14 @@ endif
 
 " css-color
 Plug 'ap/vim-css-color'
+
+" multi-select
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
+" Plug 'kana/vim-textobj-user'
 call plug#end()
 " }}}
 nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
-
 
 " Git {{{
 if has("autocmd")
@@ -380,6 +394,7 @@ set statusline+=%m " modified-flag
 set statusline+=%r " read-onlyflag
 set statusline+=%{FugitiveStatusline()}
 set statusline+=%=
+set statusline+=CodeStatsXp:\ %{CodeStatsXp()}\ 
 set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
 set statusline+=\ %-14.(%l,%c%V%)\ %P
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
@@ -388,11 +403,10 @@ nnoremap <silent> <leader>sv :wa<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<
 augroup vimrc
     au!
     au! BufWritePost $MYVIMRC silent source $MYVIMRC | redraw! | echo $MYVIMRC . " reloaded"
-    au! BufWritePost .vimrc_project source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
+    au! BufWritePost .vimrc_project source .vimrc_project | source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
     au! BufWritePost .vimrc source $MYVIMRC | redraw! | echo $MYVIMRC . ' reloaded'
+    au! BufWritePost ~/.vimrc_personal.vim source ~/.vimrc_personal.vim | redraw! | echo $MYVIMRC . ' reloaded'
 augroup END
-
-let g:codestats_api_key = 'SFMyNTY.YldGdmNuVnUjI01USTJNVGM9.KmdqdO96Ye-0Sgf0EQIKglU3BicSkfm55l5o5AmuIQ8'
 
 " not waiting too long
 set updatetime=500
@@ -433,14 +447,16 @@ endif
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>qf <Plug>(coc-fix-current)
+nmap <leader>cn <plug>(coc-diagnostic-next)
+nmap <leader>cp <Plug>(coc-diagnostic-prev)
+nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gs <Plug>(coc-references)
 nmap <leader>gi <Plug>(coc-implementation)
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>ff  <Plug>(coc-format-selected)
+nmap <leader>ff  <Plug>(coc-format-selected)
 
 
 function! ShowDocIfNoDiagnostic(args)
@@ -487,7 +503,7 @@ nohlsearch
 
 "{{{ Template-Logik
 
-inoremap <> <Esc>/<++><cr>zzzvcf>
+inoremap <+> <Esc>/<++><cr>zzzvcf>
 
 function! GetTemplate (type)
     :execute "r ~/.vim/templates/" . a:type .".tpl"
@@ -505,3 +521,9 @@ endif
 " <silent> :CocRestart
 
 source ~/.vim/abbreviate.vim
+
+" Personal-vimrc {{{
+if filereadable(expand("~/.vimrc_personal.vim"))
+    autocmd VimEnter * source ~/.vimrc_personal.vim
+endif
+" }}}

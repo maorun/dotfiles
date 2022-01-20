@@ -4,13 +4,39 @@ source ~/.vimrc
 
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = {"lua","html","php","javascript","typescript","bash","make","markdown","regex","vim","yaml"},
+    ensure_installed = {"lua","html","php","javascript","tsx", "typescript","bash","make","markdown","regex","vim","yaml"},
     syncinstall = true,
     highlight = {
         enable = true
     },
+    playground = {
+        enable = true,
+        disable = {},
+        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+        persist_queries = false, -- Whether the query persists across vim sessions
+        keybindings = {
+          toggle_query_editor = 'o',
+          toggle_hl_groups = 'i',
+          toggle_injected_languages = 't',
+          toggle_anonymous_nodes = 'a',
+          toggle_language_display = 'I',
+          focus_language = 'f',
+          unfocus_language = 'F',
+          update = 'R',
+          goto_node = '<cr>',
+          show_help = '?',
+        },
+      }
 }
 EOF
+
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   matchup = {
+"     enable = true,              -- mandatory, false will disable the whole extension
+"   },
+" }
+" EOF
 
 lua <<EOF
 local finders = require "telescope.finders"
@@ -50,6 +76,8 @@ end
 require('telescope.builtin').foobar = colors
 vim.api.nvim_set_keymap('n', '<leader>of', ":lua require('telescope.builtin').foobar()<cr>", {noremap = true})
 EOF
+
+
 lua <<EOF
 require("telescope").setup({
   -- You can optionally configure the search method for each of the pickers.
@@ -73,7 +101,7 @@ EOF
 
 augroup package.json
     au!
-    au! BufRead package.json lua require('package-info').show({force = true})
+    au! BufRead package.json lua require('package-info').show()
 augroup END
 
 " gelguy/wilder.nvim

@@ -1,9 +1,9 @@
 {
-    "tailwindCSS.headwind.defaultSortOrder": [],
+    "tailwindCSS.headwind.runOnSave": false,
     "diagnostic.checkCurrentLine": true,
     "diagnostic.floatConfig": { "border" : true, "maxWidth": 110},
     "hover.floatConfig": {"border": true},
-    "coc.preferences.formatOnSaveFiletypes": ["typescript", "typescriptreact"],
+    "coc.preferences.formatOnSaveFiletypes": ["typescriptreact", "typescript"],
     "languageserver": {
         "tailwind-lsp": {
             "command": "tailwindcss-language-server",
