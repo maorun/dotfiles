@@ -402,16 +402,16 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 nnoremap <silent> <leader>sv :w<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
 function! ReloadVimRc()
-    silent source $MYVIMRC
     redraw!
     echo $MYVIMRC . " reloaded"
 endfunction
 augroup vimrc
     au!
-    au! BufWritePost $MYVIMRC call ReloadVimRc()
-    au! BufWritePost .vimrc_project call ReloadVimRc()
-    au! BufWritePost .vimrc call ReloadVimRc()
-    au! BufWritePost ~/.vimrc_personal.vim call ReloadVimRc()
+    au! BufWritePost $MYVIMRC silent source $MYVIMRC | call ReloadVimRc()
+    au! BufWritePost .vimrc_project silent source $MYVIMRC | call ReloadVimRc()
+    au! BufWritePost init.vim silent source $MYVIMRC | call ReloadVimRc()
+    au! BufWritePost .vimrc silent source $MYVIMRC | call ReloadVimRc()
+    au! BufWritePost ~/.vimrc_personal.vim silent source $MYVIMRC | call ReloadVimRc()
 augroup END
 
 " not waiting too long
