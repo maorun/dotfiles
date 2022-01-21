@@ -1,9 +1,15 @@
 {
+    "phpactor.path": "~/nvim/plugged/phpactor/bin/phpactor",
     "tailwindCSS.headwind.runOnSave": false,
     "diagnostic.floatConfig": { "border" : true, "maxWidth": 110},
     "hover.floatConfig": {"border": true},
-    "coc.preferences.formatOnSaveFiletypes": ["typescriptreact", "typescript"],
+    "coc.preferences.formatOnSaveFiletypes": ["typescriptreact", "typescript", "javascript"],
     "languageserver": {
+        "graphql": {
+            "command": "graphql-lsp",
+            "args": ["server", "-m", "stream"],
+            "filetypes": ["typescript", "typescriptreact", "graphql"]
+        },
         "tailwind-lsp": {
             "command": "tailwindcss-language-server",
             "args": ["--stdio"],
