@@ -6,7 +6,16 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {"lua","html","php","javascript", "tsx", "typescript","bash","make","markdown","regex","vim","yaml"},
     syncinstall = true,
+    -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/plugin/nvim-treesitter.vim
     highlight = {
+        enable = true
+    },
+    textobjects = {
+        select = {
+            enable = true
+        }
+    },
+    indent = {
         enable = true
     },
     playground = {
@@ -25,84 +34,148 @@ require'nvim-treesitter.configs'.setup {
           update = 'R',
           goto_node = '<cr>',
           show_help = '?',
-        },
+        }
       }
 }
 EOF
 
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   matchup = {
-"     enable = true,              -- mandatory, false will disable the whole extension
-"   },
-" }
-" EOF
-
 lua <<EOF
-local finders = require "telescope.finders"
-local pickers = require "telescope.pickers"
-local previewers = require "telescope.previewers"
-local conf = require("telescope.config").values
-local action_state = require("telescope.actions.state")
+local lsp = require("lspconfig")
+local bin_name = 'sonar-scanner'
+local cmd = { bin_name }
+local configs = require 'lspconfig.configs'
+local util = require 'lspconfig.util'
 
-local colors = function(opts)
-  opts = opts or { 
-    attach_mappings = function(propt_bugnr, map)
-        map("i", "<cr>", function()
-            print("SELECTED", vim.inspect(action_state.get_selected_entry()))
-        end)
-        return true
-    end
-  }
-  pickers.new(opts, {
-    prompt_title = "colors",
-    finder = finders.new_table {
-      results = {
-        { "red", "#ff0000" },
-        { "green", "#00ff00" },
-        { "blue", "#0000ff" },
-      },
-      entry_maker = function(entry)
-        return {
-          value = entry,
-          display = entry[1],
-          ordinal = entry[2],
-        }
-      end
-    },
-    sorter = conf.generic_sorter(opts)
-  }):find()
+if not configs.sonarlint then
+    configs.sonarlint = {
+        default_config = {
+            cmd = cmd;
+            filetypes = {'typescriptreact'};
+            settings = {
+            };
+            root_dir = function(fname)
+                return util.root_pattern 'sonar-project.properties'(fname)
+            end;
+            on_attach = function(client)
+                print 'sonar-scanner attached'
+            end;
+        };
+    }
+ end
+-- lsp.sonarlint.setup({})
+EOF
+" lua vim.diagnostic.open_float()
+
+lua << EOF
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR><cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
 end
-require('telescope.builtin').foobar = colors
-vim.api.nvim_set_keymap('n', '<leader>of', ":lua require('telescope.builtin').foobar()<cr>", {noremap = true})
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'tsserver', 'graphql', 'tailwindcss' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
 EOF
 
+"lua <<EOF
+"require'nvim-treesitter.configs'.setup {
+"    autotag = {
+"    enable = true,
+"    filetypes = {
+"        "html",
+"        "xml",
+"        "javascript",
+"        "javascriptreact",
+"        "typescript",
+"        "typescriptreact",
+"        "vue",
+"        "svelte"
+"        }
+"    },
+"    matchup = {
+"    enable = true,
+"    },
+"}
+"EOF
 
 lua <<EOF
-require("telescope").setup({
-  -- You can optionally configure the search method for each of the pickers.
-  -- Below are the default values.
-  extensions = {
-    gkeep = {
-      find_method = "all_text",
-      link_method = "title",
+require'nvim-treesitter.configs'.setup {
+    matchup = {
+        enable = true
     },
-  },
+}
+EOF
+
+lua require('maorun.colors').init()
+
+lua <<EOF
+local actions = require('telescope.actions')
+local action_layout = require("telescope.actions.layout")
+require("telescope").setup({
+    defaults = {
+        mappings = {
+            i = {
+                ["<C-i>"] = actions.results_scrolling_up,
+                ["<C-f>"] = actions.results_scrolling_down,
+                ["<C-o>"] = action_layout.toggle_preview,
+                ["<PageUp>"] = false,
+                ["<PageDown>"] = false,
+            },
+        },
+    },
+    extensions = {
+        gkeep = {
+            find_method = "all_text",
+            link_method = "title",
+        },
+    },
 })
 -- Load the extension
 require('telescope').load_extension('gkeep')
-vim.api.nvim_set_keymap('n', '<leader>tg', ":Telescope gkeep<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>tg', ":GkeepLogin marco.driemel@gmx.de<cr>:Telescope gkeep<cr>", {noremap = true})
 EOF
+lua vim.api.nvim_set_keymap('n', '<leader>gsl', ':Telescope git_stash<cr>', {noremap = true})
 
-lua require('package-info').setup()
 lua << EOF
     require("which-key").setup { }
 EOF
-
-augroup package.json
-    au!
-    au! BufRead package.json lua require('package-info').show()
-augroup END
 
 " gelguy/wilder.nvim
 call wilder#setup({'modes': [':', '/', '?']})

@@ -1,10 +1,4 @@
-let mapleader=" "
-
-" Bug in Vim 8 => https://github.com/vim/vim/issues/4738
-nnoremap gx yiW:!open <cWORD><CR><CR>
-
-" with Esc on Nop : no arrow-keys in insert-mode (autocomplete)
-" inoremap <Esc> <Nop> 
+let $PATH = '/Users/mdriemel/.nvm/versions/node/v17.1.0/bin:' . $PATH
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
@@ -12,21 +6,8 @@ if filereadable(expand(".vimrc_project"))
 endif
 " }}}
 
-" Session-Handling {{{
-function LoadSession()
-    if filereadable(expand("Session.vim"))
-        source Session.vim "from vim-obsession
-    endif
-endfunction
-" autocmd VimEnter * call LoadSession()
-
-nnoremap <silent> <leader>ss :call LoadSession()<cr>:echo "Session loaded"<cr>
-nnoremap <leader>sesss :Obsession<cr>
-nnoremap <leader>sessd :Obsession!<cr>
-" }}}
-
 " AppleScript{{{
-function CallAppleScript(application, command)
+function! CallAppleScript(application, command)
     :silent execute "!osascript -e 'tell application \"" . a:application ."\"' -e '" . a:command . "' -e 'end tell' >> /dev/null &"
     :redraw!
 endfunction
@@ -35,32 +16,7 @@ command! TunnelblickStop :call CallAppleScript("/Applications/Tunnelblick.app", 
 command! SpotifyToggle :call CallAppleScript("Spotify", "playpause")
 "}}}
 
-" got to indention level {{{
-function! s:indent_len(str)
-    return type(a:str) == 1 ? len(matchstr(a:str, '^\s*')) : 0
-endfunction
-function! s:go_indent(times, dir)
-    for _ in range(a:times)
-        let l = line('.')
-        let x = line('$')
-        let i = s:indent_len(getline(l))
-        let e = empty(getline(l))
-
-        while l >= 1 && l <= x
-            let line = getline(l + a:dir)
-            let l += a:dir
-            if s:indent_len(line) != i || empty(line) != e
-                break
-            endif
-        endwhile
-        let l = min([max([1, l]), x])
-        execute 'normal! '. l .'G^'
-    endfor
-endfunction "}}}
-nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
-nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
-
-function StartUp ()
+function! StartUp ()
     :TunnelblickStart
     let choice = confirm("Spotify ?", "&Yes\n&No\n", 2)
     if choice == 1
@@ -69,6 +25,7 @@ function StartUp ()
 
     :call CallAppleScript('Microsoft Outlook', 'activate')
     :call CallAppleScript('Microsoft Teams', 'activate')
+    :call CallAppleScript('Google Chrome', 'activate')
 endfunction
 command! StartUp :call StartUp()
 
@@ -96,13 +53,15 @@ augroup END
 " File Browsing {{{
 augroup ProjectDrawer
     autocmd!
-    autocmd VimEnter * :NERDTree
-    autocmd VimEnter * wincmd l
+    " autocmd VimEnter * :NERDTree
+    " autocmd VimEnter * wincmd l
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 let NERDTreeShowHidden=1
-nnoremap <leader>tf :NERDTreeFind<cr>
-nnoremap <leader>t :NERDTree<cr>
+" enable line numbers
+let NERDTreeShowLineNumbers=1
+" make sure relative line numbers are used
+autocmd FileType nerdtree setlocal relativenumber
 
 let g:netrw_winsize = 25
 let g:netrw_keepdir=0
@@ -116,8 +75,7 @@ set nofoldenable
 set foldmethod=indent
 augroup VimRcRead
     autocmd!
-    autocmd BufRead .vimrc* setlocal foldmethod=marker
-    autocmd BufRead .vimrc* setlocal foldenable
+    autocmd FileType vim setlocal foldmethod=marker foldenable
     autocmd BufRead *.json setlocal foldmethod=syntax
 augroup END
 
@@ -137,12 +95,12 @@ autocmd FileType dbout setlocal nofoldenable
 "set clipboard^=unnamed,unnamedplus
 syntax enable
 set number
-:set relativenumber
-:set showcmd
-:set title
-:set ruler
-:set cursorline
-:set splitright splitbelow
+set relativenumber
+set showcmd
+set title
+set ruler
+set cursorline
+set splitright splitbelow
 set wrap
 set scrolloff=5
 set laststatus=2
@@ -154,58 +112,20 @@ set listchars=tab:!·,trail:·
 set complete+=kspell
 
 " searching
-:set hls
-:set incsearch
+set hls
+set incsearch
 set ignorecase
 set smartcase
-nnoremap <silent> <BS> :nohlsearch<cr>
+
+" undofile
+set undodir=~/.vim/undodir
+set undofile
 
 
 " Color column
-:set colorcolumn=	"80,120
-:hi ColorColumn ctermbg=green
+set colorcolumn=	"80,120
+hi ColorColumn ctermbg=green
 :call matchadd('ColorColumn', '\%81v', 100)
-
-nnoremap go o<Esc>
-nnoremap gO O<Esc>
-nnoremap <leader>w :w<cr>:e<cr>zvzz
-inoremap ;w <Esc>:w<cr>:e<cr>zva
-nnoremap <C-E> <C-B>
-inoremap jk <Esc>
-vnoremap jk <Esc>
-cnoremap jk <Esc>
-
-:nnoremap <leader>ev :tabnew ~/dotfiles/vim/.vimrc<cr><C-W>v:e ~/dotfiles/nvim/.config/nvim/init.vim<cr>3gg0w<c-w>w
-
-:noremap <Leader>n :cn<Enter>zzzv
-:noremap <leader>b :cp<Enter>zzzv
-" format json
-nnoremap <leader>fj :%!jq .<Enter>
-" grep word under cursor
-nnoremap <leader>] :silent execute "grep! -R " . shellescape(expand("<cword>")) . " . "<cr>:copen<cr><C-L>
-nnoremap n nzzzv
-nnoremap N Nzzzv
-" execute line under cursor (shellescape does not work)
-nnoremap <leader>ex :execute '!' .(expand(getline('.')))<cr>
-
-" yank and paste to/from system-clipboard (Mac)
-vnoremap ç "+y
-nnoremap √ "+p
-inoremap √ <Esc>"+pa
-
-" moving lines
-vnoremap J :m '>+1<cr>gv=gv
-vnoremap K :m '<-2<cr>gv=gv
-inoremap <C-S-j> <Esc>mk:m .+1<cr>==`ka
-inoremap <C-S-k> <Esc>mk:m .-2<cr>==`ka
-nnoremap <leader>k mk:m .-2<cr>==`k
-nnoremap <leader>j mk:m .+1<cr>==`k
-
-" undo break-points
-" inoremap , ,<C-g>u
-" inoremap . .<C-g>u
-" inoremap ! !<C-g>u
-" inoremap ? ?<C-g>u
 
 set tabstop=4
 set softtabstop=4
@@ -214,7 +134,7 @@ set expandtab
 set autoindent
 filetype plugin indent on
 
-function NewBuffer () abort
+function! NewBuffer () abort
     enew! "new buffer"
     setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
 endfunction
@@ -239,47 +159,39 @@ Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
 Plug 'junegunn/vim-plug'
 
 " File
-if has('nvim-0.6.0')
+if has('nvim')
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'nvim-treesitter/playground'
+
+    Plug 'neovim/nvim-lspconfig'
 else
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
 endif
 Plug 'preservim/nerdtree'
 
+" PlantUML
+Plug 'aklt/plantuml-syntax'
+Plug 'tyru/open-browser.vim'
+Plug 'weirongxu/plantuml-previewer.vim'
+
 " common
 "Plug 'junegunn/vim-peekaboo'
-"Plug 'ludovicchabant/vim-gutentags'
 
 " Vim HardTime
-Plug 'takac/vim-hardtime'
+" Plug 'takac/vim-hardtime'
 
-" Plug 'bfredl/nvim-miniyank'
-"Plug 'moll/vim-bbye'
-"Plug 'itchyny/lightline.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-surround'
-" project-management
-"Plug 'amiorin/vim-project'
-"Plug 'mhinz/vim-startify'
-" syntax
-" Plug 'vim-scripts/phpfolding.vim'
-" Plug 'StanAngeloff/php.vim'
-"Plug 'stephpy/vim-php-cs-fixer'
+Plug 'justinmk/vim-sneak' " replace s with search
+Plug 'tpope/vim-commentary' " gcc
+Plug 'tpope/vim-obsession' " vim session
+Plug 'tpope/vim-surround' " add/delete/change surround
 " autocomplete
-"Plug 'ncm2/ncm2'
-"Plug 'phpactor/phpactor'
-"Plug 'phpactor/ncm2-phpactor'
-"" code quality
-"Plug 'neomake/neomake'
-"" refactor
+Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
+" Plug 'stephenway/postcss.vim'
+" refactor
 "Plug 'adoy/vim-php-refactoring-toolbox'
-"Plug 'phpactor/phpactor'
 " git plugins
 Plug 'tpope/vim-repeat' " repeat all plugins with .
 Plug 'tpope/vim-fugitive' " Git
@@ -287,33 +199,25 @@ Plug 'rbong/vim-flog' " Git-Tree
 Plug 'tpope/vim-rhubarb' " enable :GBrowse to github
 Plug 'tpope/vim-dadbod' " Database
 Plug 'kristijanhusak/vim-dadbod-ui' " Database-UI
-"Plug 'mhinz/vim-signify'
 Plug 'vim-scripts/ReplaceWithRegister' " replace with register - gr
-" outline
-"Plug 'majutsushi/tagbar'
-" debugger
-"Plug 'joonty/vdebug'
-" For Docker
-" let g:vdebug_options["path_maps"] = {
-"    \       "/mySuperProject": "/home/mySuperUser/workspace/mySuperProject"
-"    \}
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'rodrigore/coc-tailwind-intellisense', {'do': 'npm install'} " only with node 16.X
 " Plug 'neoclide/coc-html', {'do': 'npm install'} " only with 12.22.9
 " Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
-" CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier
+" CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier coc-phpactor coc-phpls coc-tabnine coc-html
+
 " Plug 'neoclide/coc-tabnine'
-" Plug 'neoclide/coc-html'
 "
-" Plug 'jwalton512/vim-blade'
+Plug 'jwalton512/vim-blade' " Blade-Template (Laravel 4+)
 
 " % matches also on if/while
-" Plug 'andymass/vim-matchup'
+Plug 'andymass/vim-matchup'
 " graphql
 Plug 'jparise/vim-graphql'
 
 " typescript
-Plug 'leafgarland/typescript-vim'
+" Plug 'leafgarland/typescript-vim'
 if has('nvim')
     " Training
     Plug 'tjdevries/train.nvim'
@@ -323,10 +227,6 @@ if has('nvim')
     " google keep
     Plug 'stevearc/gkeep.nvim', { 'do': ':UpdateRemotePlugins' }
 endif
-
-" package.json version
-Plug 'MunifTanjim/nui.nvim'
-Plug 'vuki656/package-info.nvim'
 
 " wildermenu for :e and /
 if has('nvim')
@@ -352,9 +252,10 @@ Plug 'ap/vim-css-color'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 " Plug 'kana/vim-textobj-user'
+Plug 'wellle/targets.vim'
+
 call plug#end()
 " }}}
-nnoremap <leader>fp /Plugins {{/<cr>zo:nohlsearch<cr>
 
 " Git {{{
 if has("autocmd")
@@ -374,17 +275,6 @@ command! -nargs=+ GN :silent execute ":G fetch | :G checkout origin/master | :G 
 command! GF :execute ":Flogsplit -all -date=short" | :execute "/HEAD -> " . fugitive#head() | :nohlsearch
 " }}}
 
-" {{{ FZF
-" nnoremap <leader>gf :GFiles<cr>
-" nnoremap <leader>gr :Rg<cr>
-" }}}
-
-" {{{ Telescope
-nnoremap <leader>gg <cmd>lua require'telescope.builtin'.git_files{}<cr>
-nnoremap <leader>gb <cmd>lua require'telescope.builtin'.git_branches{}<cr>
-nnoremap <leader>gf <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>gr <cmd>lua require('telescope.builtin').live_grep()<cr> 
-" }}}
 
 set statusline=
 set statusline+=%<
@@ -393,20 +283,20 @@ set statusline+=%f
 set statusline+=\ %h " help-buffer
 set statusline+=%m " modified-flag
 set statusline+=%r " read-onlyflag
-set statusline+=%{FugitiveStatusline()}
+" set statusline+=%{FugitiveStatusline()}
 set statusline+=%=
 set statusline+=%{CodeStatsXp()}\ 
 set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
 set statusline+=\ %-14.(%l,%c%V%)\ %P
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-nnoremap <silent> <leader>sv :w<cr>:source $MYVIMRC<cr>:echo "~/.vimrc loaded"<cr>
 function! ReloadVimRc()
-    redraw!
-    echo $MYVIMRC . " reloaded"
+    " redraw!
+    " echo $MYVIMRC . " reloaded"
 endfunction
 augroup vimrc
     au!
+    " autocmd FileType vim
     au! BufWritePost $MYVIMRC silent source $MYVIMRC | call ReloadVimRc()
     au! BufWritePost .vimrc_project silent source $MYVIMRC | call ReloadVimRc()
     au! BufWritePost init.vim silent source $MYVIMRC | call ReloadVimRc()
@@ -415,54 +305,16 @@ augroup vimrc
 augroup END
 
 " not waiting too long
-set updatetime=500
+set updatetime=2000
 
 "{{{ Coc-Configs
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-if has('nvim')
-    inoremap <silent><expr> <c-space> coc#refresh()
-else
-    inoremap <silent><expr> <c-@> coc#refresh()
-endif
 
 highlight CocFloating ctermbg=black
+highlight MatchParen ctermbg=240
+
 " let g:coc_start_at_startup = v:false
+
 set shortmess+=c
-
-"{{{ Coc Float scrolling
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-"}}}
-
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf <Plug>(coc-fix-current)
-nmap <leader>cn <plug>(coc-diagnostic-next)
-nmap <leader>cp <Plug>(coc-diagnostic-prev)
-nmap <leader>rn <Plug>(coc-rename)
-nmap <leader>gd <Plug>(coc-definition)
-nmap <leader>gs <Plug>(coc-references)
-nmap <leader>gi <Plug>(coc-implementation)
-" Formatting selected code.
-xmap <leader>ff  <Plug>(coc-format-selected)
-nmap <leader>ff  <Plug>(coc-format-selected)
 
 
 function! ShowDocIfNoDiagnostic(args)
@@ -487,29 +339,9 @@ augroup END
 autocmd FileType typescriptreact setlocal signcolumn=yes
 autocmd FileType typescript setlocal signcolumn=yes
 
-let g:w1 = @%
-let g:w2 = @%
-let g:w3 = @%
-let g:w4 = @%
-noremap <leader>a1 :let g:w1 = @%<cr>
-noremap <leader>a2 :let g:w2 = @%<cr>:echo g:w2<cr>
-noremap <leader>a3 :let g:w3 = @%<cr>:echo g:w3<cr>
-noremap <leader>a4 :let g:w4 = @%<cr>:echo g:w4<cr>
-function! OpenFileBasedOnGlobal(file)
-    if (a:file != '')
-        :execute "buffer ".a:file
-    endif
-endfunction
-noremap ¡ :call OpenFileBasedOnGlobal(g:w1)<cr>
-noremap ™ :call OpenFileBasedOnGlobal(g:w2)<cr>
-noremap £ :call OpenFileBasedOnGlobal(g:w3)<cr>
-noremap ¢ :call OpenFileBasedOnGlobal(g:w4)<cr>
-
 nohlsearch
 
 "{{{ Template-Logik
-
-inoremap ++ <Esc>/<++><cr>zzzvcf>
 
 function! GetTemplate (type)
     :execute "r ~/.vim/templates/" . a:type .".tpl"
@@ -527,6 +359,8 @@ endif
 " <silent> :CocRestart
 
 source ~/.vim/abbreviate.vim
+
+source ~/.vim/mappings.vim
 
 " Personal-vimrc {{{
 if filereadable(expand("~/.vimrc_personal.vim"))
