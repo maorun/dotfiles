@@ -136,6 +136,10 @@ if has('nvim') || has('patch-8.2.0750')
 endif
 "}}}
 
+" float-menu up and down
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.

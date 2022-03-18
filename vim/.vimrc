@@ -1,4 +1,4 @@
-let $PATH = '/Users/mdriemel/.nvm/versions/node/v17.1.0/bin:' . $PATH
+let $PATH = '/Users/mdriemel/.nvm/versions/node/v17.4.0/bin:' . $PATH
 
 " Project-vimrc {{{
 if filereadable(expand(".vimrc_project"))
@@ -18,14 +18,15 @@ command! SpotifyToggle :call CallAppleScript("Spotify", "playpause")
 
 function! StartUp ()
     :TunnelblickStart
-    let choice = confirm("Spotify ?", "&Yes\n&No\n", 2)
-    if choice == 1
-        :call CallAppleScript("Spotify", "play")
-    endif
 
     :call CallAppleScript('Microsoft Outlook', 'activate')
     :call CallAppleScript('Microsoft Teams', 'activate')
     :call CallAppleScript('Google Chrome', 'activate')
+
+    let choice = confirm("Spotify ?", "&Yes\n&No\n", 2)
+    if choice == 1
+        :call CallAppleScript("Spotify", "play")
+    endif
 endfunction
 command! StartUp :call StartUp()
 
@@ -156,12 +157,17 @@ endif
 call plug#begin('~/nvim/plugged')
 Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
 
+Plug 'dstein64/vim-startuptime'
+
 Plug 'junegunn/vim-plug'
 
 " File
 if has('nvim')
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
+
+    Plug 'nvim-telescope/telescope-github.nvim'
+
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'nvim-treesitter/playground'
 
@@ -250,6 +256,7 @@ Plug 'ap/vim-css-color'
 
 " multi-select
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+" TODO: LEARN IT
 
 " Plug 'kana/vim-textobj-user'
 Plug 'wellle/targets.vim'
@@ -305,12 +312,14 @@ augroup vimrc
 augroup END
 
 " not waiting too long
-set updatetime=2000
+set updatetime=1000
 
 "{{{ Coc-Configs
 
 highlight CocFloating ctermbg=black
 highlight MatchParen ctermbg=240
+highlight NormalFloat guibg=#222332
+
 
 " let g:coc_start_at_startup = v:false
 

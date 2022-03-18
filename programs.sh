@@ -16,7 +16,7 @@ brew install alfred iterm2 sourcetree tunnelblick # here are the applications to
 curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
 
 brew install stow
-brew install thefuck autojump watch htop # little helper
+brew install terminal-notifier thefuck autojump watch htop # little helper
 brew install fd nvim ctags tmux tmuxinator ripgrep # vim
 brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
 # music: youtube-dl mps-youtube epv

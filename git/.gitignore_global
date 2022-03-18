@@ -10,3 +10,4 @@ Session.vim
 *.swp
 tags
 .tmux.conf
+nodemon*.json
