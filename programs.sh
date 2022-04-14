@@ -24,6 +24,11 @@ brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/tro
 brew install --cask spotify
 brew install --cask imageoptim
 
+# npm
+npm install -g @tailwindcss/language-server graphql-language-service-cli intelephense neovim nodemon sonarqube-scanner typescript-language-server typescript sql-language-server
+# eslint
+npm i -g vscode-langservers-extracted
+
 # add ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
 

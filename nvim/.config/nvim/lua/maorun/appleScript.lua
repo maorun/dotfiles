@@ -1,0 +1,41 @@
+local wk = require "which-key"
+wk.register({
+    q = {
+        name = "General Commands",
+        u = {"<cmd>lua require 'maorun.appleScript'.startUp()<CR>", "StartUp", noremap = true},
+    },
+}, { prefix = "<leader>" })
+
+local function CallAppleScript(application, command)
+    local script = "osascript -e 'tell application \"" .. application .. "\"' -e '" .. command .. "' -e 'end tell' >> /dev/null &"
+    vim.fn.system(script)
+    vim.cmd ":redraw!"
+end
+
+vim.cmd [[
+    function! CallAppleScript(application, command)
+        :silent execute "!osascript -e 'tell application \"" . a:application ."\"' -e '" . a:command . "' -e 'end tell' >> /dev/null &"
+        :redraw!
+    endfunction
+    command! TunnelblickStop :call CallAppleScript("/Applications/Tunnelblick.app", 'disconnect "openvpn"')
+]]
+local M = {}
+function M.startUp()
+    CallAppleScript("Microsoft Outlook", "activate")
+    CallAppleScript("Microsoft Teams", "activate")
+    CallAppleScript("Google Chrome", "activate")
+    vim.ui.select({ 'yes', 'no' }, {
+        prompt = 'Spotify?',
+        kind = 'ass'
+    }, function(selected)
+            if (selected == 'yes') then
+                CallAppleScript("Spotify", "play")
+            end
+        end
+    )
+    CallAppleScript("Tunnelblick", 'connect "openvpn"')
+    -- CallAppleScript("Tunnelblick", 'disconnect "openvpn"')
+end
+function M.init()
+end
+return M

@@ -1,0 +1,9 @@
+if application "Spotify" is running then
+    tell application "Spotify"
+        return (get artist of current track) & " – " & (get name of current track)
+    end tell
+else
+    return "Spotify"
+end if
+
+return

@@ -6,6 +6,7 @@
 .vscode
 .not-commit
 .vimrc_project
+.vimrc_project.lua
 Session.vim
 *.swp
 tags
