@@ -13,9 +13,10 @@ wk.register({
         name = "Git",
         w = {":wa | :G add -A | :G commit -m 'wip'<cr>", "WIP", noremap = true},
         p = {
-            name = "Push",
+            name = "Push & Pull",
             p = {":lua require('maorun.git').push()<cr>", "Push", noremap = true},
             f = {":lua require('maorun.git').pushForce()<cr>", "Force Push", noremap = true},
+            u = {":G pull<cr>", "Pull", noremap = true},
         },
         a = {
             name = "Amend",
@@ -34,7 +35,7 @@ wk.register({
         },
         l = {":lua require('maorun.git').log()<cr>", "Git Log", noremap = true},
         n = {":lua require('maorun.git').newBranch()<cr>", "Git New Branch", noremap = true},
-        f = {":G fetch --prune", "Git Fetch", noremap = true},
+        f = {":G fetch --prune<cr>", "Git Fetch", noremap = true},
     },
     d = {
         name = "Diff",

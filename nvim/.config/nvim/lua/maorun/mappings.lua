@@ -42,8 +42,6 @@ wk.register({
     g = {
         o = {"o<Esc>", "add a line below", noremap = true},
         O = {"O<Esc>", "add a line above", noremap = true},
-        -- Bug in Vim 8 => https://github.com/vim/vim/issues/4738
-        x = {"yiW:!open <cWORD><CR><CR>", "open in URL", noremap = true},
     },
     n = {"nzzv"},
     N = {"Nzzv"},
@@ -59,7 +57,7 @@ wk.register({
     w = {":w<cr>zvzz", "Save", noremap = true},
     v = {
         name = "VimRC",
-        e = {":tabnew ~/dotfiles/vim/.vimrc<cr><C-W>v:e ~/dotfiles/nvim/.config/nvim/init.vim<cr>3gg0w<c-w>w", "load main vimrcs", noremap = true},
+        e = {":tabnew ~/dotfiles/nvim/.config/nvim/init.lua<cr>3gg0w", "load main vimrc", noremap = true},
         r = {":source $MYVIMRC<cr>:echo '~/.vimrc loaded'<cr>", "Load VimRC", noremap = true},
     },
     s = {

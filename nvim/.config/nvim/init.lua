@@ -17,6 +17,7 @@ vim.cmd [[
 
 vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
+require 'maorun.plugins'
 vim.defer_fn(function()
     if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
         vim.cmd("source ~/.vimrc_personal.vim")
@@ -29,7 +30,6 @@ vim.defer_fn(function()
         vim.cmd("source .vimrc_project.lua")
     end
 
-    require 'maorun.plugins'
     require('which-key').setup {}
     require 'maorun.mappings'
 

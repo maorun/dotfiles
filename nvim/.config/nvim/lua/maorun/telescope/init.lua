@@ -30,15 +30,20 @@ require('telescope').setup({
             },
         },
     },
-    pickers = {
-        buffers = {
-            mappings = {
-                i = {
-                }
-            }
-        }
-    },
+    -- pickers = {
+    --     buffers = {
+    --         mappings = {
+    --             i = {
+    --             }
+    --         }
+    --     }
+    -- },
     extensions = {
+        project = {
+            base_dirs = {
+                '~/repos',
+            },
+        },
         gkeep = {
             find_method = 'all_text',
             link_method = 'title',
@@ -68,6 +73,7 @@ require('maorun.telescope.secrets').init()
 require('maorun.telescope.k8s').init()
 
 require("telescope").load_extension('harpoon')
+require'telescope'.load_extension('project')
 
 require"octo".setup()
 
@@ -83,6 +89,7 @@ wk.register({
         k = { "<cmd>Telescope k8s<cr>", "Kubernetes", noremap = true },
         q = { "<cmd>Telescope quickJump<cr>", "quickJump", noremap = true },
         h = { "<cmd>Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
+        p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "Project", noremap = true },
     },
     g = {
         name = "Git",

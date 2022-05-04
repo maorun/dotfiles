@@ -24,6 +24,7 @@ Plug 'dstein64/vim-startuptime'
 
     Plug 'nvim-telescope/telescope-github.nvim'
     Plug 'fannheyward/telescope-coc.nvim'
+    Plug 'nvim-telescope/telescope-project.nvim'
 
     Plug 'kyazdani42/nvim-web-devicons'
     Plug 'pwntester/octo.nvim'
