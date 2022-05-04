@@ -17,11 +17,11 @@ vim.cmd [[
 
 vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
+if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
+    vim.cmd("source ~/.vimrc_personal.vim")
+end
 require 'maorun.plugins'
 vim.defer_fn(function()
-    if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
-        vim.cmd("source ~/.vimrc_personal.vim")
-    end
     -- if file .vimrc_project exists in the project directory, source it
     if vim.fn.filereadable(vim.fn.expand(".vimrc_project")) == 1 then
         vim.cmd("source .vimrc_project")

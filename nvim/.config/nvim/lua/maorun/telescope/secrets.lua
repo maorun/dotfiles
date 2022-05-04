@@ -1,8 +1,8 @@
 local finders = require "telescope.finders"
 local pickers = require "telescope.pickers"
 local previewers = require "telescope.previewers"
-local actions = require "telescope.actions"
 local conf = require("telescope.config").values
+local actions = require "telescope.actions"
 local action_state = require("telescope.actions.state")
 local entry_display = require("telescope.pickers.entry_display")
 local displayer = entry_display.create({
@@ -19,20 +19,37 @@ local make_display = function(entry)
     })
 end
 
-local files = vim.fn.systemlist('find ./deployment -type f -name "*.secret.yaml"')
-local items = {}
-for key, value in pairs(files) do
-    items[#items + 1] = {value}
-end
 local secrets = function(opts)
-    opts = opts or { 
-    }
+    opts = vim.tbl_deep_extend("keep", opts, {
+        folder = "./deployment"
+    })
+    local files = vim.fn.systemlist('find ' .. opts.folder .. ' -type f -name "*.secret.yaml"')
+    local items = {}
+    for key, value in pairs(files) do
+        items[#items + 1] = {value}
+    end
+        print(opts)
     pickers.new(opts, {
         prompt_title = "secrets",
         attach_mappings = function(propt_bufnr, map)
             actions.select_default:replace(function()
-                print("SELECTED", vim.inspect(action_state.get_selected_entry()))
+                local file = action_state.get_selected_entry().file
                 actions.close(propt_bufnr)
+            local buf = vim.api.nvim_create_buf(false, true)
+            vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+
+                local output = vim.fn.systemlist(string.format("sops -d %s", file))
+
+            vim.api.nvim_buf_set_option(0, 'filetype', 'yaml')
+            vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
+            vim.api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
+            vim.api.nvim_buf_set_option(0, 'swapfile', false)
+
+                vim.api.nvim_buf_set_lines(0, 0, -1, true, output)
+                vim.api.nvim_command('write ' .. file .. '.enc')
+            vim.api.nvim_buf_set_option(0, 'filetype', 'yaml')
+                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>w', ':w ' .. file .. '.enc<cr>:!sops -e  --input-type yaml --output-type yaml ' .. file .. '.enc > ' .. file .. '<cr>:!rm ' .. file .. '.enc<cr>', { noremap = true, silent = true })
+
             end)
             return true
         end,

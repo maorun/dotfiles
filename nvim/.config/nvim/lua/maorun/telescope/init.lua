@@ -87,6 +87,7 @@ wk.register({
         f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find files", noremap = true },
         r = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Live Grep", noremap = true },
         k = { "<cmd>Telescope k8s<cr>", "Kubernetes", noremap = true },
+        s = { "<cmd>Telescope secrets<cr>", "Secrets", noremap = true },
         q = { "<cmd>Telescope quickJump<cr>", "quickJump", noremap = true },
         h = { "<cmd>Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
         p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "Project", noremap = true },
@@ -110,10 +111,10 @@ wk.register({
         d = {':%bd|e#<cr>', "delete all buffers", noremap = true },
         n = { function()
             local buf = vim.api.nvim_create_buf(false, true)
-            vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
-            vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-            vim.api.nvim_buf_set_option(buf, 'swapfile', false)
             vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+            vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
+            vim.api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
+            vim.api.nvim_buf_set_option(0, 'swapfile', false)
         end, "new buffer", noremap = true },
     },
 }, { prefix = "<leader>" })

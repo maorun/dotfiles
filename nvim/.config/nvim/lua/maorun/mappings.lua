@@ -38,7 +38,7 @@ local wk = require("which-key")
 
 wk.register({
     ['<BS>'] = {":nohlsearch<cr>", "clear Search", noremap = true},
-    ['<C-E'] = {"<C-B>", "Scroll up"},
+    ['<C-E>'] = {"<C-B>", "Scroll up"},
     g = {
         o = {"o<Esc>", "add a line below", noremap = true},
         O = {"O<Esc>", "add a line above", noremap = true},
@@ -128,10 +128,11 @@ vim.cmd [[
     vnoremap ç "+y
     nnoremap √ "+p
     inoremap √ <Esc>"+pa
-    " move cursor left/right in insert-mode
-    inoremap <C-L> <C-O>l
-    inoremap <C-H> <C-O>h
 ]]
+wk.register({
+    ["<C-L>"] = { "<C-O>l", "move cursor right", noremap = true},
+    ["<C-H>"] = { "<C-O>h", "move cursor left", noremap = true},
+}, { mode = 'i'})
 
 -- moving lines
 wk.register({
@@ -142,7 +143,7 @@ wk.register({
     ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true},
     ["<C-K>"] = { "mk:m .-2<cr>==`k", "move line up", noremap = true},
 }, { mode = 'n'})
-vim.cmd [[
-    inoremap <C-J> <Esc>mk:m .+1<cr>==`ka
-    inoremap <C-K> <Esc>mk:m .-2<cr>==`ka
-]]
+wk.register({
+    ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
+    ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
+}, { mode = 'i'})
