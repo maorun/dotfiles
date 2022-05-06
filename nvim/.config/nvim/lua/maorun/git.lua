@@ -30,8 +30,9 @@ wk.register({
         },
         r = {
             name = "Git Rebase",
-            m = {":G fetch --prune | :G rebase origin/master", "Git Rebase", noremap = true},
+            m = {":G fetch --prune | :G rebase origin/master<cr>", "Git Rebase", noremap = true},
             r = {":G rebase -i HEAD~", "Git Rebase interactive", noremap = true},
+            c = {":G rebase --continue<cr>", "Git Rebase continue", noremap = true},
         },
         l = {":lua require('maorun.git').log()<cr>", "Git Log", noremap = true},
         n = {":lua require('maorun.git').newBranch()<cr>", "Git New Branch", noremap = true},

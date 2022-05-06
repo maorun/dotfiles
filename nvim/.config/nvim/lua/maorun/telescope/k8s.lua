@@ -28,7 +28,11 @@ end
 local k8s = function(opts)
     local cmd = "git branch --show-current | tr '[:upper:]' '[:lower:]' | tr -C \"[a-z0-9\\n]\" '-'"
     local namespace = vim.fn.trim('ac-steam-' .. vim.fn.system(cmd))
-    local files = vim.fn.systemlist("kubectl get -n " .. namespace .. " pod -o name | sed 's/pod\\///g'")
+    
+    local cmd = "kubectl get -n " .. namespace .. " pod -o name | sed 's/pod\\///g'"
+    print('Getting pods ' .. cmd)
+
+    local files = vim.fn.systemlist(cmd)
     local items = {}
     for key, value in pairs(files) do
         items[#items + 1] = {value}

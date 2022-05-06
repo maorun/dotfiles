@@ -23,7 +23,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- " undofile
-vim.opt.undodir="~/.vim/undodir"
+vim.opt.undodir = vim.fn.stdpath('data') .. "/undodir"
 vim.opt.undofile = true
 
 

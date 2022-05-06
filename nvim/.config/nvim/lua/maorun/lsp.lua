@@ -52,7 +52,7 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
   buf_set_keymap('n', '<leader>gr', '<cmd>lua require("telescope.builtin").lsp_references()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.diagnostic.goto_next()<CR><cmd>lua require("telescope.builtin").lsp_code_actions()<CR>', opts)
+  buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.diagnostic.goto_next()<CR><cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
   buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<leader>cn', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
