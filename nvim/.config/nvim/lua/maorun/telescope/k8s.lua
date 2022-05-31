@@ -28,7 +28,7 @@ end
 local k8s = function(opts)
     local cmd = "git branch --show-current | tr '[:upper:]' '[:lower:]' | tr -C \"[a-z0-9\\n]\" '-'"
     local namespace = vim.fn.trim('ac-steam-' .. vim.fn.system(cmd))
-    
+
     local cmd = "kubectl get -n " .. namespace .. " pod -o name | sed 's/pod\\///g'"
     print('Getting pods ' .. cmd)
 
@@ -44,8 +44,14 @@ local k8s = function(opts)
         attach_mappings = function(propt_bufnr, map)
             actions.select_default:replace(function()
                 local pod = action_state.get_selected_entry().pod
-                local cmd = "kubectl exec -it " .. pod .. " -c php -n " .. namespace .. " -- /bin/sh"
-                local logsCmd = "kubectl logs " .. pod .. " -c php -n " .. namespace .. " -f --since=5m"
+                local container = ''
+                if string.find(pod, 'app') then
+                    container = '-c php'
+                end
+                local cmd = "kubectl exec -it " .. pod .. " " .. container .. " -n " .. namespace .. " -- /bin/sh"
+                local logsCmd = "kubectl logs " .. pod .. " " .. container .. " -n " .. namespace .. " -f --since=5m"
+                print(cmd)
+                print(logsCmd)
                 vim.fn.system("tmux new-window -n k8s -t 'ac-steam' ' " .. logsCmd .. "'")
                 vim.fn.system("tmux split-window -t 'ac-steam:k8s' " .. cmd )
 

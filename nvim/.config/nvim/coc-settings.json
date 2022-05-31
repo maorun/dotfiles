@@ -1,5 +1,6 @@
 {
     "tailwindCSS.headwind.runOnSave": false,
+    "diagnostic.enable": false,
     "diagnostic.floatConfig": { "border" : true, "maxWidth": 110, "title": "CoC-diagnostic" },
     "hover.floatConfig": {"border": true, "title": "CoC-hover"},
     "signature.floatConfig": {"border": true, "title": "CoC-Signature"},

@@ -14,7 +14,7 @@ Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
 
 Plug 'dstein64/vim-startuptime'
 
--- Plug 'junegunn/vim-plug'
+Plug 'junegunn/vim-plug'
 
 -- File
     Plug 'lewis6991/impatient.nvim'
@@ -65,6 +65,7 @@ Plug 'tpope/vim-rhubarb' -- enable :GBrowse to github
 Plug 'tpope/vim-dadbod' -- Database
 Plug 'kristijanhusak/vim-dadbod-ui' -- Database-UI
 Plug 'vim-scripts/ReplaceWithRegister' -- replace with register - gr
+Plug 'lewis6991/gitsigns.nvim' -- git-sign
 
 Plug('neoclide/coc.nvim', {['branch']= 'release'})
 -- Plug('rodrigore/coc-tailwind-intellisense', {'do': 'npm install'})  -- only with node 16.X
@@ -113,6 +114,9 @@ Plug 'wellle/targets.vim'
 -- quick Filebrowsing
 Plug 'ThePrimeagen/harpoon'
 
+-- Plug 'maorun/snyk.nvim'
+Plug '~/repos/maorun/snyk.nvim'
+
 vim.call('plug#end')
 
 -- File Browsing {{{
@@ -138,15 +142,23 @@ vim.cmd [[
 ]]
 -- }}}
 
+
 -- {{{ Coc-Configs
 vim.cmd [[
+    augroup Cursor
+        autocmd!
+    " autocmd CursorHold * silent call CocActionAsync('highlight')
+    "    autocmd CursorHoldI * :call <SID>show_hover_doc()
+    "    autocmd CursorHold * :call <SID>show_hover_doc()
+    augroup END
+
     highlight CocFloating ctermbg=black
     highlight MatchParen ctermbg=240
     highlight NormalFloat guibg=#222332
 
     function! ShowDocIfNoDiagnostic(args)
       if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
-        silent call CocActionAsync('doHover')
+  "      silent call CocActionAsync('doHover')
       endif
     endfunction
 
@@ -154,12 +166,5 @@ vim.cmd [[
         " call ShowDocIfNoDiagnostic()
         call timer_start(500, 'ShowDocIfNoDiagnostic')
     endfunction
-
-    augroup Cursor
-        autocmd!
-        autocmd CursorHold * silent call CocActionAsync('highlight')
-        autocmd CursorHoldI * :call <SID>show_hover_doc()
-        autocmd CursorHold * :call <SID>show_hover_doc()
-    augroup END
 ]]
 -- }}}

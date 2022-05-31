@@ -1,6 +1,13 @@
 vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.relativenumber = true
+local relativenumberAuGroup = vim.api.nvim_create_augroup('relativenumber', {})
+vim.api.nvim_create_autocmd('FileType', {
+    group = relativenumberAuGroup,
+    pattern = 'octo',
+    command = "setlocal relativenumber number",
+})
+
 vim.opt.showcmd = true
 vim.opt.title = true
 vim.opt.ruler = true
@@ -46,7 +53,7 @@ vim.cmd [[
     set statusline+=%{CodeStatsXp()}\ 
     set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
     set statusline+=\ %-14.(%l,%c%V%)\ %P
-    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+    "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
     augroup statusline
         au!
         autocmd BufEnter fugitive://*  hi statusline guibg=Red ctermfg=Red guifg=OrangeRed4 ctermbg=White

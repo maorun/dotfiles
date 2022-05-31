@@ -2,7 +2,8 @@ local wk = require "which-key"
 wk.register({
     q = {
         name = "General Commands",
-        u = {"<cmd>lua require 'maorun.appleScript'.startUp()<CR>", "StartUp", noremap = true},
+        u = {":lua require 'maorun.appleScript'.startUp()<CR>", "StartUp", noremap = true},
+        s = {":call CallAppleScript('Spotify', 'playpause')<cr>", "Spotify play/pause", noremap = true},
     },
 }, { prefix = "<leader>" })
 

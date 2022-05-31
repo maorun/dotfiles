@@ -36,7 +36,12 @@ local localActions = transform_mod({
 
 require('telescope').setup({
     defaults = {
-        file_ignore_patterns = {'node_modules', '__snapshots__', 'package%-lock%.json', 'composer%.lock'},
+        file_ignore_patterns = {
+            'node_modules',
+            '__snapshots__',
+            'package%-lock%.json',
+            'composer%.lock'
+        },
         mappings = {
             i = {
                 ['<C-i>'] = actions.results_scrolling_up,
@@ -72,6 +77,7 @@ require('telescope').setup({
             base_dirs = {
                 '~/repos',
             },
+            hidden_files = true,
         },
         gkeep = {
             find_method = 'all_text',
@@ -80,8 +86,7 @@ require('telescope').setup({
     },
 })
 
-
-
+vim.cmd("autocmd User TelescopePreviewerLoaded setlocal wrap")
 
 -- Load the extension
 require('telescope').load_extension('gkeep')
@@ -114,11 +119,12 @@ wk.register({
         o = { ':Octo actions<cr>', "Pull Requests", noremap = true },
         g = { ':GkeepLogin marco.driemel@gmx.de<cr>:Telescope gkeep<cr>', "Google Keep", noremap = true },
         f = { ":lua require('telescope.builtin').find_files()<cr>", "Find files", noremap = true },
-        r = { ":lua require('telescope.builtin').live_grep()<cr>", "Live Grep", noremap = true },
+        r = { ":lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden' } }<cr>", "Live Grep", noremap = true },
         k = { ":Telescope k8s<cr>", "Kubernetes", noremap = true },
         s = { ":lua require('maorun.telescope.secrets').secrets()<cr>", "Secrets", noremap = true },
         h = { ":Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
         p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "Project", noremap = true },
+        l = { ":lua require('telescope.builtin').oldfiles()<cr>", "Find last opened files", noremap = true },
     },
     g = {
         name = "Git",
@@ -129,7 +135,6 @@ wk.register({
         b = { ":lua require'telescope.builtin'.git_branches()<cr>", "Git branches", noremap = true },
         h = {
             name = "GitHub",
-            p = {':lua require("telescope").extensions.gh.pull_request()<cr>', "Pull Request", noremap = true},
             g = {':lua require("telescope").extensions.gh.gist()<cr>', "Gist", noremap = true},
         },
     },
@@ -137,13 +142,6 @@ wk.register({
         name = "Buffer",
         b = {':lua require("telescope.builtin").buffers()<cr>', "show Buffers", noremap = true },
         d = {':%bd|e#<cr>', "delete all buffers", noremap = true },
-        n = { function()
-            local buf = vim.api.nvim_create_buf(false, true)
-            vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
-            vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
-            vim.api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
-            vim.api.nvim_buf_set_option(0, 'swapfile', false)
-        end, "new buffer", noremap = true },
     },
 }, { prefix = "<leader>" })
 

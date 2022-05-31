@@ -4,7 +4,8 @@ vim.cmd [[
 
     function! ShowCmdInNewBuffer (cmd) abort "{{{
         let res = system(a:cmd)
-        :call NewBuffer()
+        lua newBuffer()
+        " :call NewBuffer()
         silent put=res
         :normal gg
         silent :normal dd
@@ -30,6 +31,10 @@ vim.defer_fn(function()
         vim.cmd("source .vimrc_project.lua")
     end
 
+    -- maorun/snyk
+    -- require('maorun.snyk').setup()
+
+
     require('which-key').setup {}
     require 'maorun.mappings'
 
@@ -39,6 +44,10 @@ vim.defer_fn(function()
     require('maorun.telescope').init()
     require('maorun.lsp')
     require('maorun.git')
+
+    require('gitsigns').setup {
+        current_line_blame = true,
+    }
 
     require'nvim-web-devicons'.setup {
         default = true
@@ -82,7 +91,7 @@ vim.defer_fn(function()
 end, 0)
 
 vim.cmd [[
-    augroup lua reload
+    augroup luaReload
         autocmd!
         autocmd! BufWritePost */nvim/**.lua so %
         au! BufWritePost $MYVIMRC silent source $MYVIMRC

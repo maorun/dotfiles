@@ -20,14 +20,17 @@ brew install terminal-notifier thefuck autojump watch htop # little helper
 brew install fd nvim ctags tmux tmuxinator ripgrep # vim
 brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
 # music: youtube-dl mps-youtube epv
+brew install youtube-dl ffmpeg
+brew install lua-language-server
 
 brew install --cask spotify
 brew install --cask imageoptim
 
 # npm
-npm install -g @tailwindcss/language-server graphql-language-service-cli intelephense neovim nodemon sonarqube-scanner typescript-language-server typescript sql-language-server
+npm install -g @tailwindcss/language-server graphql-language-service-cli intelephense neovim nodemon sonarqube-scanner typescript-language-server typescript sql-language-server vim-language-server
 # eslint
 npm i -g vscode-langservers-extracted
+
 
 # add ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc

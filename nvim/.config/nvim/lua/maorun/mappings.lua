@@ -1,14 +1,7 @@
 vim.g.mapleader = ' '
 
+-- got to indention level {{{
 vim.cmd [[
-function! LoadSession()
-    if filereadable(expand("Session.vim"))
-        source Session.vim "from vim-obsession
-    endif
-endfunction
-]]
-vim.cmd [[
-    " got to indention level {{{
     function! s:indent_len(str)
         return type(a:str) == 1 ? len(matchstr(a:str, '^\s*')) : 0
     endfunction
@@ -29,12 +22,54 @@ vim.cmd [[
             let l = min([max([1, l]), x])
             execute 'normal! '. l .'G^'
         endfor
-    endfunction "}}}
+    endfunction 
+
     nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
     nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
 ]]
+-- }}}
 
 local wk = require("which-key")
+newBuffer = function(args)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+    vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
+    vim.api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
+    vim.api.nvim_buf_set_option(0, 'swapfile', false)
+    if (args ~= nil) then
+        vim.api.nvim_buf_set_lines(0, 0, -1, true, args)
+    end
+end
+
+function job(opts)
+    local lines = {}
+    opts = vim.tbl_deep_extend("keep", opts or {}, {
+        silent = false,
+        command = '',
+        args =  {},
+        interactive = false,
+        on_stdout = function(error, data)
+            table.insert(lines, data)
+        end,
+        on_stderr = function(error, data)
+            table.insert(lines, data)
+        end,
+        on_exit = function(signal, failure)
+            vim.schedule(function()
+                vim.api.nvim_command('new')
+                if (opts.silent ~= true) then
+                    newBuffer(lines)
+                end 
+            end)
+        end,
+    })
+
+    local Job = require'plenary.job'
+    if (opts.silent ~= true) then
+        print('start "' .. opts.command .. " " .. table.concat(opts.args,' ') .. '"')
+    end
+    Job:new(opts):start()
+end
 
 wk.register({
     ['<BS>'] = {":nohlsearch<cr>", "clear Search", noremap = true},
@@ -52,19 +87,75 @@ wk.register({
 
 }, { silent=true, prefix = '' })
 
+local mappingListPlugin = require("maorun.telescope.mappingList")
+mappingListPlugin.init()
 wk.register({
+    h = { function()
+        if (vim.o.filetype == 'octo') then
+            local mappings = require('octo.config').get_config().mappings
+            local list = {}
+            local k, v = next( mappings )
+            while k do
+                k, v = next( mappings, k )
+                if (k ~= nil) then
+                    for key, value in next, v do
+                        table.insert(list, k .. " : " .. key .. " => " .. value)
+
+                    end
+                end
+            end
+            mappingListPlugin.mappingList {
+                title = "octo",
+                list = list
+            }
+        end
+    end, "help", noremap = true },
+    q = {
+        name = "General Commands",
+        n = {
+            name = "Create new X",
+            b = { newBuffer, "new buffer", noremap = true }
+        },
+        r =  {
+            name = "Run X",
+            t = {function()
+                job({
+                    command = 'npm',
+                    args = { 'run', 'test', '--ignore-scripts'},
+                }) 
+            end, "run tests", noremap = true }
+        },
+    },
     a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
     w = {":w<cr>zvzz", "Save", noremap = true},
     v = {
         name = "VimRC",
-        e = {":tabnew ~/dotfiles/nvim/.config/nvim/init.lua<cr>3gg0w", "load main vimrc", noremap = true},
+        e = {function()
+            require('telescope.builtin').git_files {
+                cwd = "~/dotfiles/",
+                show_untracked = false,
+                recurse_submodules = true,
+                prompt_title = "* dotfiles *",
+            }
+        end, "find file in dotfiles", noremap = true},
         r = {":source $MYVIMRC<cr>:echo '~/.vimrc loaded'<cr>", "Load VimRC", noremap = true},
     },
     s = {
-       name = "Session-Handling",
-       s = {':call LoadSession()<cr>:echo "Session loaded"<cr>' , "Load Session", noremap = true},
+        name = "Session-Handling",
+        s = { function ()
+            local sessionFilename = vim.fn.expand("Session.vim")
+            print(sessionFilename)
+            if (vim.fn.filereadable(sessionFilename)) then
+                -- from vim-obsession
+                vim.cmd('source ' .. sessionFilename)
+            else
+                print("Session.vim not found")
+            end
+            -- ':call LoadSession()<cr>:echo "Session loaded"<cr>'
+        end, "Load Session", noremap = true},
     },
     f = {
+        name = "Formatting",
         j = {":%!jq .<cr>" , "JSON pretty print", noremap = true},
     },
     i = { "go to next indent", noremap = true},
@@ -77,6 +168,10 @@ wk.register({
         name = "NERDTree",
         f = {":NERDTreeFind<cr>", "current file", noremap = true },
         t = {":NERDTree<cr>", "open tree", noremap = true},
+    },
+    b = {
+        name = "Buffer",
+        n = { newBuffer, "new buffer", noremap = true },
     },
     c = {
         name = "COC",
@@ -97,38 +192,13 @@ vim.cmd [[
     vnoremap jk <Esc>
     cnoremap jk <Esc>
 
-    "{{{ Coc-Configs
-
-    function! s:check_back_space() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    if has('nvim')
-        inoremap <silent><expr> <c-space> coc#refresh()
-    else
-        inoremap <silent><expr> <c-@> coc#refresh()
-    endif
-    "{{{ Coc Float scrolling
-    if has('nvim') || has('patch-8.2.0750')
-        nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-        nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-        inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-        inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-        vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-        vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-    endif
-    "}}}
-
-    " float-menu up and down
-    inoremap <C-j> <Down>
-    inoremap <C-k> <Up>
 
     " yank and paste to/from system-clipboard (Mac)
     vnoremap ç "+y
     nnoremap √ "+p
     inoremap √ <Esc>"+pa
 ]]
+
 wk.register({
     ["<C-L>"] = { "<C-O>l", "move cursor right", noremap = true},
     ["<C-H>"] = { "<C-O>h", "move cursor left", noremap = true},
@@ -143,7 +213,11 @@ wk.register({
     ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true},
     ["<C-K>"] = { "mk:m .-2<cr>==`k", "move line up", noremap = true},
 }, { mode = 'n'})
+
 wk.register({
-    ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
-    ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
+    -- " float-menu up and down
+    ["<C-J>"] = { "<Down>", "float-menu down", noremap = true},
+    ["<C-K>"] = { "<Up>", "float-menu up", noremap = true},
+--     ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
+--     ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
 }, { mode = 'i'})
