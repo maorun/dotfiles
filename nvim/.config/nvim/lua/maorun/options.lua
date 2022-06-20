@@ -1,12 +1,6 @@
 vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.relativenumber = true
-local relativenumberAuGroup = vim.api.nvim_create_augroup('relativenumber', {})
-vim.api.nvim_create_autocmd('FileType', {
-    group = relativenumberAuGroup,
-    pattern = 'octo',
-    command = "setlocal relativenumber number",
-})
 
 vim.opt.showcmd = true
 vim.opt.title = true

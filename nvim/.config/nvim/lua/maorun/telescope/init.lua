@@ -44,7 +44,7 @@ require('telescope').setup({
         },
         mappings = {
             i = {
-                ['<C-i>'] = actions.results_scrolling_up,
+                ['<C-p>'] = actions.results_scrolling_up,
                 ['<C-f>'] = actions.results_scrolling_down,
                 ['<C-O>'] = action_layout.toggle_preview,
                 ['<PageUp>'] = false,
@@ -110,6 +110,15 @@ require'telescope'.load_extension('project')
 -- require'telescope'.load_extension('secrets')
 
 require"octo".setup()
+local octoGroup = vim.api.nvim_create_augroup('Octo', {})
+vim.api.nvim_create_autocmd('FileType', {
+    group = octoGroup,
+    pattern = 'octo',
+    callback = function()
+        vim.api.nvim_buf_set_keymap(0, "i", "@", "@<C-x><C-o>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "i", "#", "#<C-x><C-o>", { silent = true, noremap = true })
+    end,
+})
 
 local wk = require("which-key")
 wk.register({

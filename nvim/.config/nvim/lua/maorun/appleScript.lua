@@ -25,6 +25,8 @@ function M.startUp()
     CallAppleScript("Microsoft Outlook", "activate")
     CallAppleScript("Microsoft Teams", "activate")
     CallAppleScript("Google Chrome", "activate")
+    CallAppleScript("Tunnelblick", 'connect "openvpn"')
+    -- CallAppleScript("Tunnelblick", 'disconnect "openvpn"')
     vim.ui.select({ 'yes', 'no' }, {
         prompt = 'Spotify?',
         kind = 'ass'
@@ -34,8 +36,6 @@ function M.startUp()
             end
         end
     )
-    CallAppleScript("Tunnelblick", 'connect "openvpn"')
-    -- CallAppleScript("Tunnelblick", 'disconnect "openvpn"')
 end
 function M.init()
 end

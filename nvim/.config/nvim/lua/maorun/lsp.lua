@@ -1,5 +1,6 @@
 local configs = require 'lspconfig.configs'
 local util = require 'lspconfig.util'
+local wk = require("which-key")
 
 local lsp = require('lspconfig')
 -- local bin_name = 'sonar-scanner'
@@ -35,7 +36,6 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local wk = require("which-key")
     wk.register({
         l = {
             name = "LSP",
@@ -48,7 +48,6 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
                 t = {':lua vim.lsp.buf.type_definition()<CR>', 'Type definition', noremap = true},
             },
             k = {':lua vim.lsp.buf.hover()<CR>', 'Hover', noremap = true},
-            K = {':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', 'open_float', noremap = true},
             ['<C-k>'] = {':lua vim.lsp.buf.signature_help()<CR>', 'Signature help', noremap = true},
             w = {
                 name = "LSP-workspace",
@@ -57,10 +56,7 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
                 l = {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', 'list lsp-workspace', noremap = true},
             },
             r = {':lua vim.lsp.buf.rename()<CR>', 'rename', noremap = true},
-            ['['] = {':lua vim.diagnostic.goto_prev()<CR>', 'next diagnostic', noremap = true},
-            [']'] = {':lua vim.diagnostic.goto_next()<CR>', 'prev diagnostic', noremap = true},
             c = {':lua vim.lsp.buf.code_action()<CR>', 'code-action', noremap = true},
-            q = {':lua vim.diagnostic.setloclist()<cr>', 'show diagnostics', noremap = true},
             f = {':lua vim.lsp.buf.formatting()<CR>', 'format', noremap = true},
         },
     }, { silent=true, prefix = '<leader>' })
@@ -72,11 +68,26 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
             i = {':lua vim.lsp.buf.implementation()<CR>', 'Implementaion', noremap = true},
             f = {':lua require("telescope.builtin").lsp_references()<CR>', 'References', noremap = true},
             y = {':lua vim.lsp.buf.type_definition()<CR>', 'Type definition', noremap = true},
-            ['['] = {':lua vim.diagnostic.goto_prev()<CR>', 'next diagnostic', noremap = true},
-            [']'] = {':lua vim.diagnostic.goto_next()<CR>', 'prev diagnostic', noremap = true},
         },
     }, { silent = true})
 end
+-- Diagnostics mapping (should also available without LSP)
+wk.register({
+    l = {
+        name = "LSP",
+        K = {':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', 'open_float', noremap = true},
+        ['['] = {':lua vim.diagnostic.goto_prev()<CR>', 'next diagnostic', noremap = true},
+        [']'] = {':lua vim.diagnostic.goto_next()<CR>', 'prev diagnostic', noremap = true},
+        q = {':lua vim.diagnostic.setloclist()<cr>', 'show diagnostics', noremap = true},
+    },
+}, { silent=true, prefix = '<leader>' })
+wk.register({
+    g = {
+        name = "Goto",
+        ['['] = {':lua vim.diagnostic.goto_prev()<CR>', 'next diagnostic', noremap = true},
+        [']'] = {':lua vim.diagnostic.goto_next()<CR>', 'prev diagnostic', noremap = true},
+    },
+}, { silent = true})
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches

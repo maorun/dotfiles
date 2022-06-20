@@ -99,7 +99,8 @@ wk.register({
                 k, v = next( mappings, k )
                 if (k ~= nil) then
                     for key, value in next, v do
-                        table.insert(list, k .. " : " .. key .. " => " .. value)
+                        -- print(vim.inspect(value))
+                        table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
 
                     end
                 end

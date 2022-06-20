@@ -83,7 +83,8 @@ function M.newBranch()
     end
     vim.cmd(":G fetch --prune")
     -- create branch
-    vim.cmd(string.format(":G checkout -b %s origin/master", branch))
+    -- vim.cmd(string.format(":G checkout -b %s origin/master", branch))
+    vim.cmd(string.format(":G branch %s origin/master", branch))
 end
 function M.amendPush()
     M.amend()
