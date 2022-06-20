@@ -19,6 +19,7 @@ local wk = require("which-key")
 wk.register({
     g = {
         name = "Git",
+        c = {":G add -A | :G commit<cr>", "Commit", noremap = true},
         w = {":w | :G add -A | :G commit -m 'wip'<cr>", "WIP", noremap = true},
         p = {
             name = "Push & Pull",
