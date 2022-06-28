@@ -26,8 +26,19 @@ local make_display = function(entry)
 end
 
 local k8s = function(opts)
+    local branch = vim.fn.input("namespace: ")
+    local prefixNamespace = 'ac-steam'
+    if (branch ~= '') then
+        prefixNamespace = branch
+    end
+
     local cmd = "git branch --show-current | tr '[:upper:]' '[:lower:]' | tr -C \"[a-z0-9\\n]\" '-'"
-    local namespace = vim.fn.trim('ac-steam-' .. vim.fn.system(cmd))
+    local namespace = ''
+    if cmd == 'master' then
+        namespace = vim.fn.trim(prefixNamespace)
+    else
+        namespace = vim.fn.trim(prefixNamespace .. '-' .. vim.fn.system(cmd))
+    end
 
     local cmd = "kubectl get -n " .. namespace .. " pod -o name | sed 's/pod\\///g'"
     print('Getting pods ' .. cmd)
