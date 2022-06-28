@@ -223,3 +223,10 @@ wk.register({
 --     ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
 --     ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
 }, { mode = 'i'})
+
+wk.register({
+    ['<C-SPACE>'] = {'coc#refresh()', noremap = true }
+}, {mode = 'i' })
+vim.cmd [[
+    " inoremap <silent><expr> <c-space> coc#refresh()
+]]

@@ -38,7 +38,7 @@ Plug 'junegunn/vim-plug'
 
     Plug('iamcco/markdown-preview.nvim', { [ 'do' ]= 'cd app && npm install'  })
 
-    Plug 'github/copilot.vim'
+    -- Plug 'github/copilot.vim'
 
 Plug('preservim/nerdtree', { on= 'NERDTreeFind' })
 
@@ -74,7 +74,7 @@ Plug('neoclide/coc.nvim', {['branch']= 'release'})
 -- Plug('iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'})
 -- CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier coc-phpactor coc-phpls coc-tabnine coc-html
 
--- Plug 'neoclide/coc-tabnine'
+Plug 'neoclide/coc-tabnine'
 
 Plug 'jwalton512/vim-blade' -- Blade-Template (Laravel 4+)
 
