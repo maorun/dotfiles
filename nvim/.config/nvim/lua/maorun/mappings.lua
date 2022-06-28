@@ -115,7 +115,8 @@ wk.register({
         name = "General Commands",
         n = {
             name = "Create new X",
-            b = { newBuffer, "new buffer", noremap = true }
+            b = { newBuffer, "new buffer", noremap = true },
+            g = { ':GkeepNew<cr>', 'new google-note', noremap = true }
         },
         r =  {
             name = "Run X",
