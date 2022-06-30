@@ -33,7 +33,7 @@ local secrets = function(opts)
     opts = vim.tbl_deep_extend("keep", opts or {}, {
         folder = "./deployment"
     })
-    local files = vim.fn.systemlist('find ' .. opts.folder .. ' -type f -name "*.secret.yaml"')
+    local files = vim.fn.systemlist('find ' .. opts.folder .. ' -type f -name "*secret*.yaml"')
     local items = {}
     for key, value in pairs(files) do
         items[#items + 1] = {value}
@@ -103,19 +103,23 @@ function M.secrets(opts)
     secrets(opts)
 end
 function M.folders()
-    pickers.new({}, {
+    local opts = {}
+    pickers.new(opts, {
         prompt_title = 'secrets - folder',
         attach_mappings = function(prompt_bufnr, map)
             actions.select_default:replace(function()
                 local file = action_state.get_selected_entry().value
-                actions.close(propt_bufnr)
-                print(file)
+                actions.close(prompt_bufnr)
+                M.secrets({
+                    folder = file
+                })
             end)
             return true
         end,
         finder = finders.new_table {
             results = {
                 './deployment',
+                './helm',
             },
             entry_maker = function(entry)
                 return {
