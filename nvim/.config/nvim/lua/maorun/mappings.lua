@@ -146,7 +146,6 @@ wk.register({
         name = "Session-Handling",
         s = { function ()
             local sessionFilename = vim.fn.expand("Session.vim")
-            print(sessionFilename)
             if (vim.fn.filereadable(sessionFilename)) then
                 -- from vim-obsession
                 vim.cmd('source ' .. sessionFilename)
@@ -224,9 +223,11 @@ wk.register({
 --     ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
 }, { mode = 'i'})
 
-wk.register({
-    ['<C-SPACE>'] = {'coc#refresh()', noremap = true }
-}, {mode = 'i' })
+-- wk.register({
+--     ["<C-SPACE>"] = {'coc#refresh()', noremap = true },
+--     ["<tab>"] = {'coc#pum#visible() ? coc#pum#confirm() : "<tab>"', noremap = true },
+-- }, {mode = 'i', expr = true })
 vim.cmd [[
-    " inoremap <silent><expr> <c-space> coc#refresh()
+    inoremap <silent><expr> <c-space> coc#refresh()
+    inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#confirm() : "\<tab>"
 ]]
