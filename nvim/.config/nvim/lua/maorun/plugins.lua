@@ -60,8 +60,8 @@ Plug('phpactor/phpactor', {[ 'for' ]= 'php', [ 'tag' ]= '*', [ 'do' ]= 'composer
 -- git plugins
 Plug 'tpope/vim-repeat' -- repeat all plugins with .
 Plug 'tpope/vim-fugitive' -- Git
--- Plug 'rbong/vim-flog' -- Git-Tree
-Plug 'AchmadFathoni/vim-flog' -- Git-Tree - Fork because of https://github.com/rbong/vim-flog/issues/77
+Plug 'rbong/vim-flog' -- Git-Tree
+-- Plug 'AchmadFathoni/vim-flog' -- Git-Tree - Fork because of https://github.com/rbong/vim-flog/issues/77
 Plug 'tpope/vim-rhubarb' -- enable :GBrowse to github
 Plug 'tpope/vim-dadbod' -- Database
 Plug 'kristijanhusak/vim-dadbod-ui' -- Database-UI
