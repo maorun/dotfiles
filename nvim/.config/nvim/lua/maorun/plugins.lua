@@ -156,6 +156,7 @@ vim.cmd [[
     highlight CocFloating ctermbg=black
     highlight MatchParen ctermbg=240
     highlight NormalFloat guibg=#222332
+    highlight CocMenuSel ctermbg=Grey guibg=DarkGrey
 
     function! ShowDocIfNoDiagnostic(args)
       if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
