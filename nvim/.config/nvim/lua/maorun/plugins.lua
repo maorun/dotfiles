@@ -115,8 +115,11 @@ Plug 'wellle/targets.vim'
 -- quick Filebrowsing
 Plug 'ThePrimeagen/harpoon'
 
+-- testing
+Plug 'vim-test/vim-test'
+
 -- Plug 'maorun/snyk.nvim'
-Plug '~/repos/maorun/snyk.nvim'
+-- Plug '~/repos/maorun/snyk.nvim'
 
 vim.call('plug#end')
 
