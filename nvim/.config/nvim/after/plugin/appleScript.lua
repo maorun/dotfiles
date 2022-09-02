@@ -2,7 +2,7 @@ local wk = require "which-key"
 wk.register({
     q = {
         name = "General Commands",
-        u = {":lua require 'maorun.appleScript'.startUp()<CR>", "StartUp", noremap = true},
+        u = {":lua maorun.startUp()<CR>", "StartUp", noremap = true},
         s = {":call CallAppleScript('Spotify', 'playpause')<cr>", "Spotify play/pause", noremap = true},
     },
 }, { prefix = "<leader>" })
@@ -20,8 +20,8 @@ vim.cmd [[
     endfunction
     command! TunnelblickStop :call CallAppleScript("/Applications/Tunnelblick.app", 'disconnect "openvpn"')
 ]]
-local M = {}
-function M.startUp()
+maorun = maorun or {}
+function maorun.startUp()
     CallAppleScript("Microsoft Outlook", "activate")
     CallAppleScript("Microsoft Teams", "activate")
     CallAppleScript("Google Chrome", "activate")
@@ -37,6 +37,3 @@ function M.startUp()
         end
     )
 end
-function M.init()
-end
-return M
