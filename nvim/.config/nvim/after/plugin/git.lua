@@ -43,6 +43,7 @@ wk.register({
             r = {":G rebase -i HEAD~", "Git Rebase interactive", noremap = true},
             c = {":G rebase --continue<cr>", "Git Rebase continue", noremap = true},
             o = {":lua maorun.git.resetToOrigin()<cr>", "Git Reset origin", noremap = true},
+            n = {":G rebase ", "Git Rebase", noremap = true},
         },
         l = {":lua maorun.git.log()<cr>", "Git Log", noremap = true},
         n = {":lua maorun.git.newBranch()<cr>", "Git New Branch", noremap = true},

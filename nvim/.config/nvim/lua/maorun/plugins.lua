@@ -118,9 +118,10 @@ Plug 'ThePrimeagen/harpoon'
 -- testing
 Plug 'vim-test/vim-test'
 
--- Plug 'maorun/snyk.nvim'
--- Plug '~/repos/maorun/snyk.nvim'
+Plug('maorun/snyk.nvim', { [ 'do' ]= 'npm install'  })
 
+-- varnish-syntax highlighting
+Plug 'fgsch/vim-varnish'
 vim.call('plug#end')
 
 -- File Browsing {{{

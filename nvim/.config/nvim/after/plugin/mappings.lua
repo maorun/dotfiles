@@ -230,4 +230,5 @@ wk.register({
 vim.cmd [[
     inoremap <silent><expr> <c-space> coc#refresh()
     inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>"
+    tnoremap <Esc> <C-\><C-n>
 ]]

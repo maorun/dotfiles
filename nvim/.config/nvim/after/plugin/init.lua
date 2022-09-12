@@ -7,7 +7,7 @@ if vim.fn.filereadable(vim.fn.expand(".vimrc_project.lua")) == 1 then
 end
 
 -- maorun/snyk
--- require('maorun.snyk').setup()
+require('maorun.snyk').setup()
 
 require('which-key').setup {}
 
