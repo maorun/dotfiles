@@ -117,7 +117,7 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function()
         vim.api.nvim_buf_set_keymap(0, "i", "@", "@<C-x><C-o>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "i", "#", "#<C-x><C-o>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "n", "<leader>pm", ":Octo pr merge rebase<cr>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ":Octo pr merge rebase<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppc", ":Octo pr checks<cr>", { silent = true, noremap = true })
     end,
 })
