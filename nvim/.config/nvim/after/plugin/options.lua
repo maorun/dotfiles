@@ -45,6 +45,7 @@ vim.opt.statusline=vim.opt.statusline + "%m" -- modified-flag
 vim.opt.statusline=vim.opt.statusline + "%r" -- read-onlyflag
 vim.opt.statusline=vim.opt.statusline + "%="
 vim.cmd [[
+    :StartCodeStats
     set statusline+=%{CodeStatsXp()}\ 
     set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
     set statusline+=\ %-14.(%l,%c%V%)\ %P

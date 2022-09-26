@@ -8,9 +8,11 @@ vim.cmd [[
 
 local Plug = vim.fn['plug#']
 
+vim.api.nvim_create_user_command('StartCodeStats', "call plug#load('code-stats-vim')", {})
+
 vim.call('plug#begin', '~/nvim/plugged')
 
-Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
+Plug('https://gitlab.com/code-stats/code-stats-vim.git', { on  = 'StartCodeStats'})
 
 Plug 'dstein64/vim-startuptime'
 
