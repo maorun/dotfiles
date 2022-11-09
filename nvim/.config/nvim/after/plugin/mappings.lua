@@ -125,7 +125,9 @@ wk.register({
                     command = 'npm',
                     args = { 'run', 'test', '--ignore-scripts'},
                 }) 
-            end, "run tests", noremap = true }
+            end, "run tests", noremap = true },
+            i = { '<c-w>s:terminal npm run image<cr>a', 'run npm-image', noremap = true },
+            d = { '<c-w>s:terminal npm run dev<cr>a', 'run npm-dev', noremap = true },
         },
     },
     a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
