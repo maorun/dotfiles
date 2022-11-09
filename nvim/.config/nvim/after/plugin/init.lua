@@ -8,6 +8,7 @@ end
 
 -- maorun/snyk
 require('maorun.snyk').setup()
+require('maorun.code-stats').setup()
 
 require('which-key').setup {}
 

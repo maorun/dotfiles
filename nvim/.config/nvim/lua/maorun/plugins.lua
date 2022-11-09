@@ -8,11 +8,7 @@ vim.cmd [[
 
 local Plug = vim.fn['plug#']
 
-vim.api.nvim_create_user_command('StartCodeStats', "call plug#load('code-stats-vim')", {})
-
 vim.call('plug#begin', '~/nvim/plugged')
-
-Plug('https://gitlab.com/code-stats/code-stats-vim.git', { on  = 'StartCodeStats'})
 
 Plug 'dstein64/vim-startuptime'
 
@@ -121,6 +117,7 @@ Plug 'ThePrimeagen/harpoon'
 Plug 'vim-test/vim-test'
 
 Plug('maorun/snyk.nvim', { [ 'do' ]= 'npm install'  })
+Plug('maorun/code-stats.nvim')
 
 -- varnish-syntax highlighting
 Plug 'fgsch/vim-varnish'

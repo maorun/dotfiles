@@ -44,9 +44,8 @@ vim.opt.statusline=vim.opt.statusline + " %h" -- help-buffer
 vim.opt.statusline=vim.opt.statusline + "%m" -- modified-flag
 vim.opt.statusline=vim.opt.statusline + "%r" -- read-onlyflag
 vim.opt.statusline=vim.opt.statusline + "%="
+vim.opt.statusline=vim.opt.statusline + "%{luaeval(\"require('maorun.code-stats').currentXp()\")} "
 vim.cmd [[
-    :StartCodeStats
-    set statusline+=%{CodeStatsXp()}\ 
     set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
     set statusline+=\ %-14.(%l,%c%V%)\ %P
     "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
