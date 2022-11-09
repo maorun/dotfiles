@@ -146,7 +146,7 @@ wk.register({
         name = "Session-Handling",
         s = { function ()
             local sessionFilename = vim.fn.expand("Session.vim")
-            if (vim.fn.filereadable(sessionFilename)) then
+            if (vim.fn.filereadable(sessionFilename) == 1) then
                 -- from vim-obsession
                 vim.cmd('source ' .. sessionFilename)
             else
