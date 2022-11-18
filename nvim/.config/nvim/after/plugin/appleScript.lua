@@ -25,7 +25,7 @@ function maorun.startUp()
     CallAppleScript("Microsoft Outlook", "activate")
     CallAppleScript("Microsoft Teams", "activate")
     CallAppleScript("Google Chrome", "activate")
-    CallAppleScript("Tunnelblick", 'connect "openvpn"')
+    -- CallAppleScript("Tunnelblick", 'connect "openvpn"')
     -- CallAppleScript("Tunnelblick", 'disconnect "openvpn"')
     vim.ui.select({ 'yes', 'no' }, {
         prompt = 'Spotify?',
