@@ -130,6 +130,11 @@ wk.register({
             d = { '<c-w>s:terminal npm run dev<cr>a', 'run npm-dev', noremap = true },
         },
     },
+    d = {
+        name = "Diff",
+        d = {":diffthis<cr>", "Diff this", noremap = true },
+        q = {":diffoff!<cr>", "Diff off", noremap = true },
+    },
     a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
     w = {":w<cr>zvzz", "Save", noremap = true},
     v = {
