@@ -1,5 +1,5 @@
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = {'lua','html','php','javascript', 'tsx', 'typescript','bash','make','markdown','regex','vim','yaml'},
+    ensure_installed = {'graphql', 'lua','html','php','javascript', 'tsx', 'typescript','bash','make','markdown','regex','vim','yaml'},
     syncinstall = true,
     -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/plugin/nvim-treesitter.vim
     highlight = {
