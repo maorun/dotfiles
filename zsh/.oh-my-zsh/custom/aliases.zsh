@@ -7,5 +7,3 @@
 alias nv='nvim'
 alias vi='nvim'
 alias vim='nvim'
-
-alias docker-start='open /Applications/Docker.app'

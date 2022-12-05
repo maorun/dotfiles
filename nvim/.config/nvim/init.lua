@@ -1,3 +1,7 @@
+-- disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.cmd [[
     set runtimepath^=~/.vim runtimepath+=~/.vim/after
     let &packpath = &runtimepath
@@ -23,6 +27,7 @@ if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
 end
 
 require 'maorun.plugins'
+require 'maorun'
 
 vim.cmd [[
     augroup luaReload

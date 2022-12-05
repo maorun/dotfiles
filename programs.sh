@@ -44,3 +44,5 @@ chsh -s /bin/zsh
 
 brew install gh
 gh completion -s zsh > ~/.oh-my-zsh/custom/github-completion.zsh
+
+curl https://get.volta.sh | bash

@@ -120,6 +120,9 @@ function M.folders()
             results = {
                 './deployment',
                 './helm',
+                './charts/global/environments',
+                './stage/',
+                './production/',
             },
             entry_maker = function(entry)
                 return {

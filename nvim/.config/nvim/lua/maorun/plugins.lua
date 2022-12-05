@@ -24,7 +24,7 @@ Plug 'junegunn/vim-plug'
     Plug 'fannheyward/telescope-coc.nvim'
     Plug 'nvim-telescope/telescope-project.nvim'
 
-    Plug 'kyazdani42/nvim-web-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
     Plug 'pwntester/octo.nvim'
 
     Plug('nvim-treesitter/nvim-treesitter', {[ 'do' ] = ':TSUpdate'})  -- We recommend updating the parsers on update
@@ -38,7 +38,8 @@ Plug 'junegunn/vim-plug'
 
     -- Plug 'github/copilot.vim'
 
-Plug('preservim/nerdtree', { on= 'NERDTreeFind' })
+Plug 'nvim-tree/nvim-tree.lua'
+-- Plug('preservim/nerdtree', { on= 'NERDTreeFind' })
 
 -- common
 -- Plug 'junegunn/vim-peekaboo'
@@ -53,8 +54,6 @@ Plug 'tpope/vim-surround' -- add/delete/change surround
 -- autocomplete
 Plug('phpactor/phpactor', {[ 'for' ]= 'php', [ 'tag' ]= '*', [ 'do' ]= 'composer install --no-dev -o'})
 -- Plug 'stephenway/postcss.vim'
--- refactor
--- lug 'adoy/vim-php-refactoring-toolbox'
 -- git plugins
 Plug 'tpope/vim-repeat' -- repeat all plugins with .
 Plug 'tpope/vim-fugitive' -- Git
@@ -74,12 +73,12 @@ Plug('neoclide/coc.nvim', {['branch']= 'release'})
 
 Plug 'neoclide/coc-tabnine'
 
-Plug 'jwalton512/vim-blade' -- Blade-Template (Laravel 4+)
+-- Plug 'jwalton512/vim-blade' -- Blade-Template (Laravel 4+)
 
 -- % matches also on if/while
-Plug 'andymass/vim-matchup'
+-- Plug 'andymass/vim-matchup'
 -- graphql
-Plug 'jparise/vim-graphql'
+-- Plug 'jparise/vim-graphql'
 
 -- typescript
 -- Plug 'leafgarland/typescript-vim'
@@ -101,17 +100,19 @@ Plug('gelguy/wilder.nvim', { [ 'do' ] = function()
 end})
 
 -- css-color
-Plug 'ap/vim-css-color'
+-- Plug 'ap/vim-css-color'
 
 -- multi-select
 -- Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 -- TODO: LEARN IT
 
 -- Plug 'kana/vim-textobj-user'
+
+-- aa - around argument
 Plug 'wellle/targets.vim'
 
 -- quick Filebrowsing
-Plug 'ThePrimeagen/harpoon'
+-- Plug 'ThePrimeagen/harpoon'
 
 -- testing
 Plug 'vim-test/vim-test'
@@ -121,31 +122,12 @@ Plug('maorun/code-stats.nvim')
 
 -- varnish-syntax highlighting
 Plug 'fgsch/vim-varnish'
+
+-- refactor
+Plug "ThePrimeagen/refactoring.nvim"
 vim.call('plug#end')
 
--- File Browsing {{{
-vim.cmd [[
-    augroup ProjectDrawer
-        autocmd!
-        " autocmd VimEnter * :NERDTree
-        " autocmd VimEnter * wincmd l
-        autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    augroup END
-    let NERDTreeShowHidden=1
-    " enable line numbers
-    let NERDTreeShowLineNumbers=1
-    " make sure relative line numbers are used
-    autocmd FileType nerdtree setlocal relativenumber
-
-    let g:netrw_winsize = 25
-    let g:netrw_keepdir=0
-    let g:netrw_banner=0  		" 0 = disable top-banner
-    let g:netrw_browse_split=4 	" open in prior window
-    let g:netrw_altv=1		" open splits to the right
-    let g:netrw_liststyle=3		" tree-view
-]]
--- }}}
-
+-- require('refactoring').setup({})
 
 -- {{{ Coc-Configs
 vim.cmd [[

@@ -18,15 +18,18 @@ local make_display = function(entry)
 end
 
 mappingList= function(opts)
-    opts = opts or {
+    opts = vim.tbl_deep_extend("keep", opts or {}, {
         title = '',
         list = {},
-    }
+        action = function()
+        end
+    })
     pickers.new(opts, {
         prompt_title = "Mappings for " .. opts.title,
         attach_mappings = function(propt_bufnr, map)
             actions.select_default:replace(function()
                 actions.close(propt_bufnr)
+                opts.action(action_state.get_selected_entry().value)
             end)
             return true
         end,

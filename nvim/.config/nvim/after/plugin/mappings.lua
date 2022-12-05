@@ -142,7 +142,7 @@ wk.register({
         e = {function()
             require('telescope.builtin').git_files {
                 cwd = "~/dotfiles/",
-                show_untracked = false,
+                -- show_untracked = false,
                 recurse_submodules = true,
                 prompt_title = "* dotfiles *",
             }
@@ -173,9 +173,9 @@ wk.register({
 
 wk.register({
     n = {
-        name = "NERDTree",
-        f = {":NERDTreeFind<cr>", "current file", noremap = true },
-        t = {":NERDTree<cr>", "open tree", noremap = true},
+        name = "FileTree",
+        f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
+        t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
     },
     b = {
         name = "Buffer",

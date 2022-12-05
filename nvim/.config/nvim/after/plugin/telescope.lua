@@ -105,36 +105,18 @@ require('telescope').load_extension('gh')
 require('maorun.telescope.secrets').init()
 require('maorun.telescope.k8s').init()
 
-require("telescope").load_extension('harpoon')
-require'telescope'.load_extension('project')
+-- require("telescope").load_extension('harpoon')
+-- require'telescope'.load_extension('project')
 -- require'telescope'.load_extension('secrets')
-
-require"octo".setup()
-local octoGroup = vim.api.nvim_create_augroup('Octo', {})
-vim.api.nvim_create_autocmd('FileType', {
-    group = octoGroup,
-    pattern = 'octo',
-    callback = function()
-        vim.api.nvim_buf_set_keymap(0, "i", "@", "@<C-x><C-o>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "i", "#", "#<C-x><C-o>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ":Octo pr merge rebase<cr>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppc", ":Octo pr checks<cr>", { silent = true, noremap = true })
-    end,
-})
 
 local wk = require("which-key")
 wk.register({
     [ '<leader>' ] = { ":lua require'telescope.builtin'.git_files{}<cr>", "Git files", noremap = true },
     t = {
         name = "Telescope",
-        o = {
-            name = "Octo",
-            a = { ':Octo actions<cr>', "Octo actions", noremap = true },
-            c = { ':Octo pr create draft<cr>', "create PR draft", noremap = true },
-        },
         g = { ':GkeepLogin marco.driemel@gmx.de<cr>:Telescope gkeep<cr>', "Google Keep", noremap = true },
         f = { ":lua require('telescope.builtin').find_files()<cr>", "Find files", noremap = true },
-        r = { ":lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden' } }<cr>", "Live Grep", noremap = true },
+        r = { ":lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", "Live Grep", noremap = true },
         k = { ":Telescope k8s<cr>", "Kubernetes", noremap = true },
         s = { ":lua require('maorun.telescope.secrets').folders()<cr>", "Secrets", noremap = true },
         h = { ":Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
@@ -160,10 +142,3 @@ wk.register({
     },
 }, { prefix = "<leader>" })
 
---
--- nnoremap <leader>of :Telescope colors<cr>
-
-local M = {}
-function M.init(opts)
-end
-return M

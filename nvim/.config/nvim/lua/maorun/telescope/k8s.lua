@@ -33,11 +33,12 @@ local k8s = function(opts)
     end
 
     local cmd = "git branch --show-current | tr '[:upper:]' '[:lower:]' | tr -C \"[a-z0-9\\n]\" '-'"
+    local branch = vim.fn.trim(vim.fn.system(cmd))
     local namespace = ''
-    if cmd == 'master' then
+    if branch == 'master' then
         namespace = vim.fn.trim(prefixNamespace)
     else
-        namespace = vim.fn.trim(prefixNamespace .. '-' .. vim.fn.system(cmd))
+        namespace = vim.fn.trim(prefixNamespace .. '-' .. branch)
     end
 
     local cmd = "kubectl get -n " .. namespace .. " pod -o name | sed 's/pod\\///g'"

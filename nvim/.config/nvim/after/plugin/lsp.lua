@@ -57,7 +57,7 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
             },
             r = {':lua vim.lsp.buf.rename()<CR>', 'rename', noremap = true},
             c = {':lua vim.lsp.buf.code_action()<CR>', 'code-action', noremap = true},
-            f = {':lua vim.lsp.buf.formatting()<CR>', 'format', noremap = true},
+            f = {':lua vim.lsp.buf.format { async = true }<CR>', 'format', noremap = true},
         },
     }, { silent=true, prefix = '<leader>' })
     wk.register({
@@ -136,11 +136,16 @@ end
 --     },
 -- }
 local forattingAuGroup = vim.api.nvim_create_augroup('formatting', {})
-vim.api.nvim_create_autocmd('BufWritePre', {
-    group = forattingAuGroup,
-    pattern = {'*.tsx','*.ts','*.jsx','*.js','*.php'},
-    command = 'lua vim.lsp.buf.formatting()',
-})
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--     group = forattingAuGroup,
+--     pattern = {'*.tsx','*.ts','*.jsx','*.js'},
+--     command = 'lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})',
+-- })
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--     group = forattingAuGroup,
+--     pattern = {'*.tsx','*.ts','*.jsx','*.js','*.php'},
+--     command = 'lua vim.lsp.buf.formatting()',
+-- })
 local signcolumnAuGroup = vim.api.nvim_create_augroup('signcolumn', {})
 vim.api.nvim_create_autocmd('FileType', {
     group = signcolumnAuGroup,
