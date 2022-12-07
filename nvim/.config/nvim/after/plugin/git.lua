@@ -1,20 +1,3 @@
-local fugitiveAuGroup = vim.api.nvim_create_augroup("user_fugitive", {})
-vim.api.nvim_create_autocmd("BufReadPost", {
-    group = fugitiveAuGroup,
-    pattern = "fugitive://*",
-    command = "set bufhidden=delete",
-})
-vim.api.nvim_create_autocmd("FileType", {
-    group = fugitiveAuGroup,
-    pattern = "dbout",
-    command = "setlocal nofoldenable",
-})
-vim.api.nvim_create_autocmd("User", {
-    group = fugitiveAuGroup,
-    pattern = "DBUIOpened",
-    command = "setlocal relativenumber number",
-})
-
 local wk = require("which-key")
 wk.register({
     g = {

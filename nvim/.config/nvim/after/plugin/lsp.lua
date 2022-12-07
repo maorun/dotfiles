@@ -2,7 +2,6 @@ local configs = require 'lspconfig.configs'
 local util = require 'lspconfig.util'
 local wk = require("which-key")
 
-local lsp = require('lspconfig')
 -- local bin_name = 'sonar-scanner'
 -- local cmd = { bin_name }
 -- if not configs.sonarlint then

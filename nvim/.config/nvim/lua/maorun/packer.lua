@@ -1,0 +1,474 @@
+local ensure_packer = function()
+    local fn = vim.fn
+    local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+    vim.opt.packpath =    vim.opt.packpath +  install_path
+    if fn.empty(fn.glob(install_path)) > 0 then
+        fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+        vim.cmd [[packadd packer.nvim]]
+        return true
+    end
+    return false
+end
+
+local packer_bootstrap = ensure_packer()
+
+require('packer').startup(function(use)
+    use 'wbthomason/packer.nvim'
+
+    use 'dstein64/vim-startuptime'
+    use {
+        'lewis6991/impatient.nvim',
+        config = function()
+            require('impatient')
+        end
+    }
+
+    use {
+        'folke/which-key.nvim',
+        config = function()
+            require('which-key').setup {}
+        end
+    }
+
+    use 'nvim-lua/plenary.nvim'
+    use {
+        'nvim-telescope/telescope.nvim',
+        config = function()
+            local actions = require('telescope.actions')
+            local action_layout = require('telescope.actions.layout')
+            local gitActions = require('maorun.telescope.git').actions
+
+            require('telescope').setup({
+                defaults = {
+                    file_ignore_patterns = {
+                        '.git/*',
+                        'node_modules',
+                        '__snapshots__',
+                        'package%-lock%.json',
+                        'composer%.lock'
+                    },
+                    mappings = {
+                        i = {
+                            ['<C-p>'] = actions.results_scrolling_up,
+                            ['<C-f>'] = actions.results_scrolling_down,
+                            ['<C-O>'] = action_layout.toggle_preview,
+                            ['<PageUp>'] = false,
+                            ['<PageDown>'] = false,
+                            ['<Down>'] = false,
+                            ['<C-j>'] = actions.move_selection_next,
+                            ['<Up>'] = false,
+                            ['<C-k>'] = actions.move_selection_previous,
+                        },
+                    },
+                },
+                pickers = {
+                    buffers = {
+                        mappings ={
+                            i = {
+                                ["<c-d>"] = actions.delete_buffer,
+                            },
+                        },
+                    },
+                    git_branches = {
+                        mappings = {
+                            i = {
+                                ['<c-d>'] = gitActions.git_delete_branch + gitActions.showGitBranches,
+                            }
+                        }
+                    }
+                },
+                extensions = {
+                    project = {
+                        base_dirs = {
+                            '~/repos',
+                        },
+                        hidden_files = true,
+                    },
+                    gkeep = {
+                        find_method = 'all_text',
+                        link_method = 'title',
+                    },
+                },
+            })
+            vim.api.nvim_create_autocmd("TelescopePreviewerLoaded ", {
+                group = 'User',
+                command = 'setlocal wrap'
+            })
+        end,
+        requires = {
+            { -- google keep
+                'stevearc/gkeep.nvim',
+                run = ':UpdateRemotePlugins',
+                config = function()
+                    require('telescope').load_extension('gkeep')
+                end
+            },
+            { 'nvim-lua/plenary.nvim' },
+            { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
+            { 
+                disable = true,
+                'nvim-telescope/telescope-github.nvim',
+                config = function()
+                    require('telescope').load_extension('gh')
+                    -- c-f browse modified files
+                    -- c-a approve
+                    -- c-e view details or diff
+                    -- c-r merge
+                    -- <cr> checkout
+                end,
+            },
+            {
+                disable = true,
+                'fannheyward/telescope-coc.nvim',
+                config = function()
+                    require('telescope').load_extension('coc')
+                end,
+            },
+            {
+                'nvim-telescope/telescope-project.nvim',
+                config = function()
+                    require'telescope'.load_extension('project')
+                end
+            }
+        },
+    }
+
+
+    use {
+        'pwntester/octo.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            {
+                'nvim-tree/nvim-web-devicons',
+                config = function()
+                    require'nvim-web-devicons'.setup {
+                        color_icons = true,
+                        default = true
+                    }
+                end
+            }
+        },
+        config = function ()
+            require"octo".setup()
+        end
+    }
+
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate'
+    }
+    --  use 'nvim-treesitter/playground'
+
+    use {
+        'neovim/nvim-lspconfig',
+        config = function()
+        end,
+    }
+
+    use {
+        'rafcamlet/nvim-luapad',
+        cmd= 'Luapad'
+    }
+
+    use {
+        'iamcco/markdown-preview.nvim',
+        run = 'cd app && npm install',
+        setup = function()
+            vim.g.mkdp_filetypes = { "markdown" } 
+        end,
+        ft = { "markdown" }
+    }
+
+    use {
+        disable = true,
+        'github/copilot.vim',
+    }
+
+    use {
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+            'nvim-tree/nvim-web-devicons',
+        },
+        config = function()
+            local treeApi = require("nvim-tree.api")
+            local function changeCwdToCurrentNode(node)
+                treeApi.tree.change_root_to_node(node)
+                if (node.type == "file") then
+                    vim.cmd("cd " .. node.parent.absolute_path)
+                elseif (node.type == "directory") then
+                    vim.cmd("cd " .. node.absolute_path)
+                end
+            end
+
+            require("nvim-tree").setup({
+                view = {
+                    adaptive_size = true, -- vergrößerung der Breite bei langen dateien
+                    relativenumber = true,
+                    number = true,
+                    mappings = {
+                        list = {
+                            { key = "u", action = "dir_up" },
+                            {
+                                key = "C",
+                                action = "changeCwdToCurrentNode",
+                                action_cb = changeCwdToCurrentNode,
+                            }
+                        },
+                    },
+                },
+                diagnostics = {
+                    enable = true,
+                },
+                renderer = {
+                    group_empty = true,
+                },
+                filters = {
+                },
+            })
+            vim.api.nvim_create_autocmd("BufEnter", {
+                nested = true,
+                callback = function()
+                    if #vim.api.nvim_list_wins() == 1 and require("nvim-tree.utils").is_nvim_tree_buf() then
+                        vim.cmd "quit"
+                    end
+                end
+            })
+        end
+    }
+    --  use 'junegunn/vim-peekaboo'
+
+    -- Vim HardTime
+    --  use 'takac/vim-hardtime'
+
+    use 'justinmk/vim-sneak' -- replace s with search
+    use 'tpope/vim-commentary' -- gcc
+    use {
+        disable= true,
+        'tpope/vim-obsession', -- vim session
+    }
+    use 'tpope/vim-surround' -- add/delete/change surround
+
+    -- autocomplete
+    use {
+        'phpactor/phpactor',
+        run = "composer install --no-dev -o",
+        tag = '*',
+        ft = 'php',
+    }
+    --  use 'stephenway/postcss.vim'
+    -- git plugins
+    use 'tpope/vim-repeat' -- repeat all plugins with .
+    use { -- Git
+        'tpope/vim-fugitive',
+        config = function()
+            local fugitiveAuGroup = vim.api.nvim_create_augroup("user_fugitive", {})
+            vim.api.nvim_create_autocmd("BufReadPost", {
+                group = fugitiveAuGroup,
+                pattern = "fugitive://*",
+                command = "set bufhidden=delete",
+            })
+        end,
+    }
+    use 'rbong/vim-flog' -- Git-Tree
+
+    use {
+        disable= true,
+        'tpope/vim-rhubarb', -- enable :GBrowse to github
+    }
+    use {
+        'tpope/vim-dadbod', -- Database
+        requires = {
+            {
+                'kristijanhusak/vim-dadbod-ui', -- Database-UI
+                cmd = 'DBUI'
+            }
+        },
+        cmd = 'DBUI',
+        config = function ()
+            local dbAuGroup = vim.api.nvim_create_augroup("user_db", {})
+            vim.api.nvim_create_autocmd("FileType", {
+                group = dbAuGroup,
+                pattern = "dbout",
+                command = "setlocal nofoldenable",
+            })
+            vim.api.nvim_create_autocmd("User", {
+                group = dbAuGroup,
+                pattern = "DBUIOpened",
+                command = "setlocal relativenumber number",
+            })
+        end,
+    }
+    use 'vim-scripts/ReplaceWithRegister' -- replace with register - gr
+
+    use { -- git-sign
+        'lewis6991/gitsigns.nvim',
+        requires = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            require('gitsigns').setup {
+                current_line_blame = true,
+            }
+        end
+    }
+
+
+    use {
+        'neoclide/coc.nvim',
+        branch= 'release',
+        config= function()
+            -- wk.register({
+            --     ["<C-SPACE>"] = {'coc#refresh()', noremap = true },
+            --     ["<tab>"] = {'coc#pum#visible() ? coc#pum#confirm() : "<tab>"', noremap = true },
+            -- }, {mode = 'i', expr = true })
+            vim.cmd [[
+    inoremap <silent><expr> <c-space> coc#refresh()
+    inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#confirm() : "\<tab>"
+    tnoremap <Esc> <C-\><C-n>
+
+    augroup Cursor
+    autocmd!
+    " autocmd CursorHold * silent call CocActionAsync('highlight')
+    "    autocmd CursorHoldI * :call <SID>show_hover_doc()
+    "    autocmd CursorHold * :call <SID>show_hover_doc()
+    augroup END
+
+    highlight CocFloating ctermbg=black
+    highlight MatchParen ctermbg=240
+    highlight NormalFloat guibg=#222332
+    highlight CocMenuSel ctermbg=Grey guibg=DarkGrey
+
+    function! ShowDocIfNoDiagnostic(args)
+    if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
+    "      silent call CocActionAsync('doHover')
+    endif
+    endfunction
+
+    function! s:show_hover_doc()
+    " call ShowDocIfNoDiagnostic()
+    call timer_start(500, 'ShowDocIfNoDiagnostic')
+    endfunction
+]]
+        end,
+        run = function()
+            vim.cmd [[
+            :CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier coc-phpactor coc-phpls coc-tabnine coc-html
+            ]]
+        end,
+        requires = {
+            { 'neoclide/coc-tabnine' },
+            { -- only with 12.22.9 ???
+                'neoclide/coc-html',
+                run= 'npm install'
+            },
+        }
+        -- Plug('rodrigore/coc-tailwind-intellisense', {'do': 'npm install'})  -- only with node 16.X
+        -- Plug('iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'})
+    }
+
+    --  use 'jwalton512/vim-blade' -- Blade-Template (Laravel 4+)
+
+    -- % matches also on if/while
+    --  use 'andymass/vim-matchup'
+    -- graphql
+    --  use 'jparise/vim-graphql'
+
+    -- typescript
+    --  use 'leafgarland/typescript-vim'
+    -- Training
+    --  use 'tjdevries/train.nvim'
+    use {
+        'ThePrimeagen/vim-be-good',
+        cmd= 'VimBeGood'
+    }
+    -- Vim Script
+
+    -- wildermenu for :e and /
+    -- function! UpdateRemotePlugins(...)
+    -- end
+    use {
+        'gelguy/wilder.nvim',
+        config = function()
+            vim.api.nvim_create_autocmd('CmdlineEnter', {
+                group = vim.api.nvim_create_augroup('Wilder', {}),
+                once = true,
+                pattern = '*',
+                callback = function()
+                    local wilder = require('wilder')
+                    wilder.setup({modes = {':', '/', '?'}})
+                    wilder.set_option('pipeline', {
+                        wilder.branch(
+                            wilder.cmdline_pipeline({
+                                language = 'python',
+                                fuzzy = 2,
+                            }),
+                            wilder.python_search_pipeline({
+                                pattern = wilder.python_fuzzy_pattern({
+                                    start_at_boundary = 0
+                                }),
+                                sorter = wilder.python_difflib_sorter(),
+                                engine = 're',
+                            })
+                        )
+                    })
+                    wilder.set_option('renderer', wilder.popupmenu_renderer({
+                        highlighter = wilder.basic_highlighter(),
+                        separator = ' · ',
+                        left = {' ', wilder.wildmenu_spinner(), ' '},
+                        right = {' ', wilder.wildmenu_index()},
+                    }))
+                end,
+            })
+
+        end
+    }
+
+    -- css-color
+    --  use 'ap/vim-css-color'
+
+    -- multi-select
+    --  use 'mg979/vim-visual-multi', {'branch': 'master'}
+    -- TODO: LEARN IT
+
+    --  use 'kana/vim-textobj-user'
+
+    -- aa - around argument
+    use 'wellle/targets.vim'
+
+    -- quick Filebrowsing
+    --  use 'ThePrimeagen/harpoon'
+    -- require("telescope").load_extension('harpoon')
+
+    -- testing
+    use 'vim-test/vim-test'
+
+    use {
+        'maorun/snyk.nvim',
+        run = 'npm install',
+        config = function()
+            require('maorun.snyk').setup()
+        end,
+    }
+    use {
+        'maorun/code-stats.nvim',
+        config = function()
+            require('maorun.code-stats').setup()
+        end
+    }
+
+    -- varnish-syntax highlighting
+    use 'fgsch/vim-varnish'
+
+    -- refactor
+    use {
+        disable = true,
+        'ThePrimeagen/refactoring.nvim',
+        config = function()
+            require('refactoring').setup({})
+        end
+    }
+
+
+    if packer_bootstrap then
+        require('packer').sync()
+    end
+end)

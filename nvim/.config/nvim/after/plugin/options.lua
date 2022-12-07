@@ -46,7 +46,7 @@ vim.opt.statusline=vim.opt.statusline + "%r" -- read-onlyflag
 vim.opt.statusline=vim.opt.statusline + "%="
 vim.opt.statusline=vim.opt.statusline + "%{luaeval(\"require('maorun.code-stats').currentXp()\")} "
 vim.cmd [[
-    set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
+    "set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
     set statusline+=\ %-14.(%l,%c%V%)\ %P
     "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
     augroup statusline
@@ -75,7 +75,6 @@ vim.opt.foldexpr="nvim_treesitter#foldexpr()"
 vim.cmd [[
     augroup VimRcRead
         autocmd!
-        autocmd FileType lua setlocal foldmethod=marker foldenable
         autocmd FileType vim setlocal foldmethod=marker foldenable
         autocmd BufRead *.json setlocal foldmethod=syntax
     augroup END

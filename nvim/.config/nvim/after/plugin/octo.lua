@@ -1,5 +1,3 @@
-require"octo".setup()
-
 local octoGroup = vim.api.nvim_create_augroup('Octo', {})
 vim.api.nvim_create_autocmd('FileType', {
     group = octoGroup,

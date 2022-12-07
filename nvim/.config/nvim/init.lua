@@ -26,7 +26,7 @@ if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
     vim.cmd("source ~/.vimrc_personal.vim")
 end
 
-require 'maorun.plugins'
+require 'maorun.packer'
 require 'maorun'
 
 vim.cmd [[
