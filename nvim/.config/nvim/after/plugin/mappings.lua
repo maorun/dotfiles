@@ -72,7 +72,6 @@ function job(opts)
 end
 
 wk.register({
-    ['<BS>'] = {":nohlsearch<cr>", "clear Search", noremap = true},
     ['<C-E>'] = {"<C-B>", "Scroll up"},
     g = {
         o = {"o<Esc>", "add a line below", noremap = true},
@@ -200,11 +199,23 @@ vim.cmd [[
     vnoremap jk <Esc>
     cnoremap jk <Esc>
 
-
     " yank and paste to/from system-clipboard (Mac)
     vnoremap ç "+y
+    nnoremap ç :set operatorfunc=CopyToSystemClipboard<cr>g@
     nnoremap √ "+p
     inoremap √ <Esc>"+pa
+
+    function! CopyToSystemClipboard(type)
+    if a:type ==# 'line'
+        execute "normal! mm`[V`]\"+y`m"
+    elseif a:type ==# 'char'
+        execute "normal! mm`[v`]\"+y`m"
+    else
+        return
+    endif
+
+    " echo @@ "yanked into clipboard"
+    endfunction
 ]]
 
 wk.register({

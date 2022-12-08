@@ -208,12 +208,16 @@ require('packer').startup(function(use)
                     number = true,
                     mappings = {
                         list = {
+                            {
+                                key = "x",
+                                action = "close_node",
+                            },
                             { key = "u", action = "dir_up" },
                             {
                                 key = "C",
                                 action = "changeCwdToCurrentNode",
                                 action_cb = changeCwdToCurrentNode,
-                            }
+                            },
                         },
                     },
                 },
@@ -472,3 +476,10 @@ require('packer').startup(function(use)
         require('packer').sync()
     end
 end)
+
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost packer.lua source <afile> | PackerCompile
+  augroup end
+]])
