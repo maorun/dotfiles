@@ -90,10 +90,10 @@ require('packer').startup(function(use)
                     },
                 },
             })
-            vim.api.nvim_create_autocmd("TelescopePreviewerLoaded ", {
-                group = 'User',
-                command = 'setlocal wrap'
-            })
+            -- vim.api.nvim_create_autocmd("TelescopePreviewerLoaded ", {
+            --     group = 'User',
+            --     command = 'setlocal wrap'
+            -- })
         end,
         requires = {
             { -- google keep
