@@ -327,7 +327,6 @@ require('packer').startup(function(use)
             vim.cmd [[
     inoremap <silent><expr> <c-space> coc#refresh()
     inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#confirm() : "\<tab>"
-    tnoremap <Esc> <C-\><C-n>
 
     augroup Cursor
     autocmd!

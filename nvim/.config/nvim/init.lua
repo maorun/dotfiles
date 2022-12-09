@@ -2,6 +2,10 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+vim.cmd[[
+tnoremap <Esc> <C-\><C-n>
+]]
+
 vim.cmd [[
     set runtimepath^=~/.vim runtimepath+=~/.vim/after
     let &packpath = &runtimepath
