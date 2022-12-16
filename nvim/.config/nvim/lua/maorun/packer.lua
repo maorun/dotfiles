@@ -464,7 +464,10 @@ require('packer').startup(function(use)
     }
 
     -- varnish-syntax highlighting
-    use 'fgsch/vim-varnish'
+    use {
+        'varnishcache-friends/vim-varnish',
+        ft = { "vcl" }
+    }
 
     -- refactor
     use {
