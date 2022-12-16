@@ -186,6 +186,11 @@ require('packer').startup(function(use)
     }
 
     use {
+        'preservim/nerdtree',
+        cmd = 'NerdTreeFind'
+    }
+    use {
+        disable = true,
         'nvim-tree/nvim-tree.lua',
         requires = {
             'nvim-tree/nvim-web-devicons',

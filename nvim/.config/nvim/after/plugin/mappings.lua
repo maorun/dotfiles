@@ -173,8 +173,10 @@ wk.register({
 wk.register({
     n = {
         name = "FileTree",
-        f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
-        t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
+        f = {":NERDTreeFind<cr>", "current file", noremap = true },
+        t = {":NERDTree<cr>", "open tree", noremap = true},
+        -- f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
+        -- t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
     },
     b = {
         name = "Buffer",
