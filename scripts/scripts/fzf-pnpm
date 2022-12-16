@@ -1,0 +1,8 @@
+#!/bin/bash
+
+WORKSPACE=`pnpm ls --depth -1 -r --no-optional --json --stream | jq '.[].name' | tr '"' ' ' | fzf --prompt="Workspace: "`
+write_noline() {
+  osascript -e "tell application \"iTerm2\" to tell current window to tell current session to write text \"${@}\" newline NO"
+}
+
+write_noline "pnpm --filter ${WORKSPACE} run dev"
