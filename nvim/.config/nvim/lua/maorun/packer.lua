@@ -187,7 +187,19 @@ require('packer').startup(function(use)
 
     use {
         'preservim/nerdtree',
-        cmd = 'NerdTreeFind'
+        config = function()
+            vim.cmd[[
+                augroup ProjectDrawer
+                    autocmd!
+                    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+                augroup END
+                let NERDTreeShowHidden=1
+                " enable line numbers
+                let NERDTreeShowLineNumbers=1
+                " make sure relative line numbers are used
+                autocmd FileType nerdtree setlocal relativenumber
+            ]]
+        end
     }
     use {
         disable = true,
