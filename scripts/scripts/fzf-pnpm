@@ -1,8 +1,12 @@
 #!/bin/bash
 
-WORKSPACE=`pnpm ls --depth -1 -r --no-optional --json --stream | jq '.[].name' | tr '"' ' ' | fzf --prompt="Workspace: "`
+AREA=`pnpm ls --depth -1 -r --no-optional --json --stream | jq '.[]' -c | fzf --prompt="Area: "`
+WORKSPACE=`echo "${AREA}" | jq .name | tr -d '"'`
+FOLDER=`echo "${AREA}" | jq .path | tr -d '"' `"/package.json"
+SCRIPT=`jq -r '.scripts|to_entries[]|((.key))' ${FOLDER} | fzf --prompt="Script to run: "`
+#
 write_noline() {
   osascript -e "tell application \"iTerm2\" to tell current window to tell current session to write text \"${@}\" newline NO"
 }
 
-write_noline "pnpm --filter ${WORKSPACE} run dev"
+pnpm --filter ${WORKSPACE} run ${SCRIPT}
