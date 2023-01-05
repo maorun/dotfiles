@@ -15,7 +15,10 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
-    use 'dstein64/vim-startuptime'
+    use {
+        'dstein64/vim-startuptime',
+        cmd = 'StartupTime'
+    }
     use {
         'lewis6991/impatient.nvim',
         config = function()
@@ -101,9 +104,14 @@ require('packer').startup(function(use)
                 run = ':UpdateRemotePlugins',
                 config = function()
                     require('telescope').load_extension('gkeep')
+                    local keepNote = vim.api.nvim_create_augroup("GoogleKeepNote", {})
+                    vim.api.nvim_create_autocmd("FileType", {
+                        group = dbAuGroup,
+                        pattern = "GoogleKeepNote",
+                        command = "setlocal spell spelllang=de",
+                    })
                 end
             },
-            { 'nvim-lua/plenary.nvim' },
             { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
             { 
                 disable = true,
@@ -138,7 +146,6 @@ require('packer').startup(function(use)
         'pwntester/octo.nvim',
         requires = {
             'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope.nvim',
             {
                 'nvim-tree/nvim-web-devicons',
                 config = function()
@@ -291,7 +298,10 @@ require('packer').startup(function(use)
             })
         end,
     }
-    use 'rbong/vim-flog' -- Git-Tree
+    use {
+        'rbong/vim-flog', -- Git-Tree
+        cmd = 'Flogsplit',
+    }
 
     use {
         disable= true,
@@ -438,7 +448,6 @@ require('packer').startup(function(use)
                     }))
                 end,
             })
-
         end
     }
 
@@ -452,14 +461,18 @@ require('packer').startup(function(use)
     --  use 'kana/vim-textobj-user'
 
     -- aa - around argument
-    use 'wellle/targets.vim'
+    use {
+        'wellle/targets.vim',
+    }
 
     -- quick Filebrowsing
     --  use 'ThePrimeagen/harpoon'
     -- require("telescope").load_extension('harpoon')
 
     -- testing
-    use 'vim-test/vim-test'
+    use {
+        'vim-test/vim-test',
+    }
 
     use {
         'maorun/snyk.nvim',
