@@ -2,13 +2,15 @@
 
 # --preview="echo {}"
 
-NAMESPACE="--namespace ac-steam"
-# NAMESPACE="--namespace "`kubectl get namespace -o custom-columns=name:.metadata.name | fzf --prompt="Namespace: "`
-
 CONTEXT="--context "`yq '.contexts.[].name' < ~/.kube/config | fzf --prompt="Context: "`
+
+# NAMESPACE="--namespace ac-steam"
+NAMESPACE="--namespace "`kubectl ${CONTEXT} get namespace -o custom-columns=name:.metadata.name | fzf --prompt="Namespace: "`
 
 # tr ' ' '\n'
 COMMANDS=(
+    'get deployments.app -o wide'
+    'get secrets -o wide'
     'get configmaps -o json'
     'create job'
     'delete'
