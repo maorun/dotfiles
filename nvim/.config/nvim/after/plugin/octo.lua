@@ -5,8 +5,8 @@ function rebaseMergeConfirm()
         kind = 'ass'
     }, function(selected)
             if (selected == 'yes') then
-                vim.cmd("Octo pr merge rebase<cr>")
-                cim.cmd(":e<cr>")
+                local commands = require("octo.commands")
+                commands.merge_pr("rebase")
             end
         end
     )
