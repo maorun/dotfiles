@@ -22,7 +22,12 @@ wk.register({
             l = { ':Telescope git_stash<cr>', "Stash list", noremap = true },
         },
         g = { ":lua require'telescope.builtin'.git_files{}<cr>", "Git files", noremap = true },
-        b = { ":lua require'telescope.builtin'.git_branches()<cr>", "Git branches", noremap = true },
+        b = {
+            name = "Branches",
+            a = {":lua require'telescope.builtin'.git_branches()<cr>", "Git all branches", noremap = true },
+            b = {":lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", "Git lokal branches", noremap = true },
+            r = {":lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>", "Git remote branches", noremap = true },
+        },
         h = {
             name = "GitHub",
             g = {':lua require("telescope").extensions.gh.gist()<cr>', "Gist", noremap = true},
