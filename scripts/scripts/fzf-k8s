@@ -9,7 +9,8 @@ NAMESPACE="--namespace "`kubectl ${CONTEXT} get namespace -o custom-columns=name
 
 # tr ' ' '\n'
 COMMANDS=(
-    'get deployments.app -o wide'
+    'restart-deployment'
+    'get deployments.app -o wide -w'
     'get secrets -o wide'
     'get configmaps -o json'
     'create job'
@@ -30,6 +31,10 @@ if [ "${KCMD}" == "annotate" ]; then
     POD=`kubectl ${CONTEXT} ${NAMESPACE} get ${RESOURCE} -o custom-columns=name:.metadata.name,status:.status.phase | fzf | sed 's/ .*$//g'`
 
     KCMD="${KCMD} ${RESOURCE} ${POD} kustomize.toolkit.fluxcd.io/reconcile='disabled'"
+fi
+if [ "${KCMD}" == "restart-deployment" ]; then
+    DEPLOYMENTS=`kubectl --namespace ac-steam --context bcp-nmacs-stage get deployments.apps -o custom-columns=name:.metadata.name | fzf --prompt="Deployments: "`
+    KCMD="rollout restart deployment ${DEPLOYMENTS}"
 fi
 if [ "${KCMD}" == "logs" ]; then
     POD=`kubectl ${NAMESPACE} ${CONTEXT} get pods -o custom-columns=name:.metadata.name,status:.status.phase | fzf | sed 's/ .*$//g'`
