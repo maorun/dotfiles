@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 AREA=`pnpm ls --depth -1 -r --no-optional --json --stream | jq '.[]' -c | fzf --prompt="Area: "`
 WORKSPACE=`echo "${AREA}" | jq .name | tr -d '"'`

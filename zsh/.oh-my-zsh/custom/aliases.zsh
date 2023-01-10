@@ -7,3 +7,6 @@
 alias nv='nvim'
 alias vi='nvim'
 alias vim='nvim'
+
+alias fp='fzf-pnpm'
+alias fk='fzf-k8s'
