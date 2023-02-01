@@ -83,6 +83,8 @@ vim.cmd [[
 
     syntax enable
 
+    hi DiffChange   ctermfg=NONE          ctermbg=NONE
+
     hi ColorColumn ctermbg=green
     call matchadd('ColorColumn', '\%81v', 100)
 
