@@ -9,4 +9,4 @@ write_noline() {
   osascript -e "tell application \"iTerm2\" to tell current window to tell current session to write text \"${@}\" newline NO"
 }
 
-pnpm --filter ${WORKSPACE} run ${SCRIPT}
+write_noline "pnpm --filter ${WORKSPACE} run ${SCRIPT}"

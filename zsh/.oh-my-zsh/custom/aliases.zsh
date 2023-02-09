@@ -10,3 +10,6 @@ alias vim='nvim'
 
 alias fp='fzf-pnpm'
 alias fk='fzf-k8s'
+alias fn='fzf-npm'
+
+alias update='pnpm add -g pnpm && npm install -g npm && brew update && brew upgrade'
