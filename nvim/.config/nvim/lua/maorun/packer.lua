@@ -39,7 +39,7 @@ require('packer').startup(function(use)
         config = function()
             local actions = require('telescope.actions')
             local action_layout = require('telescope.actions.layout')
-            local gitActions = require('maorun.telescope.git').actions
+            local gitActions = require('maorun.telescope.gitActions').actions
 
             require('telescope').setup({
                 defaults = {
