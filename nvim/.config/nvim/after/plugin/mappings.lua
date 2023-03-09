@@ -1,4 +1,6 @@
 vim.g.mapleader = ' '
+-- Bug in Vim 8 => https://github.com/vim/vim/issues/4738
+vim.cmd "nnoremap gx yiW:!open <cWORD><CR><CR>"
 
 -- got to indention level {{{
 vim.cmd [[
@@ -195,6 +197,10 @@ wk.register({
         ["i"] = {"<Plug>(coc-implementation)", "goto implementations", noremap = true },
     },
 }, { prefix = "<leader>" })
+
+wk.register({
+    cq = {":split | terminal aicommits -g 3<cr>a", "open terminal", noremap = true},
+}, { mode = 'n'})
 
 vim.cmd [[
     inoremap jk <Esc>
