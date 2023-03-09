@@ -1,0 +1,27 @@
+#!/bin/bash -e
+FILE=~/.local/share/nvim/maorun-time.json
+
+DATA=`cat $FILE`
+WEEKDAY=`date +"%A"`
+WEEKNUMBER=`date +"%W"`
+
+JQ_EXPRESSION='.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${WEEKDAY}'"]["summary"]'
+VALUE=`echo $DATA | jq $JQ_EXPRESSION`
+# VALUE_ROUND=`echo $VALUE | tr '.' ',' | awk  '{ print sprintf("%.2f", $1); }'`
+# echo $VALUE_ROUND
+
+OVERHOUR_WEEK=`echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["summary"].overhour'`
+OVERHOUR_MONDAY=``
+getOverview() {
+    echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${1}'"]["summary"].overhour' 2> /dev/null
+}
+
+echo -e "Gesammtüberstunden:\t" $OVERHOUR_WEEK
+echo -e "Montag:\t\t" $(getOverview "Montag")
+echo -e "Dienstag:\t" $(getOverview "Dienstag")
+echo -e "Mittwoch:\t" $(getOverview "Mittwoch")
+echo -e "Donnerstag:\t" $(getOverview "Donnerstag")
+echo -e "Freitag:\t" $(getOverview "Freitag")
+
+# say "$VALUE_ROUND Stunden"
+
