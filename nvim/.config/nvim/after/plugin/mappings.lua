@@ -30,7 +30,7 @@ vim.cmd [[
 -- }}}
 
 local wk = require("which-key")
-newBuffer = function(args)
+NewBuffer = function(args)
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
     vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
@@ -41,7 +41,7 @@ newBuffer = function(args)
     end
 end
 
-function job(opts)
+function Job(opts)
     local lines = {}
     opts = vim.tbl_deep_extend("keep", opts or {}, {
         silent = false,
@@ -58,17 +58,17 @@ function job(opts)
             vim.schedule(function()
                 vim.api.nvim_command('new')
                 if (opts.silent ~= true) then
-                    newBuffer(lines)
+                    NewBuffer(lines)
                 end 
             end)
         end,
     })
 
-    local Job = require'plenary.job'
+    local plenaryJob = require'plenary.job'
     if (opts.silent ~= true) then
         print('start "' .. opts.command .. " " .. table.concat(opts.args,' ') .. '"')
     end
-    Job:new(opts):start()
+    plenaryJob:new(opts):start()
 end
 
 wk.register({
@@ -114,13 +114,13 @@ wk.register({
         name = "General Commands",
         n = {
             name = "Create new X",
-            b = { newBuffer, "new buffer", noremap = true },
+            b = { NewBuffer, "new buffer", noremap = true },
             g = { ':GkeepNew<cr>', 'new google-note', noremap = true }
         },
         r =  {
             name = "Run X",
             t = {function()
-                job({
+                Job({
                     command = 'npm',
                     args = { 'run', 'test', '--ignore-scripts'},
                 }) 
@@ -180,7 +180,7 @@ wk.register({
     },
     b = {
         name = "Buffer",
-        n = { newBuffer, "new buffer", noremap = true },
+        n = { NewBuffer, "new buffer", noremap = true },
     },
     c = {
         name = "COC",

@@ -17,7 +17,7 @@ local make_display = function(entry)
     })
 end
 
-mappingList= function(opts)
+local mappingList= function(opts)
     opts = vim.tbl_deep_extend("keep", opts or {}, {
         title = '',
         list = {},

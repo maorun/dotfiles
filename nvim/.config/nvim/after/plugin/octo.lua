@@ -1,5 +1,5 @@
 local octoGroup = vim.api.nvim_create_augroup('Octo', {})
-function rebaseMergeConfirm()
+function RebaseMergeConfirm()
     vim.ui.select({ 'yes', 'no' }, {
         prompt = 'Merge Rebase?',
         kind = 'ass'
@@ -17,11 +17,12 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function()
         vim.api.nvim_buf_set_keymap(0, "i", "@", "@<C-x><C-o>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "i", "#", "#<C-x><C-o>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ':lua rebaseMergeConfirm()<cr>', { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ':lua RebaseMergeConfirm()<cr>', { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppc", ":Octo pr checks<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rs", ":Octo review start<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rn", ":Octo review resume<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rd", ":Octo pr ready<cr>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<C-N>", ":Octo pr browser<cr>", { silent = true, noremap = true })
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
