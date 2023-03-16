@@ -175,10 +175,15 @@ wk.register({
 wk.register({
     n = {
         name = "FileTree",
-        f = {":NERDTreeFind<cr>", "current file", noremap = true },
-        t = {":NERDTree<cr>", "open tree", noremap = true},
+        n = {
+            name = "NERDTree",
+            f = {":NERDTreeFind<cr>", "current file", noremap = true },
+            t = {":NERDTree<cr>", "open tree", noremap = true},
         -- f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
         -- t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
+        },
+        f = {":Telescope file_browser path=%:p:h select_buffer=true<cr>", "current file", noremap = true},
+        t = {":Telescope file_browser respect_gitignore=true<cr>", "open tree", noremap = true},
     },
     b = {
         name = "Buffer",
