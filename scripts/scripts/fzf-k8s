@@ -15,7 +15,7 @@ COMMANDS=(
     'get configmaps -o json'
     'create job'
     'delete'
-    'exec -it'
+    'exec'
     'annotate'
     'apply -f'
     'logs'
@@ -25,17 +25,25 @@ for i in ${!COMMANDS[@]}; do
     CMD="${COMMANDS[$i]}|$CMD"
 done
 KCMD=`echo $CMD  | sed 's/|*$//g' | tr '|' '\n' | fzf --prompt="Command: "`
-# KCMD="annotate"
+if [ "${KCMD}" == "exec" ]; then
+    POD=`kubectl ${NAMESPACE} ${CONTEXT} get pods -o custom-columns=name:.metadata.name,status:.status.phase | fzf | sed 's/ .*$//g'`
+
+    CONTAINER="--container "`kubectl ${NAMESPACE} ${CONTEXT} get pods ${POD} -o custom-columns=containers:.spec.containers\[\*\].name | tail -n1 | tr ',' '\n' | fzf --prompt="Container: "`
+
+    KCMD="${KCMD} ${POD} ${CONTAINER} -it -- /bin/sh"
+fi
 if [ "${KCMD}" == "annotate" ]; then
     RESOURCE=`kubectl api-resources -o name | fzf --prompt="Resource: "`
     POD=`kubectl ${CONTEXT} ${NAMESPACE} get ${RESOURCE} -o custom-columns=name:.metadata.name,status:.status.phase | fzf | sed 's/ .*$//g'`
 
     KCMD="${KCMD} ${RESOURCE} ${POD} kustomize.toolkit.fluxcd.io/reconcile='disabled'"
 fi
+
 if [ "${KCMD}" == "restart-deployment" ]; then
     DEPLOYMENTS=`kubectl --namespace ac-steam --context bcp-nmacs-stage get deployments.apps -o custom-columns=name:.metadata.name | fzf --prompt="Deployments: "`
     KCMD="rollout restart deployment ${DEPLOYMENTS}"
 fi
+
 if [ "${KCMD}" == "logs" ]; then
     POD=`kubectl ${NAMESPACE} ${CONTEXT} get pods -o custom-columns=name:.metadata.name,status:.status.phase | fzf | sed 's/ .*$//g'`
 
@@ -43,7 +51,6 @@ if [ "${KCMD}" == "logs" ]; then
 
     KCMD="${KCMD} ${POD} ${CONTAINER} --since=5m -f"
 fi
-echo $KCMD
 
 write_noline() {
   osascript -e "tell application \"iTerm2\" to tell current window to tell current session to write text \"${@}\" newline NO"
