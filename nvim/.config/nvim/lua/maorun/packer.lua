@@ -207,6 +207,24 @@ require('packer').startup(function(use)
             ]]
         end
     }
+
+    use {
+        "nvim-telescope/telescope-file-browser.nvim",
+        requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+        config = function()
+            require("telescope").setup {
+                extensions = {
+                    file_browser = {
+                        respect_gitignore = false,
+                        hidden = true,
+                        depth = 8,
+                    }
+                }
+            }
+            require("telescope").load_extension "file_browser"
+        end
+    }
+
     use {
         disable = true,
         'nvim-tree/nvim-tree.lua',
@@ -473,6 +491,7 @@ require('packer').startup(function(use)
     use {
         'maorun/snyk.nvim',
         run = 'npm install',
+        disable = true,
         config = function()
             require('maorun.snyk').setup()
         end,
@@ -499,6 +518,19 @@ require('packer').startup(function(use)
         end
     }
 
+    use {'kshenoy/vim-signature'} -- show marks
+
+    use({
+        "jackMort/ChatGPT.nvim",
+        config = function()
+            require("chatgpt").setup({})
+        end,
+        requires = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    })
 
     if packer_bootstrap then
         require('packer').sync()
