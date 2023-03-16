@@ -56,7 +56,7 @@ wk.register({
                         vim.cmd('Octo pr list ' .. value)
                     end
                 }
-            end, "help", noremap = true },
+            end, "list pr of a list of repos", noremap = true },
             l = { ':Octo pr list<cr>', "list PR", noremap = true },
             p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "should be keybind of tp fur Project", noremap = true },
             h = { function()
