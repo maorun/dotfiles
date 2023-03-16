@@ -106,7 +106,7 @@ require('packer').startup(function(use)
                     require('telescope').load_extension('gkeep')
                     local keepNote = vim.api.nvim_create_augroup("GoogleKeepNote", {})
                     vim.api.nvim_create_autocmd("FileType", {
-                        group = dbAuGroup,
+                        group = keepNote,
                         pattern = "GoogleKeepNote",
                         command = "setlocal spell spelllang=de",
                     })
@@ -114,7 +114,7 @@ require('packer').startup(function(use)
             },
             { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
             { 
-                disable = true,
+                disable = false,
                 'nvim-telescope/telescope-github.nvim',
                 config = function()
                     require('telescope').load_extension('gh')
@@ -188,7 +188,6 @@ require('packer').startup(function(use)
     }
 
     use {
-        disable = true,
         'github/copilot.vim',
     }
 
@@ -304,10 +303,6 @@ require('packer').startup(function(use)
     }
 
     use {
-        disable= true,
-        'tpope/vim-rhubarb', -- enable :GBrowse to github
-    }
-    use {
         'tpope/vim-dadbod', -- Database
         requires = {
             {
@@ -333,6 +328,7 @@ require('packer').startup(function(use)
     use 'vim-scripts/ReplaceWithRegister' -- replace with register - gr
 
     use { -- git-sign
+        -- disable = true, -- startup-time-consuming
         'lewis6991/gitsigns.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
         config = function()
@@ -352,8 +348,8 @@ require('packer').startup(function(use)
             --     ["<tab>"] = {'coc#pum#visible() ? coc#pum#confirm() : "<tab>"', noremap = true },
             -- }, {mode = 'i', expr = true })
             vim.cmd [[
-    inoremap <silent><expr> <c-space> coc#refresh()
-    inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#confirm() : "\<tab>"
+     inoremap <silent><expr> <c-space> coc#refresh()
+     inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#confirm() : "\<s-tab>"
 
     augroup Cursor
     autocmd!
