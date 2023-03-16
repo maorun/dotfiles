@@ -208,16 +208,16 @@ vim.cmd [[
     cnoremap jk <Esc>
 
     " yank and paste to/from system-clipboard (Mac)
-    vnoremap ç "+y
-    nnoremap ç :set operatorfunc=CopyToSystemClipboard<cr>g@
-    nnoremap √ "+p
-    inoremap √ <Esc>"+pa
+    vnoremap <silent> ç "+y
+    nnoremap <silent> ç :set operatorfunc=CopyToSystemClipboard<cr>g@
+    nnoremap <silent> √ "+p
+    inoremap <silent> √ <Esc>"+pa
 
     function! CopyToSystemClipboard(type)
     if a:type ==# 'line'
-        execute "normal! mm`[V`]\"+y`m"
+        silent execute "normal! mm`[V`]\"+y`m"
     elseif a:type ==# 'char'
-        execute "normal! mm`[v`]\"+y`m"
+        silent execute "normal! mm`[v`]\"+y`m"
     else
         return
     endif
