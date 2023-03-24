@@ -32,7 +32,7 @@ npm install -g @tailwindcss/language-server graphql-language-service-cli intelep
 npm i -g vscode-langservers-extracted
 
 # ai
-npm install -g aicommits@1.2.0 # 1.3.0 has a bug (https://github.com/Nutlope/aicommits/issues/137)
+npm install -g aicommits
 
 # add ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
