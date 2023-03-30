@@ -204,7 +204,8 @@ wk.register({
 }, { prefix = "<leader>" })
 
 wk.register({
-    cq = {":split | terminal aicommits -g 3<cr>a", "open terminal", noremap = true},
+    cq = {":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true},
+    cx = {":split | terminal opencommit<cr>a", "opencommit", noremap = true},
 }, { mode = 'n'})
 
 vim.cmd [[
