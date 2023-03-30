@@ -3,7 +3,9 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.cmd[[
-tnoremap <Esc> <C-\><C-n>
+    tnoremap <Esc> <C-\><C-n>
+    highlight MatchParen ctermbg=240
+    highlight NormalFloat guibg=#222332
 ]]
 
 vim.cmd [[
@@ -32,6 +34,7 @@ end
 
 require 'maorun.packer'
 require 'maorun'
+require 'time'
 
 vim.cmd [[
     augroup luaReload

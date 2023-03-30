@@ -217,7 +217,7 @@ require('packer').startup(function(use)
                     file_browser = {
                         respect_gitignore = false,
                         hidden = true,
-                        depth = 8,
+                        depth = 6,
                     }
                 }
             }
@@ -356,8 +356,8 @@ require('packer').startup(function(use)
         end
     }
 
-
     use {
+        disable = true,
         'neoclide/coc.nvim',
         branch= 'release',
         config= function()
@@ -377,8 +377,6 @@ require('packer').startup(function(use)
     augroup END
 
     highlight CocFloating ctermbg=black
-    highlight MatchParen ctermbg=240
-    highlight NormalFloat guibg=#222332
     highlight CocMenuSel ctermbg=Grey guibg=DarkGrey
 
     function! ShowDocIfNoDiagnostic(args)
@@ -523,7 +521,11 @@ require('packer').startup(function(use)
     use({
         "jackMort/ChatGPT.nvim",
         config = function()
-            require("chatgpt").setup({})
+            require("chatgpt").setup({
+                keymaps = {
+                    submit = "<C-s>"
+                },
+            })
         end,
         requires = {
             "MunifTanjim/nui.nvim",
