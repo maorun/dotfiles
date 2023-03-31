@@ -28,6 +28,14 @@ local obj = {
     path = vim.fn.stdpath "data" .. os_sep .. "maorun-time.json",
 }
 
+local defaultHoursPerWeekday = {
+    Montag= 8,
+    Dienstag = 7,
+    Mittwoch = 6,
+    Donnerstag = 8,
+    Freitag = 8,
+}
+
 local function init()
     local p = Path:new(obj.path)
     if not p:exists() then
@@ -40,13 +48,7 @@ local function init()
     else
         obj.content = {}
     end
-    obj.content['hoursPerWeekday'] = {
-        Montag= 8,
-        Dienstag = 7,
-        Mittwoch = 6,
-        Donnerstag = 8,
-        Freitag = 8,
-    }
+    obj.content['hoursPerWeekday'] = defaultHoursPerWeekday
     local sumHoursPerWeek = 0
     for key, value in pairs(obj.content.hoursPerWeekday) do
         sumHoursPerWeek = sumHoursPerWeek + value
@@ -183,6 +185,17 @@ local function addTime(time, weekday)
         ["Sonntag"] = 7,
     }
     local week = years[os.date("%W")]
+    local diffDays =  weekdayNumberMap[os.date("%A")] - weekdayNumberMap[weekday]
+    if diffDays < 0 then
+        diffDays = diffDays + 7
+    end
+    
+    print(weekday, diffDays, os.date("%d") - diffDays)
+    if  week['weekdays'][weekday] == nil  then
+        week['weekdays'][weekday] = {
+            items = {}
+        }
+    end
     local items = week['weekdays'][weekday].items
     -- calculate(week)
     -- save(obj)
