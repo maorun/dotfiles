@@ -32,7 +32,9 @@ npm install -g @tailwindcss/language-server graphql-language-service-cli intelep
 npm i -g vscode-langservers-extracted
 
 # ai
-npm install -g aicommits opencommit
+npm install -g aicommits opencommit # git-commit-messages
+pip3 install openai && git clone https://github.com/tom-doerr/zsh_codex.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh_codex # cli-completion
+
 
 # add ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
