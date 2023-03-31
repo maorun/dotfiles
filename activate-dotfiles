@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-STOW_FOLDERS="axelspringer,personal,git,gnupg,ssh,vim,zsh,nvim,tmux"
+STOW_FOLDERS="axelspringer,personal,git,gnupg,ssh,vim,zsh,nvim,tmux,scripts"
 
 for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
 do
