@@ -169,6 +169,11 @@ local function calculateAverage()
     return sum / count
 end
 
+local function setIllDay(weekday)
+    calculateAverage()
+    addTime(calculateAverage(), weekday)
+end
+
 -- adds time into the current week
 local function addTime(time, weekday)
     local years = obj.content['data'][os.date("%Y")] 
@@ -189,21 +194,47 @@ local function addTime(time, weekday)
     if diffDays < 0 then
         diffDays = diffDays + 7
     end
-    
-    print(weekday, diffDays, os.date("%d") - diffDays)
+
     if  week['weekdays'][weekday] == nil  then
         week['weekdays'][weekday] = {
             items = {}
         }
     end
     local items = week['weekdays'][weekday].items
-    -- calculate(week)
-    -- save(obj)
-    print(os.date("%Y-%m-%d %H:%M:%S", os.time({
+
+    local endTime = os.time({
         year = os.date("%Y"),
         month = os.date("%m"),
-        day = 1,
-    })))
+        day = os.date("%d") - diffDays,
+        hour = 23,
+    })
+    local hour = (math.floor(time))
+    local minutes = ((time - math.floor(time)) * 60)
+    local seconds = (minutes - math.floor(minutes)) * 60
+    local startTime = os.time({
+        year = os.date("%Y"),
+        month = os.date("%m"),
+        day = os.date("%d") - diffDays,
+        hour = 22 - math.floor(time),
+        min = 59 - math.floor(minutes),
+        sec = 60 - math.floor(seconds)
+    })
+    TimeStart(weekday, startTime)
+    TimeStop(weekday, endTime)
+    print(os.date("%Y-%m-%d %H:%M:%S", endTime)) 
+    print(os.date("%Y-%m-%d %H:%M:%S", startTime)) 
+end
+
+local function deleteItems(weekday)
+    local years = obj.content['data'][os.date("%Y")] 
+    local week = years[os.date("%W")]
+    local items = week['weekdays'][weekday].items
+    for key, value in pairs(items) do
+        items[key] = nil
+    end
+    calculate(week)
+    local items = week['weekdays'][weekday]
+    save(obj)
 end
 
 local timeGroup = vim.api.nvim_create_augroup('Maorun-Time', {})
