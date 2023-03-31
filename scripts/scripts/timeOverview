@@ -14,6 +14,8 @@ OVERHOUR_WEEK=`echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["summary"].over
 OVERHOUR_MONDAY=``
 getOverview() {
     echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${1}'"]["summary"].overhour' 2> /dev/null
+    echo "\t"
+    echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${1}'.items[] | "\t\(.startReadable)-\(.endReadable)"' 2> /dev/null
 }
 
 echo -e "Gesammtüberstunden:\t" $OVERHOUR_WEEK
@@ -23,6 +25,8 @@ echo -e "Mittwoch:\t" $(getOverview "Mittwoch")
 echo -e "Donnerstag:\t" $(getOverview "Donnerstag")
 echo -e "Freitag:\t" $(getOverview "Freitag")
 
+echo -e "\n"
+echo -e "Today:"
 echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${WEEKDAY}'.items[] | "Start: \(.startReadable) Uhr, End: \(.endReadable) Uhr, Diff: \(.diffInHours)"'
 
 # say "$VALUE_ROUND Stunden"
