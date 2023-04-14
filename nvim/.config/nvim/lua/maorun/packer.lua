@@ -63,13 +63,15 @@ require('packer').startup(function(use)
                             luasnip = "[LuaSnip]",
                             treesitter = "[Treesitter]",
                             copilot = "[Copilot]",
+                            cmp_tabnine = "[Tabnine]",
                         })[entry.source.name]
                         return vim_item
                     end,
                 },
                 sources = {
-                    { name = 'nvim_lsp' },
                     { name = 'copilot' },
+                    { name = 'cmp_tabnine' },
+                    { name = 'nvim_lsp' },
                 }
             }
         end
@@ -83,6 +85,27 @@ require('packer').startup(function(use)
         },
         config = function ()
             require("copilot_cmp").setup()
+        end
+    }
+    use {
+        'tzachar/cmp-tabnine',
+        run='./install.sh',
+        requires = 'hrsh7th/nvim-cmp',
+        config = function ()
+            local tabnine = require('cmp_tabnine.config')
+
+            tabnine:setup({
+                max_lines = 1000,
+                max_num_results = 20,
+                sort = true,
+                run_on_every_keystroke = true,
+                snippet_placeholder = '..',
+                ignored_file_types = {
+                    -- uncomment to ignore in lua:
+                    -- lua = true
+                },
+                show_prediction_strength = false
+            })
         end
     }
 
@@ -301,7 +324,7 @@ require('packer').startup(function(use)
         config = function()
             require("copilot").setup({
                 suggestion = {
-                    auto_trigger = true,
+                    -- auto_trigger = true,
                     keymap = {
                         accept = "<Tab>",
                         next = "<C-n>",
