@@ -236,10 +236,10 @@ wk.register({
     ie = {':exec "normal! ggVG"<cr>', "select all", noremap = true},
 }, { mode = 'o', remap = false})
 
-wk.register({
-    ["<C-L>"] = { "<C-O>l", "move cursor right", noremap = true},
-    ["<C-H>"] = { "<C-O>h", "move cursor left", noremap = true},
-}, { mode = 'i'})
+-- wk.register({
+--     ["<C-L>"] = { "<C-O>l", "move cursor right", noremap = true},
+--     ["<C-H>"] = { "<C-O>h", "move cursor left", noremap = true},
+-- }, { mode = 'i'})
 
 -- moving lines
 wk.register({

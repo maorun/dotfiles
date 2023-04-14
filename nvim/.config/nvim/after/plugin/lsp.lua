@@ -12,7 +12,7 @@ local on_attach = function(_, bufnr)
 
     -- Enable completion triggered by <c-x><c-o>
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-    buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
+    -- buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -66,9 +66,12 @@ wk.register({
 local servers = { 
     -- 'vimls',
     'tsserver', 'graphql', 'tailwindcss', 'phpactor', 'sqlls', 'eslint' }
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
         on_attach = on_attach,
+        capabilities = capabilities,
         flags = {
             debounce_text_changes = 150,
         }
@@ -82,9 +85,10 @@ local forattingAuGroup = vim.api.nvim_create_augroup('formatting', {})
 --     command = 'lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})',
 -- })
 vim.api.nvim_create_autocmd('BufWritePre', {
+    desc = "[lsp] format on save",
     group = forattingAuGroup,
     pattern = {'*.tsx','*.ts','*.jsx','*.js','*.php'},
-    command = 'lua vim.lsp.buf.formatting()',
+    command = 'lua vim.lsp.buf.format()',
 })
 local signcolumnAuGroup = vim.api.nvim_create_augroup('signcolumn', {})
 vim.api.nvim_create_autocmd('FileType', {

@@ -19,10 +19,70 @@ require('packer').startup(function(use)
         'dstein64/vim-startuptime',
         cmd = 'StartupTime'
     }
+
+    -- Speed up loading Lua modules in Neovim to improve startup time.
     use {
         'lewis6991/impatient.nvim',
         config = function()
             require('impatient')
+        end
+    }
+
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/vim-vsnip'
+        },
+        config = function ()
+            local cmp = require'cmp'
+            cmp.setup {
+                snippet = {
+                    -- REQUIRED - you must specify a snippet engine
+                    expand = function(args)
+                        require('luasnip').lsp_expand(args.body)
+                    end,
+                },
+                mapping = {
+                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                    ['<c-j>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                    ['<c-k>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                },
+                window = {
+                    completion = cmp.config.window.bordered(),
+                    documentation = cmp.config.window.bordered(),
+                },
+                formatting = {
+                    format = function(entry, vim_item)
+                        vim_item.kind = string.format("%s %s", vim_item.kind, entry.source.name)
+                        vim_item.menu = ({
+                            nvim_lsp = "[LSP]",
+                            nvim_lua = "[Lua]",
+                            buffer = "[Buf]",
+                            vsnip = "[Vsnip]",
+                            luasnip = "[LuaSnip]",
+                            treesitter = "[Treesitter]",
+                            copilot = "[Copilot]",
+                        })[entry.source.name]
+                        return vim_item
+                    end,
+                },
+                sources = {
+                    { name = 'nvim_lsp' },
+                    { name = 'copilot' },
+                }
+            }
+        end
+    }
+
+    use {
+        'zbirenbaum/copilot-cmp',
+        after = { "copilot.lua" },
+        requires = {
+            'zbirenbaum/copilot.lua'
+        },
+        config = function ()
+            require("copilot_cmp").setup()
         end
     }
 
@@ -107,8 +167,8 @@ require('packer').startup(function(use)
                     local keepNote = vim.api.nvim_create_augroup("GoogleKeepNote", {})
                     vim.api.nvim_create_autocmd("FileType", {
                         group = keepNote,
-                        pattern = "GoogleKeepNote",
-                        command = "setlocal spell spelllang=de",
+                        pattern = "GoogleKeepNote,GoogleKeepList",
+                        command = "set number relativenumber",
                     })
                 end
             },
@@ -174,6 +234,49 @@ require('packer').startup(function(use)
     }
 
     use {
+        'MunifTanjim/prettier.nvim',
+        after = { 'nvim-lspconfig' },
+        requires = {
+            'neovim/nvim-lspconfig',
+            {
+                'jose-elias-alvarez/null-ls.nvim',
+                config = function()
+                    local null_ls = require("null-ls")
+
+                    null_ls.setup({
+                        sources = { 
+                            null_ls.builtins.formatting.prettier,
+                            null_ls.builtins.formatting.prettier_eslint,
+                        },
+                    })
+                end
+
+            }
+        },
+        config = function()
+            local prettier = require("prettier")
+
+            prettier.setup({
+                bin = 'prettier', -- or `'prettierd'` (v0.23.3+)
+                filetypes = {
+                    "css",
+                    "graphql",
+                    "html",
+                    "javascript",
+                    "javascriptreact",
+                    "json",
+                    "less",
+                    "markdown",
+                    "scss",
+                    "typescript",
+                    "typescriptreact",
+                    "yaml",
+                },
+            })
+        end
+    }
+
+    use {
         'rafcamlet/nvim-luapad',
         cmd= 'Luapad'
     }
@@ -188,7 +291,25 @@ require('packer').startup(function(use)
     }
 
     use {
+        disable = true,
         'github/copilot.vim',
+    }
+    use {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+        config = function()
+            require("copilot").setup({
+                suggestion = {
+                    auto_trigger = true,
+                    keymap = {
+                        accept = "<Tab>",
+                        next = "<C-n>",
+                        prev = "<C-p>",
+                    }
+                }
+            })
+        end,
     }
 
     use {
@@ -217,7 +338,7 @@ require('packer').startup(function(use)
                     file_browser = {
                         respect_gitignore = false,
                         hidden = true,
-                        depth = 6,
+                        depth = 5,
                     }
                 }
             }
