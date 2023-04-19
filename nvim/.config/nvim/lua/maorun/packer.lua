@@ -40,7 +40,7 @@ require('packer').startup(function(use)
                 snippet = {
                     -- REQUIRED - you must specify a snippet engine
                     expand = function(args)
-                        require('luasnip').lsp_expand(args.body)
+                        vim.fn["vsnip#anonymous"](args.body)
                     end,
                 },
                 mapping = {
