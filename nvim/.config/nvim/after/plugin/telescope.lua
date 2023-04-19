@@ -4,7 +4,7 @@ require('maorun.telescope.k8s').init()
 
 local wk = require("which-key")
 wk.register({
-    [ '<leader>' ] = { ":lua require'telescope.builtin'.git_files{}<cr>", "Git files", noremap = true },
+    [ '<leader>' ] = { ":Telescope file_browser respect_gitignore=true<cr>", "ope file", noremap = true },
     t = {
         name = "Telescope",
         g = { ':GkeepLogin marco.driemel@gmx.de<cr>:Telescope gkeep<cr>', "Google Keep", noremap = true },

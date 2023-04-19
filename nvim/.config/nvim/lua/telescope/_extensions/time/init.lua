@@ -26,7 +26,7 @@ local make_display = function(entry)
     })
 end
 
-timePicker = function(opts)
+local timePicker = function(opts)
     local t = require 'time'
     local items = {
         {
