@@ -118,6 +118,40 @@ require('packer').startup(function(use)
 
     use 'nvim-lua/plenary.nvim'
     use {
+        'nvim-telescope/telescope-project.nvim',
+        requires = { 
+            'nvim-telescope/telescope.nvim',
+            'nvim-telescope/telescope-file-browser.nvim'
+        },
+        config = function()
+            require'telescope'.load_extension('project')
+        end
+    }
+    use { -- google keep
+        'stevearc/gkeep.nvim',
+        requires = {
+            'nvim-telescope/telescope.nvim',
+        },
+        run = ':UpdateRemotePlugins',
+        config = function()
+            require('telescope').load_extension('gkeep')
+            local keepNote = vim.api.nvim_create_augroup("GoogleKeepNote", {})
+            vim.api.nvim_create_autocmd("FileType", {
+                group = keepNote,
+                pattern = "GoogleKeepNote,GoogleKeepList",
+                command = "set number relativenumber",
+            })
+        end
+    }
+    use {
+        disable = true,
+        'nvim-lua/popup.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        }
+    }
+
+    use {
         'nvim-telescope/telescope.nvim',
         config = function()
             local actions = require('telescope.actions')
@@ -164,11 +198,24 @@ require('packer').startup(function(use)
                     }
                 },
                 extensions = {
+                    file_browser = {
+                        respect_gitignore = false,
+                        hidden = true,
+                        depth = 5,
+                    },
                     project = {
                         base_dirs = {
                             '~/repos',
                         },
                         hidden_files = true,
+                        on_project_selected = function(prompt_bufnr)
+                            local project_actions = require("telescope._extensions.project.actions")
+                            project_actions.change_working_directory(prompt_bufnr, false)
+                            require "telescope".extensions.file_browser.file_browser({ 
+                                respect_gitignore = true,
+                            })
+
+                        end
                     },
                     gkeep = {
                         find_method = 'all_text',
@@ -182,46 +229,34 @@ require('packer').startup(function(use)
             -- })
         end,
         requires = {
-            { -- google keep
-                'stevearc/gkeep.nvim',
-                run = ':UpdateRemotePlugins',
-                config = function()
-                    require('telescope').load_extension('gkeep')
-                    local keepNote = vim.api.nvim_create_augroup("GoogleKeepNote", {})
-                    vim.api.nvim_create_autocmd("FileType", {
-                        group = keepNote,
-                        pattern = "GoogleKeepNote,GoogleKeepList",
-                        command = "set number relativenumber",
-                    })
-                end
-            },
             { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
-            { 
-                disable = false,
-                'nvim-telescope/telescope-github.nvim',
-                config = function()
-                    require('telescope').load_extension('gh')
-                    -- c-f browse modified files
-                    -- c-a approve
-                    -- c-e view details or diff
-                    -- c-r merge
-                    -- <cr> checkout
-                end,
-            },
-            {
-                disable = true,
-                'fannheyward/telescope-coc.nvim',
-                config = function()
-                    require('telescope').load_extension('coc')
-                end,
-            },
-            {
-                'nvim-telescope/telescope-project.nvim',
-                config = function()
-                    require'telescope'.load_extension('project')
-                end
-            }
+            'nvim-treesitter/nvim-treesitter', -- finder/preview
         },
+    }
+    use {
+        disable = true,
+        'fannheyward/telescope-coc.nvim',
+        requires = {
+            'nvim-telescope/telescope.nvim',
+        },
+        config = function()
+            require('telescope').load_extension('coc')
+        end,
+    }
+    use { 
+        disable = false,
+        'nvim-telescope/telescope-github.nvim',
+        requires = {
+            'nvim-telescope/telescope.nvim',
+        },
+        config = function()
+            require('telescope').load_extension('gh')
+            -- c-f browse modified files
+            -- c-a approve
+            -- c-e view details or diff
+            -- c-r merge
+            -- <cr> checkout
+        end,
     }
 
 
@@ -353,18 +388,9 @@ require('packer').startup(function(use)
     }
 
     use {
-        "nvim-telescope/telescope-file-browser.nvim",
-        requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+        'nvim-telescope/telescope-file-browser.nvim',
+        requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
-            require("telescope").setup {
-                extensions = {
-                    file_browser = {
-                        respect_gitignore = false,
-                        hidden = true,
-                        depth = 5,
-                    }
-                }
-            }
             require("telescope").load_extension "file_browser"
         end
     }
