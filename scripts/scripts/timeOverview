@@ -26,6 +26,7 @@ echo -e "Donnerstag:\t" $(getOverview "Donnerstag")
 echo -e "Freitag:\t" $(getOverview "Freitag")
 
 echo -e "\n"
+echo -e "Week-Number: $WEEKNUMBER"
 echo -e "Today:"
 echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${WEEKDAY}'.items[] | "Start: \(.startReadable) Uhr, End: \(.endReadable) Uhr, Diff: \(.diffInHours)"'
 
