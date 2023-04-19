@@ -34,7 +34,7 @@ end
 
 require 'maorun.packer'
 require 'maorun'
-require 'time'
+require 'time'.setup()
 
 vim.cmd [[
     augroup luaReload

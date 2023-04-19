@@ -1,8 +1,7 @@
 local Path = require "plenary.path"
 local os_sep = require("plenary.path").path.sep
 local uv = vim.loop
-
-vim.g.maorun_time_paused = 0
+-- lua package.loaded['time'] = nil; require'time'.echo()
 
 local write_async = function(path, txt, flag)
     uv.fs_open(path, flag, 438, function(open_err, fd)
@@ -36,7 +35,7 @@ local defaultHoursPerWeekday = {
     Freitag = 8,
 }
 
-local function init()
+local function init(config)
     local p = Path:new(obj.path)
     if not p:exists() then
         p:touch { parents = true }
@@ -98,11 +97,27 @@ local function calculate(week)
     end
 end
 
+function TimePause()
+    init()
+    obj.content.paused = true
+    save(obj)
+end
+
+function TimeResume()
+    init()
+    obj.content.paused = false
+    save(obj)
+end
+local function isPaused()
+    init()
+    return obj.content.paused
+end
+
 function TimeStart(weekday, time)
-    if (vim.g.maorun_time_paused == 1) then
+    init()
+    if (isPaused()) then
         return
     end
-    init()
 
     if weekday == nil then
         weekday = os.date("%A")
@@ -123,19 +138,20 @@ function TimeStart(weekday, time)
         canStart = canStart and (item.startTime ~= nil and item.endTime ~= nil)
     end
     if canStart then
+        local timeReadable = os.date("*t", time)
         table.insert(dayItem.items, {
             startTime = time,
-            startReadable = os.date("%H:%M"),
+            startReadable = string.format("%02d:%02d", timeReadable.hour, timeReadable.min)
         })
     end
     save(obj)
 end
 
 function TimeStop(weekday, time)
-    if (vim.g.maorun_time_paused == 1) then
+    init()
+    if (isPaused()) then
         return
     end
-    init()
 
     if weekday == nil then
         weekday = os.date("%A")
@@ -176,6 +192,7 @@ end
 
 -- adds time into the current week
 local function addTime(time, weekday)
+    init()
     local years = obj.content['data'][os.date("%Y")] 
     if weekday == nil then
         weekday = os.date("%A")
@@ -219,13 +236,19 @@ local function addTime(time, weekday)
         min = 59 - math.floor(minutes),
         sec = 60 - math.floor(seconds)
     })
+    local paused = isPaused()
+    if (paused) then
+        TimeResume()
+    end
+
     TimeStart(weekday, startTime)
     TimeStop(weekday, endTime)
-    print(os.date("%Y-%m-%d %H:%M:%S", endTime)) 
-    print(os.date("%Y-%m-%d %H:%M:%S", startTime)) 
+    if (paused) then
+        TimePause()
+    end
 end
 
-local function deleteItems(weekday)
+local function clearDay(weekday)
     local years = obj.content['data'][os.date("%Y")] 
     local week = years[os.date("%W")]
     local items = week['weekdays'][weekday].items
@@ -256,3 +279,21 @@ vim.api.nvim_create_autocmd("VimLeave", {
 -- Donnerstag: 9h von 8h (+1h => 0h)
 -- Freitag: 8h von 8h (0h => 0h)
 
+return {
+    setup = function(config)
+        init(config)
+        -- TimeResume()
+    end,
+    TimeStart = TimeStart,
+    TimeStop = TimeStop,
+    TimePause = TimePause,
+    TimeResume = TimeResume,
+    setIllDay = setIllDay,
+    addTime = addTime,
+    clearDay = clearDay,
+    isPaused = isPaused,
+    echo = function() 
+        init()
+        return vim.inspect(obj.content.paused)
+    end,
+}
