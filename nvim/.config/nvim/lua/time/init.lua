@@ -1,7 +1,6 @@
 local Path = require "plenary.path"
 local os_sep = require("plenary.path").path.sep
 local uv = vim.loop
--- lua package.loaded['time'] = nil; require'time'.echo()
 
 local write_async = function(path, txt, flag)
     uv.fs_open(path, flag, 438, function(open_err, fd)
@@ -33,6 +32,15 @@ local defaultHoursPerWeekday = {
     Mittwoch = 6,
     Donnerstag = 8,
     Freitag = 8,
+}
+local weekdayNumberMap = {
+    Montag = '1',
+    Dienstag = 2,
+    Mittwoch = 3,
+    Donnerstag = 4,
+    Freitag = 5,
+    Samstag = 6,
+    Sonntag = 7,
 }
 
 local function init(config)
@@ -97,13 +105,13 @@ local function calculate(week)
     end
 end
 
-function TimePause()
+local function TimePause()
     init()
     obj.content.paused = true
     save(obj)
 end
 
-function TimeResume()
+local function TimeResume()
     init()
     obj.content.paused = false
     save(obj)
@@ -113,7 +121,7 @@ local function isPaused()
     return obj.content.paused
 end
 
-function TimeStart(weekday, time)
+local function TimeStart(weekday, time)
     init()
     if (isPaused()) then
         return
@@ -147,7 +155,7 @@ function TimeStart(weekday, time)
     save(obj)
 end
 
-function TimeStop(weekday, time)
+local function TimeStop(weekday, time)
     init()
     if (isPaused()) then
         return
@@ -185,11 +193,6 @@ local function calculateAverage()
     return sum / count
 end
 
-local function setIllDay(weekday)
-    calculateAverage()
-    addTime(calculateAverage(), weekday)
-end
-
 -- adds time into the current week
 local function addTime(time, weekday)
     init()
@@ -197,15 +200,7 @@ local function addTime(time, weekday)
     if weekday == nil then
         weekday = os.date("%A")
     end
-    local weekdayNumberMap = {
-        ["Montag"] = 1,
-        ["Dienstag"] = 2,
-        ["Mittwoch"] = 3,
-        ["Donnerstag"] = 4,
-        ["Freitag"] = 5,
-        ["Samstag"] = 6,
-        ["Sonntag"] = 7,
-    }
+
     local week = years[os.date("%W")]
     local diffDays =  weekdayNumberMap[os.date("%A")] - weekdayNumberMap[weekday]
     if diffDays < 0 then
@@ -248,6 +243,10 @@ local function addTime(time, weekday)
     end
 end
 
+local function setIllDay(weekday)
+    addTime(calculateAverage(), weekday)
+end
+
 local function clearDay(weekday)
     local years = obj.content['data'][os.date("%Y")] 
     local week = years[os.date("%W")]
@@ -273,12 +272,6 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 -- Überstunden letzte Woche: 3h
 
--- Montag: 9h von 8h (+1h => 4h)
--- Dienstag: 8h von 8h (0h => 4h)
--- Mittwoch: 3h von 8h (-5h => -1h)
--- Donnerstag: 9h von 8h (+1h => 0h)
--- Freitag: 8h von 8h (0h => 0h)
-
 return {
     setup = function(config)
         init(config)
@@ -289,11 +282,8 @@ return {
     TimePause = TimePause,
     TimeResume = TimeResume,
     setIllDay = setIllDay,
+    setHoliday = setIllDay,
     addTime = addTime,
     clearDay = clearDay,
     isPaused = isPaused,
-    echo = function() 
-        init()
-        return vim.inspect(obj.content.paused)
-    end,
 }
