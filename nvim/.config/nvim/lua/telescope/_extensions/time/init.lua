@@ -9,6 +9,7 @@ local actions = require("telescope.actions")
 local finders = require "telescope.finders"
 local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
+local t = require 'telescope._extensions.time.logic'
 
 local picker_opt = {
 }
@@ -27,7 +28,6 @@ local make_display = function(entry)
 end
 
 local timePicker = function(opts)
-    local t = require 'time'
     local items = {
         {
             item = 'TimeStart()',
@@ -78,6 +78,7 @@ end
 return telescope.register_extension({
     setup = function(ext_config, config)
         conf = vim.tbl_extend("force", conf, ext_config or {})
+        t.setup(conf)
     end,
     exports = {
         time = timePicker

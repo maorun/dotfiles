@@ -31,7 +31,6 @@ vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
 require 'maorun.packer'
 require 'maorun'
-require 'time'.setup()
 
 vim.cmd [[
     augroup luaReload
