@@ -231,16 +231,7 @@ require('packer').startup(function(use)
         cmd = "Copilot",
         event = "InsertEnter",
         config = function()
-            require("copilot").setup({
-                suggestion = {
-                    -- auto_trigger = true,
-                    keymap = {
-                        accept = "<Tab>",
-                        next = "<C-n>",
-                        prev = "<C-p>",
-                    }
-                }
-            })
+            require('maorun.plugin-config.copilot')
         end,
     }
 
@@ -285,12 +276,7 @@ require('packer').startup(function(use)
     use { -- Git
         'tpope/vim-fugitive',
         config = function()
-            local fugitiveAuGroup = vim.api.nvim_create_augroup("user_fugitive", {})
-            vim.api.nvim_create_autocmd("BufReadPost", {
-                group = fugitiveAuGroup,
-                pattern = "fugitive://*",
-                command = "set bufhidden=delete",
-            })
+            require('maorun.plugin-config.database')
         end,
     }
     use {
@@ -308,17 +294,7 @@ require('packer').startup(function(use)
         },
         cmd = 'DBUI',
         config = function ()
-            local dbAuGroup = vim.api.nvim_create_augroup("user_db", {})
-            vim.api.nvim_create_autocmd("FileType", {
-                group = dbAuGroup,
-                pattern = "dbout",
-                command = "setlocal nofoldenable",
-            })
-            vim.api.nvim_create_autocmd("User", {
-                group = dbAuGroup,
-                pattern = "DBUIOpened",
-                command = "setlocal relativenumber number",
-            })
+            require('maorun.plugin-config.database')
         end,
     }
     use 'vim-scripts/ReplaceWithRegister' -- replace with register - gr
@@ -339,50 +315,7 @@ require('packer').startup(function(use)
         'neoclide/coc.nvim',
         branch= 'release',
         config= function()
-            -- wk.register({
-            --     ["<C-SPACE>"] = {'coc#refresh()', noremap = true },
-            --     ["<tab>"] = {'coc#pum#visible() ? coc#pum#confirm() : "<tab>"', noremap = true },
-            -- }, {mode = 'i', expr = true })
-            vim.cmd [[
-     inoremap <silent><expr> <c-space> coc#refresh()
-     inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#confirm() : "\<s-tab>"
-
-    augroup Cursor
-    autocmd!
-    " autocmd CursorHold * silent call CocActionAsync('highlight')
-    "    autocmd CursorHoldI * :call <SID>show_hover_doc()
-    "    autocmd CursorHold * :call <SID>show_hover_doc()
-    augroup END
-
-    highlight CocFloating ctermbg=black
-    highlight CocMenuSel ctermbg=Grey guibg=DarkGrey
-
-    function! ShowDocIfNoDiagnostic(args)
-    if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
-    "      silent call CocActionAsync('doHover')
-    endif
-    endfunction
-
-    function! s:show_hover_doc()
-    " call ShowDocIfNoDiagnostic()
-    call timer_start(500, 'ShowDocIfNoDiagnostic')
-    endfunction
-]]
-            wk.register({
-                c = {
-                    name = "COC",
-                    ["a"] = {"<Plug>(coc-codeaction)", "open coc", noremap = true},
-                    -- Apply AutoFix to problem on the current line.
-                    ["f"] = {"<Plug>(coc-fix-current)", "quickfix current problem", noremap = true },
-                    ["n"] = {"<plug>(coc-diagnostic-next)", "next problem", noremap = true },
-                    ["p"] = {"<Plug>(coc-diagnostic-prev)", "prev problem", noremap = true },
-                    ["r"] = {"<Plug>(coc-rename)", "rename", noremap = true },
-                    ["d"] = {"<Plug>(coc-definition)", "see definition", noremap = true },
-                    ["s"] = {"<Plug>(coc-references)", "see references", noremap = true },
-                    ["i"] = {"<Plug>(coc-implementation)", "goto implementations", noremap = true },
-                },
-            }, { prefix = "<leader>" })
-
+            require('maorun.plugin-config.coc')
         end,
         run = function()
             vim.cmd [[
@@ -423,36 +356,7 @@ require('packer').startup(function(use)
     use {
         'gelguy/wilder.nvim',
         config = function()
-            vim.api.nvim_create_autocmd('CmdlineEnter', {
-                group = vim.api.nvim_create_augroup('Wilder', {}),
-                once = true,
-                pattern = '*',
-                callback = function()
-                    local wilder = require('wilder')
-                    wilder.setup({modes = {':', '/', '?'}})
-                    wilder.set_option('pipeline', {
-                        wilder.branch(
-                            wilder.cmdline_pipeline({
-                                language = 'python',
-                                fuzzy = 2,
-                            }),
-                            wilder.python_search_pipeline({
-                                pattern = wilder.python_fuzzy_pattern({
-                                    start_at_boundary = 0
-                                }),
-                                sorter = wilder.python_difflib_sorter(),
-                                engine = 're',
-                            })
-                        )
-                    })
-                    wilder.set_option('renderer', wilder.popupmenu_renderer({
-                        highlighter = wilder.basic_highlighter(),
-                        separator = ' · ',
-                        left = {' ', wilder.wildmenu_spinner(), ' '},
-                        right = {' ', wilder.wildmenu_index()},
-                    }))
-                end,
-            })
+            require('maorun.plugin-config.wilder')
         end
     }
 
@@ -475,17 +379,7 @@ require('packer').startup(function(use)
         disable = true,
         'ThePrimeagen/harpoon',
         config = function()
-            wk.register({
-                ["¡"] = {"<cmd>lua require('harpoon.ui').nav_file(1)<cr>", "navigate to file 1", noremap = true},
-                ["™"] = {"<cmd>lua require('harpoon.ui').nav_file(2)<cr>", "navigate to file 2", noremap = true},
-                ["£"] = {"<cmd>lua require('harpoon.ui').nav_file(3)<cr>", "navigate to file 3", noremap = true},
-                ["¢"] = {"<cmd>lua require('harpoon.ui').nav_file(4)<cr>", "navigate to file 4", noremap = true},
-
-            }, { silent=true, prefix = '' })
-            wk.register({
-                a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
-            }, { silent=true, prefix = '<leader>' })
-            require("telescope").load_extension('harpoon')
+            require('maorun.plugin-config.harpoon')
         end,
     }
 
@@ -529,11 +423,7 @@ require('packer').startup(function(use)
     use({
         "jackMort/ChatGPT.nvim",
         config = function()
-            require("chatgpt").setup({
-                keymaps = {
-                    submit = "<C-s>"
-                },
-            })
+            require('maorun.plugin-config.chatgpt')
         end,
         requires = {
             "MunifTanjim/nui.nvim",
