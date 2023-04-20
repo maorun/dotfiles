@@ -1,3 +1,5 @@
+local wk = require("which-key")
+
 local ensure_packer = function()
     local fn = vim.fn
     local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
@@ -201,7 +203,7 @@ require('packer').startup(function(use)
                     file_browser = {
                         respect_gitignore = false,
                         hidden = true,
-                        depth = 5,
+                        depth = 4,
                     },
                     project = {
                         base_dirs = {
@@ -392,6 +394,13 @@ require('packer').startup(function(use)
         requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
             require("telescope").load_extension "file_browser"
+            wk.register({
+                n = {
+                    name = "FileTree",
+                    f = {":Telescope file_browser path=%:p:h select_buffer=true<cr>", "current file", noremap = true},
+                    t = {":Telescope file_browser respect_gitignore=true<cr>", "open tree", noremap = true},
+                },
+            }, { prefix = "<leader>" })
         end
     }
 
@@ -560,6 +569,21 @@ require('packer').startup(function(use)
     call timer_start(500, 'ShowDocIfNoDiagnostic')
     endfunction
 ]]
+            wk.register({
+                c = {
+                    name = "COC",
+                    ["a"] = {"<Plug>(coc-codeaction)", "open coc", noremap = true},
+                    -- Apply AutoFix to problem on the current line.
+                    ["f"] = {"<Plug>(coc-fix-current)", "quickfix current problem", noremap = true },
+                    ["n"] = {"<plug>(coc-diagnostic-next)", "next problem", noremap = true },
+                    ["p"] = {"<Plug>(coc-diagnostic-prev)", "prev problem", noremap = true },
+                    ["r"] = {"<Plug>(coc-rename)", "rename", noremap = true },
+                    ["d"] = {"<Plug>(coc-definition)", "see definition", noremap = true },
+                    ["s"] = {"<Plug>(coc-references)", "see references", noremap = true },
+                    ["i"] = {"<Plug>(coc-implementation)", "goto implementations", noremap = true },
+                },
+            }, { prefix = "<leader>" })
+
         end,
         run = function()
             vim.cmd [[
@@ -648,8 +672,23 @@ require('packer').startup(function(use)
     }
 
     -- quick Filebrowsing
-    --  use 'ThePrimeagen/harpoon'
-    -- require("telescope").load_extension('harpoon')
+     use {
+        disable = true,
+        'ThePrimeagen/harpoon',
+        config = function()
+            wk.register({
+                ["¡"] = {"<cmd>lua require('harpoon.ui').nav_file(1)<cr>", "navigate to file 1", noremap = true},
+                ["™"] = {"<cmd>lua require('harpoon.ui').nav_file(2)<cr>", "navigate to file 2", noremap = true},
+                ["£"] = {"<cmd>lua require('harpoon.ui').nav_file(3)<cr>", "navigate to file 3", noremap = true},
+                ["¢"] = {"<cmd>lua require('harpoon.ui').nav_file(4)<cr>", "navigate to file 4", noremap = true},
+
+            }, { silent=true, prefix = '' })
+            wk.register({
+                a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
+            }, { silent=true, prefix = '<leader>' })
+            require("telescope").load_extension('harpoon')
+        end,
+    }
 
     -- testing
     use {

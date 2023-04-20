@@ -1,5 +1,4 @@
 vim.g.mapleader = ' '
--- Bug in Vim 8 => https://github.com/vim/vim/issues/4738
 vim.cmd "nnoremap gx yiW:!open <cWORD><CR><CR>"
 
 -- got to indention level {{{
@@ -31,7 +30,6 @@ vim.cmd [[
 ]]
 -- }}}
 
-local wk = require("which-key")
 NewBuffer = function(args)
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
@@ -73,6 +71,7 @@ function Job(opts)
     plenaryJob:new(opts):start()
 end
 
+local wk = require("which-key")
 wk.register({
     ['<C-E>'] = {"<C-B>", "Scroll up"},
     g = {
@@ -81,37 +80,9 @@ wk.register({
     },
     n = {"nzzv"},
     N = {"Nzzv"},
-    ["¡"] = {"<cmd>lua require('harpoon.ui').nav_file(1)<cr>", "navigate to file 1", noremap = true},
-    ["™"] = {"<cmd>lua require('harpoon.ui').nav_file(2)<cr>", "navigate to file 2", noremap = true},
-    ["£"] = {"<cmd>lua require('harpoon.ui').nav_file(3)<cr>", "navigate to file 3", noremap = true},
-    ["¢"] = {"<cmd>lua require('harpoon.ui').nav_file(4)<cr>", "navigate to file 4", noremap = true},
-
 }, { silent=true, prefix = '' })
 
-local mappingListPlugin = require("maorun.telescope.mappingList")
-mappingListPlugin.init()
 wk.register({
-    h = { function()
-        if (vim.o.filetype == 'octo') then
-            local mappings = require('octo.config').get_config().mappings
-            local list = {}
-            local k, v = next( mappings )
-            while k do
-                k, v = next( mappings, k )
-                if (k ~= nil) then
-                    for key, value in next, v do
-                        -- print(vim.inspect(value))
-                        table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
-
-                    end
-                end
-            end
-            mappingListPlugin.mappingList {
-                title = "octo",
-                list = list
-            }
-        end
-    end, "help", noremap = true },
     q = {
         name = "General Commands",
         n = {
@@ -136,7 +107,6 @@ wk.register({
         d = {":diffthis<cr>", "Diff this", noremap = true },
         q = {":diffoff!<cr>", "Diff off", noremap = true },
     },
-    a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
     w = {":w<cr>zvzz", "Save", noremap = true},
     v = {
         name = "VimRC",
@@ -182,24 +152,10 @@ wk.register({
         -- f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
         -- t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
         },
-        f = {":Telescope file_browser path=%:p:h select_buffer=true<cr>", "current file", noremap = true},
-        t = {":Telescope file_browser respect_gitignore=true<cr>", "open tree", noremap = true},
     },
     b = {
         name = "Buffer",
         n = { NewBuffer, "new buffer", noremap = true },
-    },
-    c = {
-        name = "COC",
-        ["a"] = {"<Plug>(coc-codeaction)", "open coc", noremap = true},
-        -- Apply AutoFix to problem on the current line.
-        ["f"] = {"<Plug>(coc-fix-current)", "quickfix current problem", noremap = true },
-        ["n"] = {"<plug>(coc-diagnostic-next)", "next problem", noremap = true },
-        ["p"] = {"<Plug>(coc-diagnostic-prev)", "prev problem", noremap = true },
-        ["r"] = {"<Plug>(coc-rename)", "rename", noremap = true },
-        ["d"] = {"<Plug>(coc-definition)", "see definition", noremap = true },
-        ["s"] = {"<Plug>(coc-references)", "see references", noremap = true },
-        ["i"] = {"<Plug>(coc-implementation)", "goto implementations", noremap = true },
     },
 }, { prefix = "<leader>" })
 

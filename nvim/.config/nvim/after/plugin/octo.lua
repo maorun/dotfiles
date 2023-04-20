@@ -34,8 +34,30 @@ vim.api.nvim_create_autocmd('FileType', {
     end,
 })
 
+local mappingListPlugin = require("maorun.telescope.mappingList")
 local wk = require("which-key")
 wk.register({
+    h = {
+        o = { function()
+                local mappings = require('octo.config').get_config().mappings
+                local list = {}
+                local k, v = next( mappings )
+                while k do
+                    k, v = next( mappings, k )
+                    if (k ~= nil) then
+                        for key, value in next, v do
+                            -- print(vim.inspect(value))
+                            table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
+
+                        end
+                    end
+                end
+                mappingListPlugin.mappingList {
+                    title = "octo",
+                    list = list
+                }
+        end, "octo", noremap = true },
+    },
     t = {
         name = "Telescope",
         o = {
