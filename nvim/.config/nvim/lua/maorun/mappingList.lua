@@ -13,7 +13,7 @@ local displayer = entry_display.create({
 })
 local make_display = function(entry)
     return displayer({
-        entry.description,
+        entry.value,
     })
 end
 
@@ -39,8 +39,6 @@ local mappingList= function(opts)
                 return {
                     value = entry,
                     display = make_display,
-                    description = entry,
-                    octal = entry,
 
                     -- this is what we can fzf
                     ordinal = entry
@@ -51,9 +49,6 @@ local mappingList= function(opts)
     }):find()
 end
 
-require('telescope').extensions.mappingList= {
-    mappingList = mappingList
-}
 local M = {}
 function M.init(opts)
 end
