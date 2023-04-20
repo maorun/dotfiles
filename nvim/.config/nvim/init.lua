@@ -29,10 +29,6 @@ vim.cmd [[
 
 vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
-if vim.fn.filereadable(vim.fn.expand("~/.vimrc_personal.vim")) == 1 then
-    vim.cmd("source ~/.vimrc_personal.vim")
-end
-
 require 'maorun.packer'
 require 'maorun'
 require 'time'.setup()
