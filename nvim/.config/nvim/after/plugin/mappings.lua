@@ -109,15 +109,7 @@ wk.register({
     w = {":w<cr>zvzz", "Save", noremap = true},
     v = {
         name = "VimRC",
-        e = {function()
-            require('telescope.builtin').git_files {
-                cwd = "~/dotfiles/",
-                -- show_untracked = false,
-                recurse_submodules = true,
-                prompt_title = "* dotfiles *",
-            }
-        end, "find file in dotfiles", noremap = true},
-        r = {":source $MYVIMRC<cr>:echo '~/.vimrc loaded'<cr>", "Load VimRC", noremap = true},
+        r = {":source $MYVIMRC<cr>:echo $MYVIMRC 'loaded'<cr>", "Load VimRC", noremap = true},
     },
     s = {
         name = "Session-Handling",
