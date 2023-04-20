@@ -375,27 +375,7 @@ require('packer').startup(function(use)
     use {
         'preservim/nerdtree',
         config = function()
-            vim.cmd[[
-                augroup ProjectDrawer
-                    autocmd!
-                    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-                augroup END
-                let NERDTreeShowHidden=1
-                " enable line numbers
-                let NERDTreeShowLineNumbers=1
-                " make sure relative line numbers are used
-                autocmd FileType nerdtree setlocal relativenumber
-            ]]
-            wk.register({
-                n = {
-                    name = "FileTree",
-                    n = {
-                        name = "NERDTree",
-                        f = {":NERDTreeFind<cr>", "current file", noremap = true },
-                        t = {":NERDTree<cr>", "open tree", noremap = true},
-                    },
-                },
-            }, { prefix = "<leader>" })
+            require('maorun.plugin-config.nerdtree')
         end
     }
 
@@ -403,14 +383,7 @@ require('packer').startup(function(use)
         'nvim-telescope/telescope-file-browser.nvim',
         requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
-            require("telescope").load_extension "file_browser"
-            wk.register({
-                n = {
-                    name = "FileTree",
-                    f = {":Telescope file_browser path=%:p:h select_buffer=true<cr>", "current file", noremap = true},
-                    t = {":Telescope file_browser respect_gitignore=true<cr>", "open tree", noremap = true},
-                },
-            }, { prefix = "<leader>" })
+            require('maorun.plugin-config.telescope-file-browser')
         end
     }
 
