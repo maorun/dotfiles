@@ -27,7 +27,14 @@ echo -e "Freitag:\t" $(getOverview "Freitag")
 
 echo -e "\n"
 echo -e "Week-Number: $WEEKNUMBER"
-echo -e "Today:"
+IS_PAUSED=`echo $DATA | jq '.paused'`
+if [ $IS_PAUSED = "true" ]; then
+    IS_PAUSED="[paused]"
+else
+    IS_PAUSED=""
+fi
+
+echo -e "Today: "$IS_PAUSED
 echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${WEEKDAY}'.items[] | "Start: \(.startReadable) Uhr, End: \(.endReadable) Uhr, Diff: \(.diffInHours)"'
 
 # say "$VALUE_ROUND Stunden"
