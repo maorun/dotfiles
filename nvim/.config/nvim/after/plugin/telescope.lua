@@ -1,5 +1,4 @@
 -- Load user extension
-require('maorun.telescope.secrets').init()
 require('maorun.telescope.k8s').init()
 
 local wk = require("which-key")
@@ -11,7 +10,6 @@ wk.register({
         f = { ":lua require('telescope.builtin').find_files()<cr>", "Find files", noremap = true },
         r = { ":lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", "Live Grep", noremap = true },
         k = { ":Telescope k8s<cr>", "Kubernetes", noremap = true },
-        s = { ":lua require('maorun.telescope.secrets').folders()<cr>", "Secrets", noremap = true },
         h = { ":Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
         p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "Project", noremap = true },
         l = { ":lua require('telescope.builtin').oldfiles()<cr>", "Find last opened files", noremap = true },

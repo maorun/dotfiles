@@ -14,6 +14,11 @@ local conf = require("telescope.config").values
 local actions = require "telescope.actions"
 local action_state = require("telescope.actions.state")
 local entry_display = require("telescope.pickers.entry_display")
+
+local picker_opt = {
+    folder = '.',
+}
+
 local displayer = entry_display.create({
     separator = " ",
     items = {
@@ -28,11 +33,8 @@ local make_display = function(entry)
     })
 end
 
-
 local secrets = function(opts)
-    opts = vim.tbl_deep_extend("keep", opts or {}, {
-        folder = "./deployment"
-    })
+    opts = vim.tbl_deep_extend("force", picker_opt, opts or {})
     local files = vim.fn.systemlist('find ' .. opts.folder .. ' -type f -name "*secret*.yaml"')
     local items = {}
     for key, value in pairs(files) do
@@ -92,51 +94,11 @@ local secrets = function(opts)
     }):find()
 end
 
-telescope.extensions.secrets = {
-    secrets = secrets,
-}
-
-local M = {}
-function M.init(opts)
-end
-function M.secrets(opts)
-    secrets(opts)
-end
-function M.folders()
-    local opts = {}
-    pickers.new(opts, {
-        prompt_title = 'secrets - folder',
-        attach_mappings = function(prompt_bufnr, map)
-            actions.select_default:replace(function()
-                local file = action_state.get_selected_entry().value
-                actions.close(prompt_bufnr)
-                M.secrets({
-                    folder = file
-                })
-            end)
-            return true
-        end,
-        finder = finders.new_table {
-            results = {
-                './deployment',
-                './helm',
-                './charts/global/environments',
-                './stage/',
-                './production/',
-            },
-            entry_maker = function(entry)
-                return {
-                    value = entry,
-                    display = make_display,
-                    description = entry,
-                    file = entry,
-
-                    -- this is what we can fzf
-                    ordinal = entry,
-                }
-            end
-        },
-        sorter = conf.generic_sorter(opts)
-    }):find()
-end
-return M
+return telescope.register_extension({
+    setup = function(ext_config, config)
+        conf = vim.tbl_extend("force", conf, ext_config or {})
+    end,
+    exports = {
+        secrets = secrets
+    },
+})
