@@ -18,12 +18,12 @@ getOverview() {
     echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${1}'.items[] | "\t\(.startReadable)-\(.endReadable)"' 2> /dev/null
 }
 
-echo -e "Gesammtüberstunden:\t" $OVERHOUR_WEEK
-echo -e "Montag:\t\t" $(getOverview "Montag")
-echo -e "Dienstag:\t" $(getOverview "Dienstag")
-echo -e "Mittwoch:\t" $(getOverview "Mittwoch")
-echo -e "Donnerstag:\t" $(getOverview "Donnerstag")
-echo -e "Freitag:\t" $(getOverview "Freitag")
+echo -e "Gesammtüberstunden:\t [`echo $DATA | jq '.hoursPerWeekday | add' `]" $OVERHOUR_WEEK
+echo -e "Montag:\t\t [`echo $DATA | jq '.hoursPerWeekday.Montag' `]" $(getOverview "Montag")
+echo -e "Dienstag:\t [`echo $DATA | jq '.hoursPerWeekday.Dienstag' `]" $(getOverview "Dienstag")
+echo -e "Mittwoch:\t [`echo $DATA | jq '.hoursPerWeekday.Mittwoch' `]" $(getOverview "Mittwoch")
+echo -e "Donnerstag:\t [`echo $DATA | jq '.hoursPerWeekday.Donnerstag' `]" $(getOverview "Donnerstag")
+echo -e "Freitag:\t [`echo $DATA | jq '.hoursPerWeekday.Freitag' `]" $(getOverview "Freitag")
 
 echo -e "\n"
 echo -e "Week-Number: $WEEKNUMBER"
