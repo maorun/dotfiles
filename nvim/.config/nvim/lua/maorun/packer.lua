@@ -37,45 +37,7 @@ require('packer').startup(function(use)
             'hrsh7th/vim-vsnip'
         },
         config = function ()
-            local cmp = require'cmp'
-            cmp.setup {
-                snippet = {
-                    -- REQUIRED - you must specify a snippet engine
-                    expand = function(args)
-                        vim.fn["vsnip#anonymous"](args.body)
-                    end,
-                },
-                mapping = {
-                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                    ['<c-j>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                    ['<c-k>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-                },
-                window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                },
-                formatting = {
-                    format = function(entry, vim_item)
-                        vim_item.kind = string.format("%s %s", vim_item.kind, entry.source.name)
-                        vim_item.menu = ({
-                            nvim_lsp = "[LSP]",
-                            nvim_lua = "[Lua]",
-                            buffer = "[Buf]",
-                            vsnip = "[Vsnip]",
-                            luasnip = "[LuaSnip]",
-                            treesitter = "[Treesitter]",
-                            copilot = "[Copilot]",
-                            cmp_tabnine = "[Tabnine]",
-                        })[entry.source.name]
-                        return vim_item
-                    end,
-                },
-                sources = {
-                    { name = 'copilot' },
-                    { name = 'cmp_tabnine' },
-                    { name = 'nvim_lsp' },
-                }
-            }
+            require('maorun.plugin-config.cmp')
         end
     }
 
@@ -94,20 +56,7 @@ require('packer').startup(function(use)
         run='./install.sh',
         requires = 'hrsh7th/nvim-cmp',
         config = function ()
-            local tabnine = require('cmp_tabnine.config')
-
-            tabnine:setup({
-                max_lines = 1000,
-                max_num_results = 20,
-                sort = true,
-                run_on_every_keystroke = true,
-                snippet_placeholder = '..',
-                ignored_file_types = {
-                    -- uncomment to ignore in lua:
-                    -- lua = true
-                },
-                show_prediction_strength = false
-            })
+            require('maorun.plugin-config.tabnine')
         end
     }
 
@@ -156,79 +105,7 @@ require('packer').startup(function(use)
     use {
         'nvim-telescope/telescope.nvim',
         config = function()
-            local actions = require('telescope.actions')
-            local action_layout = require('telescope.actions.layout')
-            local gitActions = require('maorun.telescope.gitActions').actions
-
-            require('telescope').setup({
-                defaults = {
-                    file_ignore_patterns = {
-                        '.git/*',
-                        'node_modules',
-                        '__snapshots__',
-                        'package%-lock%.json',
-                        'composer%.lock'
-                    },
-                    mappings = {
-                        i = {
-                            ['<C-p>'] = actions.results_scrolling_up,
-                            ['<C-f>'] = actions.results_scrolling_down,
-                            ['<C-O>'] = action_layout.toggle_preview,
-                            ['<PageUp>'] = false,
-                            ['<PageDown>'] = false,
-                            ['<Down>'] = false,
-                            ['<C-j>'] = actions.move_selection_next,
-                            ['<Up>'] = false,
-                            ['<C-k>'] = actions.move_selection_previous,
-                        },
-                    },
-                },
-                pickers = {
-                    buffers = {
-                        mappings ={
-                            i = {
-                                ["<c-d>"] = actions.delete_buffer,
-                            },
-                        },
-                    },
-                    git_branches = {
-                        mappings = {
-                            i = {
-                                ['<c-d>'] = gitActions.git_delete_branch + gitActions.showGitBranches,
-                            }
-                        }
-                    }
-                },
-                extensions = {
-                    file_browser = {
-                        respect_gitignore = false,
-                        hidden = true,
-                        depth = 4,
-                    },
-                    project = {
-                        base_dirs = {
-                            '~/repos',
-                        },
-                        hidden_files = true,
-                        on_project_selected = function(prompt_bufnr)
-                            local project_actions = require("telescope._extensions.project.actions")
-                            project_actions.change_working_directory(prompt_bufnr, false)
-                            require "telescope".extensions.file_browser.file_browser({ 
-                                respect_gitignore = true,
-                            })
-
-                        end
-                    },
-                    gkeep = {
-                        find_method = 'all_text',
-                        link_method = 'title',
-                    },
-                },
-            })
-            -- vim.api.nvim_create_autocmd("TelescopePreviewerLoaded ", {
-            --     group = 'User',
-            --     command = 'setlocal wrap'
-            -- })
+            require('maorun.plugin-config.telescope')
         end,
         requires = {
             { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
@@ -261,20 +138,21 @@ require('packer').startup(function(use)
         end,
     }
 
+    use {
+        'nvim-tree/nvim-web-devicons',
+        config = function()
+            require'nvim-web-devicons'.setup {
+                color_icons = true,
+                default = true
+            }
+        end
+    }
 
     use {
         'pwntester/octo.nvim',
         requires = {
             'nvim-lua/plenary.nvim',
-            {
-                'nvim-tree/nvim-web-devicons',
-                config = function()
-                    require'nvim-web-devicons'.setup {
-                        color_icons = true,
-                        default = true
-                    }
-                end
-            }
+            'nvim-tree/nvim-web-devicons',
         },
         config = function ()
             require"octo".setup()
