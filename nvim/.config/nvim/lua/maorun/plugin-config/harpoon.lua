@@ -8,5 +8,8 @@ wk.register({
 }, { silent=true, prefix = '' })
 wk.register({
     a = {":lua require('harpoon.mark').add_file()<cr>", "Add file to mark", noremap = true},
+    t = {
+        h = { ":Telescope harpoon marks<cr>", "Harpoon marks", noremap = true },
+    },
 }, { silent=true, prefix = '<leader>' })
 require("telescope").load_extension('harpoon')
