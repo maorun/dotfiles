@@ -34,29 +34,32 @@ vim.api.nvim_create_autocmd('FileType', {
     end,
 })
 
-local mappingListPlugin = require("maorun.telescope.mappingList")
+local mappingListPlugin = require("maorun.mappingList")
+mappingListPlugin.init()
+local octoHelp = function()
+    local mappings = require('octo.config').get_config().mappings
+    local list = {}
+    local k, v = next( mappings )
+    while k do
+        k, v = next( mappings, k )
+        if (k ~= nil) then
+            for key, value in next, v do
+                -- print(vim.inspect(value))
+                table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
+
+            end
+        end
+    end
+    mappingListPlugin.mappingList {
+        title = "octo",
+        list = list
+    }
+end
 local wk = require("which-key")
 wk.register({
     h = {
-        o = { function()
-                local mappings = require('octo.config').get_config().mappings
-                local list = {}
-                local k, v = next( mappings )
-                while k do
-                    k, v = next( mappings, k )
-                    if (k ~= nil) then
-                        for key, value in next, v do
-                            -- print(vim.inspect(value))
-                            table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
-
-                        end
-                    end
-                end
-                mappingListPlugin.mappingList {
-                    title = "octo",
-                    list = list
-                }
-        end, "octo", noremap = true },
+        name = 'Help',
+        o = {octoHelp, "octo", noremap = true },
     },
     t = {
         name = "Telescope",
@@ -66,14 +69,12 @@ wk.register({
             c = { ':Octo pr create draft<cr>', "create PR draft", noremap = true },
 
             k = { function()
-                local mappingListPlugin = require("maorun.telescope.mappingList")
-                mappingListPlugin.init()
                 mappingListPlugin.mappingList {
                     title = "octo",
                     list = {
                         'spring-media/ac-steam',
                         'spring-media/ac-steam-flux',
-                        },
+                    },
                     action = function(value)
                         vim.cmd('Octo pr list ' .. value)
                     end
@@ -81,27 +82,7 @@ wk.register({
             end, "list pr of a list of repos", noremap = true },
             l = { ':Octo pr list<cr>', "list PR", noremap = true },
             p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "should be keybind of tp fur Project", noremap = true },
-            h = { function()
-                local mappings = require('octo.config').get_config().mappings
-                local list = {}
-                local k, v = next( mappings )
-                while k do
-                    k, v = next( mappings, k )
-                    if (k ~= nil) then
-                        for key, value in next, v do
-                            -- print(vim.inspect(value))
-                            table.insert(list, k .. " : " .. value.lhs .. " => " .. value.desc)
-
-                        end
-                    end
-                end
-                local mappingListPlugin = require("maorun.telescope.mappingList")
-                mappingListPlugin.init()
-                mappingListPlugin.mappingList {
-                    title = "octo",
-                    list = list
-                }
-            end, "help", noremap = true },
-            },
+            h = { octoHelp, "help - mapping", noremap = true },
+        },
     },
 }, { prefix = "<leader>" })
