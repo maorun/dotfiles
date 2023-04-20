@@ -140,24 +140,12 @@ wk.register({
     i = { "go to next indent", noremap = true},
     pi = { "go to previous indent", noremap = true},
     e = {":execute '!' .(expand(getline('.')))<cr>", "execute line under cursor (shellescape does not work)", noremap = true},
-}, { silent=true, prefix = '<leader>' })
-
-wk.register({
-    n = {
-        name = "FileTree",
-        n = {
-            name = "NERDTree",
-            f = {":NERDTreeFind<cr>", "current file", noremap = true },
-            t = {":NERDTree<cr>", "open tree", noremap = true},
-        -- f = {":NvimTreeFindFile<cr>", "current file", noremap = true },
-        -- t = {":NvimTreeFocus<cr>", "open tree", noremap = true},
-        },
-    },
     b = {
         name = "Buffer",
         n = { NewBuffer, "new buffer", noremap = true },
     },
-}, { prefix = "<leader>" })
+}, { silent=true, prefix = '<leader>' })
+
 
 wk.register({
     cq = {":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true},
@@ -203,8 +191,8 @@ wk.register({
     K = {":m '<-2<cr>gv=gv", "move line up", noremap = true},
 }, { mode = 'v'})
 wk.register({
-    ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true},
     ["<C-K>"] = { "mk:m .-2<cr>==`k", "move line up", noremap = true},
+    ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true},
 }, { mode = 'n'})
 
 wk.register({
