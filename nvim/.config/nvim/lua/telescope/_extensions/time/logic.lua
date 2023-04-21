@@ -272,6 +272,11 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 -- Überstunden letzte Woche: 3h
 
+Time = {
+    addTime = addTime,
+    clearDay = clearDay,
+}
+
 return {
     setup = function(config)
         init(config)
