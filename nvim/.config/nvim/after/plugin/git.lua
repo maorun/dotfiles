@@ -29,6 +29,7 @@ wk.register({
             m = {":G fetch --prune | :G rebase origin/master<cr>", "Git Rebase master", noremap = true},
             r = {":G rebase -i HEAD~", "Git Rebase interactive", noremap = true},
             c = {":G rebase --continue<cr>", "Git Rebase continue", noremap = true},
+            a = {":G rebase --abort<cr>", "Git Rebase abort", noremap = true},
             o = {":lua Maorun.git.resetToOrigin()<cr>", "Git Reset origin", noremap = true},
             n = {":G rebase ", "Git Rebase", noremap = true},
         },
