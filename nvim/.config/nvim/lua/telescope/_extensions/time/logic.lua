@@ -90,7 +90,7 @@ local function calculate()
     local years = obj.content['data'][os.date("%Y")] 
     local loggedWeekdays = 0
     local timeInWeek = 0
-summary.overhour = prevWeekOverhour
+    summary.overhour = prevWeekOverhour
     for weekdayName, items in pairs(weekdays) do
         local timeInWeekday = 0
         for key, value in pairs(items.items) do
