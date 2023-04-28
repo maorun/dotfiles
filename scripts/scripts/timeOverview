@@ -4,7 +4,6 @@ FILE=~/.local/share/nvim/maorun-time.json
 DATA=`cat $FILE`
 WEEKDAY=`date +"%A"`
 WEEKNUMBER=`date +"%W"`
-LASTWEEK=$((WEEKNUMBER-1))
 
 JQ_EXPRESSION='.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${WEEKDAY}'"]["summary"]'
 VALUE=`echo $DATA | jq $JQ_EXPRESSION`
@@ -19,7 +18,6 @@ getOverview() {
     echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${1}'.items[] | "\t\(.startReadable)-\(.endReadable)"' 2> /dev/null
 }
 
-echo -e "letzte Woche Gesammtüberstunden:\t " $(echo $DATA | jq '.data["2023"]["'${LASTWEEK}'"]["summary"].overhour')
 echo -e "Gesammtüberstunden:\t [`echo $DATA | jq '.hoursPerWeekday | add' `]" $OVERHOUR_WEEK
 echo -e "Montag:\t\t [`echo $DATA | jq '.hoursPerWeekday.Montag' `]" $(getOverview "Montag")
 echo -e "Dienstag:\t [`echo $DATA | jq '.hoursPerWeekday.Dienstag' `]" $(getOverview "Dienstag")
