@@ -79,13 +79,18 @@ local function init(config)
     return obj
 end
 
-local function calculate(week)
+local function calculate()
+    local weeknumber = os.date("%W")
+    local year = obj.content['data'][os.date("%Y")]
+    local week = year[weeknumber]
+    local prevWeekOverhour = year[string.format("%02d", weeknumber - 1)].summary.overhour
+
     local weekdays = week['weekdays']
     local summary = week['summary']
     local years = obj.content['data'][os.date("%Y")] 
     local loggedWeekdays = 0
     local timeInWeek = 0
-    summary.overhour = 0
+summary.overhour = prevWeekOverhour
     for weekdayName, items in pairs(weekdays) do
         local timeInWeekday = 0
         for key, value in pairs(items.items) do
@@ -101,7 +106,7 @@ local function calculate(week)
         }
         timeInWeekday = 0
         loggedWeekdays = loggedWeekdays + 1
-        summary.overhour = summary.overhour + weekdays[weekdayName].summary.overhour
+summary.overhour = summary.overhour + weekdays[weekdayName].summary.overhour
     end
 end
 
@@ -178,7 +183,7 @@ local function TimeStop(weekday, time)
             item.diffInHours = os.difftime(item.endTime, item.startTime) / 60 / 60
         end
     end
-    calculate(years[os.date("%W")])
+    calculate()
     save(obj)
 end
 
@@ -254,7 +259,7 @@ local function clearDay(weekday)
     for key, value in pairs(items) do
         items[key] = nil
     end
-    calculate(week)
+    calculate()
     local items = week['weekdays'][weekday]
     save(obj)
 end
@@ -275,6 +280,14 @@ vim.api.nvim_create_autocmd("VimLeave", {
 Time = {
     addTime = addTime,
     clearDay = clearDay,
+    TimeStop = TimeStop,
+    setIllDay = setIllDay,
+    setHoliday = setIllDay,
+    calculate = function() 
+        init()
+        calculate()
+        save(obj)
+    end,
 }
 
 return {
