@@ -84,12 +84,6 @@ local forattingAuGroup = vim.api.nvim_create_augroup('formatting', {})
 --     pattern = {'*.tsx','*.ts','*.jsx','*.js'},
 --     command = 'lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})',
 -- })
-vim.api.nvim_create_autocmd('BufWritePre', {
-    desc = "[lsp] format on save",
-    group = forattingAuGroup,
-    pattern = {'*.tsx','*.ts','*.jsx','*.js','*.php'},
-    command = 'lua vim.lsp.buf.format()',
-})
 local signcolumnAuGroup = vim.api.nvim_create_augroup('signcolumn', {})
 vim.api.nvim_create_autocmd('FileType', {
     group = signcolumnAuGroup,
