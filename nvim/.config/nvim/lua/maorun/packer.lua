@@ -24,10 +24,18 @@ require('packer').startup(function(use)
 
     -- Speed up loading Lua modules in Neovim to improve startup time.
     use {
+        disable = true,
         'lewis6991/impatient.nvim',
         config = function()
             require('impatient')
         end
+    }
+
+    use {
+        'maorun/dotfiles-personal',
+        config = function()
+            require('maorun.personal')
+        end,
     }
 
     use {
@@ -398,6 +406,7 @@ require('packer').startup(function(use)
     }
     use {
         'maorun/code-stats.nvim',
+        after = 'dotfiles-personal',
         config = function()
             require('maorun.code-stats').setup()
         end
