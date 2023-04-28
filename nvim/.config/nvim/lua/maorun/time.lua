@@ -280,6 +280,8 @@ vim.api.nvim_create_autocmd("VimLeave", {
 Time = {
     addTime = addTime,
     clearDay = clearDay,
+    TimePause = TimePause,
+    TimeResume = TimeResume,
     TimeStop = TimeStop,
     setIllDay = setIllDay,
     setHoliday = setIllDay,
@@ -291,10 +293,7 @@ Time = {
 }
 
 return {
-    setup = function(config)
-        init(config)
-        -- TimeResume()
-    end,
+    setup = init,
     TimeStart = TimeStart,
     TimeStop = TimeStop,
     TimePause = TimePause,
@@ -304,4 +303,9 @@ return {
     addTime = addTime,
     clearDay = clearDay,
     isPaused = isPaused,
+    calculate = function()
+        init()
+        calculate()
+        save(obj)
+    end,
 }
