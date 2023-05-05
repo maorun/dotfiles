@@ -76,7 +76,7 @@ require('packer').startup(function(use)
     use 'nvim-lua/plenary.nvim'
     use {
         'nvim-telescope/telescope-project.nvim',
-        requires = { 
+        requires = {
             'nvim-telescope/telescope.nvim',
             'nvim-telescope/telescope-file-browser.nvim'
         },
@@ -120,7 +120,7 @@ require('packer').startup(function(use)
         config = function()
         end,
     }
-    use { 
+    use {
         disable = false,
         'nvim-telescope/telescope-github.nvim',
         requires = {
@@ -179,7 +179,7 @@ require('packer').startup(function(use)
                     local null_ls = require("null-ls")
 
                     null_ls.setup({
-                        sources = { 
+                        sources = {
                             null_ls.builtins.formatting.prettier,
                             null_ls.builtins.formatting.prettier_eslint,
                         },
@@ -220,7 +220,7 @@ require('packer').startup(function(use)
         'iamcco/markdown-preview.nvim',
         run = 'cd app && npm install',
         setup = function()
-            vim.g.mkdp_filetypes = { "markdown" } 
+            vim.g.mkdp_filetypes = { "markdown" }
         end,
         ft = { "markdown" }
     }
@@ -257,6 +257,23 @@ require('packer').startup(function(use)
 
     -- Vim HardTime
     --  use 'takac/vim-hardtime'
+
+    use {
+        'maorun/timeTracking.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            {
+                'rcarriga/nvim-notify',
+                config = function()
+                    vim.opt.termguicolors = true
+                    vim.api.nvim_set_hl(0, "NotifyBackground", { bg="#000000", ctermbg=0})
+                end
+            }
+        },
+        config = function()
+            require'maorun.time'.setup()
+        end
+    }
 
     use 'justinmk/vim-sneak' -- replace s with search
     use 'tpope/vim-commentary' -- gcc

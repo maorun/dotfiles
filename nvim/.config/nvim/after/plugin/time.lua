@@ -1,5 +1,3 @@
-require'maorun.time'.setup()
-
 local wk = require("which-key")
 wk.register({
     t = {
