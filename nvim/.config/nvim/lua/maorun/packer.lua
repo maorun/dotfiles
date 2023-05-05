@@ -83,7 +83,6 @@ require('packer').startup(function(use)
             'nvim-telescope/telescope-file-browser.nvim'
         },
         config = function()
-            require'telescope'.load_extension('project')
         end
     }
     use { -- google keep
@@ -121,7 +120,6 @@ require('packer').startup(function(use)
             'nvim-telescope/telescope.nvim',
         },
         config = function()
-            require('telescope').load_extension('coc')
         end,
     }
     use { 
@@ -131,7 +129,6 @@ require('packer').startup(function(use)
             'nvim-telescope/telescope.nvim',
         },
         config = function()
-            require('telescope').load_extension('gh')
             -- c-f browse modified files
             -- c-a approve
             -- c-e view details or diff

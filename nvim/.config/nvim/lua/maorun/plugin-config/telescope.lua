@@ -72,3 +72,8 @@ require('telescope').setup({
 --     command = 'setlocal wrap'
 -- })
 
+-- require('telescope').load_extension('coc')
+require('telescope').load_extension('gh')
+require'telescope'.load_extension('project')
+require("telescope").load_extension "file_browser"
+

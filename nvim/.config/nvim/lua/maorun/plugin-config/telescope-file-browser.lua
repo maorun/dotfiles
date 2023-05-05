@@ -1,7 +1,5 @@
 local wk = require("which-key")
 
-require("telescope").load_extension "file_browser"
-
 wk.register({
     [ '<leader>' ] = { ":Telescope file_browser respect_gitignore=true<cr>", "ope file", noremap = true },
     v = {
