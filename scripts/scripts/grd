@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+PR=$1
+REPO="spring-media/ac-steam"
+
+TO_DISMISS=$(gh api --method GET repos/${REPO}/pulls/${PR}/reviews --jq '.[] | {user: .user.login, id: .id, state: .state}' | fzf --no-sort --tac)
+
+read -p "Enter Dismiss-Message: " MESSAGE
+
+gh api repos/spring-media/ac-steam/pulls/2970/reviews/1414479382/dismissals --method PUT -f message=${MESSAGE}
+
