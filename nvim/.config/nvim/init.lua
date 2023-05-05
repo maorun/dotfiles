@@ -2,11 +2,10 @@ vim.g.mapleader = ' '
 -- disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.cmd[[colorscheme default]]
 
 vim.cmd[[
     tnoremap <Esc> <C-\><C-n>
-    highlight MatchParen ctermbg=240
-    highlight NormalFloat guibg=#222332
 ]]
 
 vim.cmd [[

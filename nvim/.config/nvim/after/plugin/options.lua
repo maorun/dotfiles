@@ -28,9 +28,8 @@ vim.opt.smartcase = true
 vim.opt.undodir = vim.fn.stdpath('data') .. "/undodir"
 vim.opt.undofile = true
 
+vim.opt.termguicolors = true
 
--- " Color column
-vim.opt.colorcolumn="80,120"
 vim.opt.tabstop=4
 vim.opt.softtabstop=4
 vim.opt.shiftwidth=4
@@ -49,11 +48,6 @@ vim.cmd [[
     "set statusline+=Session:\ %{ObsessionStatus('[active]','[paused]')}
     set statusline+=\ %-14.(%l,%c%V%)\ %P
     "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-    augroup statusline
-        au!
-        autocmd BufEnter fugitive://*  hi statusline guibg=Red ctermfg=Red guifg=OrangeRed4 ctermbg=White
-        autocmd BufLeave fugitive://*  hi statusline guibg=NONE ctermfg=NONE cterm=bold,reverse guifg=NONE gui=bold,reverse ctermbg=NONE
-    augroup END
 ]]
 
 -- " not waiting too long
@@ -82,11 +76,6 @@ vim.cmd [[
     autocmd BufRead *.txt setlocal nospell spelllang=de,en foldmethod=marker foldenable
 
     syntax enable
-
-    hi DiffChange   ctermfg=NONE          ctermbg=NONE
-
-    hi ColorColumn ctermbg=green
-    call matchadd('ColorColumn', '\%81v', 100)
 
     filetype plugin indent on
 
