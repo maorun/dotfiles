@@ -312,6 +312,9 @@ require('packer').startup(function(use)
             }
         end
     }
+    use {
+        'rhysd/git-messenger.vim',
+    }
 
     use {
         disable = true,
