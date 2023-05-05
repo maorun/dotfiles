@@ -1,5 +1,3 @@
-local wk = require("which-key")
-
 local ensure_packer = function()
     local fn = vim.fn
     local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
@@ -424,9 +422,37 @@ require('packer').startup(function(use)
         end
     }
 
+    -- until https://github.com/ThePrimeagen/refactoring.nvim/pull/372
+    use {
+        'napmn/react-extract.nvim',
+        requires = {
+            'nvim-treesitter/nvim-treesitter',
+            'folke/which-key.nvim',
+        },
+        config = function()
+            require("react-extract").setup({
+                ts_template_before = "export function [COMPONENT_NAME]([PROPERTIES]:{[TYPE_PROPERTIES]}) {\n"
+                    .. "[INDENT]return (\n",
+
+            })
+            local wk = require("which-key")
+            wk.register({
+                r = {
+                    name = "Refactor Component",
+                    f = { "<cmd>lua require('react-extract').extract_to_new_file()<CR>", "Extract to new file" },
+                    e = { "<cmd>lua require('react-extract').extract_to_current_file()<CR>", "Extract to current file" },
+                },
+            }, { prefix = "<leader>", mode = "v" })
+
+
+
+        end
+    }
+
     use {'kshenoy/vim-signature'} -- show marks
 
     use({
+        disable = true,
         "jackMort/ChatGPT.nvim",
         config = function()
             require('maorun.plugin-config.chatgpt')
