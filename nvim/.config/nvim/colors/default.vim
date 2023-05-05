@@ -11,3 +11,5 @@ hi DiffChange   ctermfg=NONE          ctermbg=NONE
 set colorcolumn=80,120
 hi ColorColumn ctermbg=green
 call matchadd('ColorColumn', '\%81v', 100)
+
+hi TelescopeSelection guibg=Gray ctermbg=Gray
