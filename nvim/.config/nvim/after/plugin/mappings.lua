@@ -1,4 +1,4 @@
-vim.cmd "nnoremap gx yiW:!open <cWORD><CR><CR>"
+vim.cmd "nnoremap gx yiW:!open '<cWORD>'<CR><CR>"
 
 -- got to indention level {{{
 vim.cmd [[

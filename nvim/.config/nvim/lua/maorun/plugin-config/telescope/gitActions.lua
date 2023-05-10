@@ -28,7 +28,7 @@ M.actions = transform_mod({
         end
     end,
     showGitBranches = function(prompt_bufnr)
-        return require'telescope.builtin'.git_branches()
+        return require'telescope.builtin'.git_branches({pattern = 'refs/heads'})
     end,
 })
 return M

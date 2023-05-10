@@ -24,6 +24,7 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rd", ":Octo pr ready<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rq", ":split | terminal grd " .. vim.fn.expand("%:t") .. "<cr>a", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<C-N>", ":Octo pr browser<cr>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<leader>sf", ":%s/.*\\[\\(\\d\\+\\).*](\\(.*\\))/\\1 \\2/<cr><C-l>", { silent = true, noremap = true })
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {

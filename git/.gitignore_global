@@ -13,3 +13,4 @@ tags
 .tmux.conf
 nodemon*.json
 .dccache
+.luarc.json

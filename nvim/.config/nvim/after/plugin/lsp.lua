@@ -49,6 +49,7 @@ wk.register({
         K = {':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', 'open_float', noremap = true},
         q = {':lua vim.diagnostic.setloclist()<cr>', 'show diagnostics', noremap = true},
     },
+    o = {':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', "Organize imports", noremap = true},
 }, { silent=true, prefix = '<leader>' })
 wk.register({
     g = {
@@ -79,6 +80,7 @@ for _, lsp in ipairs(servers) do
                     globals = {'vim'},
                 },
                 workspace = {
+                    checkThirdParty = false,
                     -- Make the server aware of Neovim runtime files
                     library = vim.api.nvim_get_runtime_file("", true),
                 },
