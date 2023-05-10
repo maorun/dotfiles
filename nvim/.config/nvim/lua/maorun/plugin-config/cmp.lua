@@ -35,6 +35,7 @@ cmp.setup {
         { name = 'copilot' },
         { name = 'cmp_tabnine' },
         { name = 'nvim_lsp' },
+        { name = "codeium" },
     }
 }
 
