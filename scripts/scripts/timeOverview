@@ -3,7 +3,13 @@ FILE=~/.local/share/nvim/maorun-time.json
 
 DATA=`cat $FILE`
 WEEKDAY=`date +"%A"`
-WEEKNUMBER=`date +"%W"`
+
+if [ $# -eq 1 ]; then
+    WEEKNUMBER=$1
+else
+    WEEKNUMBER=`date +"%W"`
+fi
+
 
 JQ_EXPRESSION='.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${WEEKDAY}'"]["summary"]'
 VALUE=`echo $DATA | jq $JQ_EXPRESSION`
