@@ -5,6 +5,8 @@ local gitActions = require('maorun.plugin-config.telescope.gitActions').actions
 require('telescope').setup({
     defaults = {
         file_ignore_patterns = {
+            ".cache/",
+            'vendor/',
             ".git/",
             'node_modules',
             '__snapshots__',
