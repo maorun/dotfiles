@@ -185,6 +185,30 @@ require('packer').startup(function(use)
     --  use 'nvim-treesitter/playground'
 
     use {
+        "SmiteshP/nvim-navbuddy",
+        requires = {
+            "neovim/nvim-lspconfig",
+            "SmiteshP/nvim-navic",
+            "MunifTanjim/nui.nvim",
+            "nvim-telescope/telescope.nvim" -- Optional
+        },
+        config = function()
+            vim.g.navbuddy_silence = 1
+            require("nvim-navbuddy").setup({
+                lsp = {
+                    -- auto_attach = true,
+                }
+            })
+            local wk = require("which-key")
+            wk.register({
+                n = {
+                    v = { "<cmd>lua require('nvim-navbuddy').open()<cr>", ":Navbuddy", noremap = true},
+                },
+            }, { prefix = "<leader>"})
+        end
+    }
+
+    use {
         'neovim/nvim-lspconfig',
         config = function()
         end,
