@@ -38,6 +38,7 @@ vim.opt.autoindent = true
 
 vim.opt.statusline="%<"
 vim.opt.statusline=vim.opt.statusline + "%="
+vim.opt.statusline=vim.opt.statusline + "%{get(b:,'gitsigns_head','')}%="
 vim.opt.statusline=vim.opt.statusline + "%f" -- the filename
 vim.opt.statusline=vim.opt.statusline + " %h" -- help-buffer
 vim.opt.statusline=vim.opt.statusline + "%m" -- modified-flag
