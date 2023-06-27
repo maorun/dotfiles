@@ -77,9 +77,15 @@ wk.register({
         o = {"o<Esc>", "add a line below", noremap = true},
         O = {"O<Esc>", "add a line above", noremap = true},
     },
-    n = {"nzzv"},
-    N = {"Nzzv"},
+    cq = {":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true},
+    cx = {":split | terminal opencommit<cr>a", "opencommit", noremap = true},
+    n = {"nzz", "next search"},
+    N = {"Nzz", "prev search"},
 }, { silent=true, prefix = '' })
+wk.register({
+    [">"] = {">gv", "indent right"},
+    ["<"] = {"<gv", "indent left"},
+}, { silent=true, mode = "x", prefix = '' })
 
 wk.register({
     q = {
@@ -136,12 +142,6 @@ wk.register({
         n = { NewBuffer, "new buffer", noremap = true },
     },
 }, { silent=true, prefix = '<leader>' })
-
-
-wk.register({
-    cq = {":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true},
-    cx = {":split | terminal opencommit<cr>a", "opencommit", noremap = true},
-}, { mode = 'n'})
 
 vim.cmd [[
     inoremap jk <Esc>
