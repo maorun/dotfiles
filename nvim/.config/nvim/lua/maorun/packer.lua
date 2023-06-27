@@ -215,24 +215,31 @@ require('packer').startup(function(use)
     }
 
     use {
+        'jose-elias-alvarez/null-ls.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        },
+        config = function()
+            local null_ls = require("null-ls")
+
+            null_ls.setup({
+                debug = true,
+                sources = {
+                    null_ls.builtins.formatting.prettier,
+                    null_ls.builtins.formatting.prettier_eslint,
+                    -- null_ls.builtins.code_actions.gitsigns,
+                },
+            })
+        end
+
+    }
+
+    use {
         'MunifTanjim/prettier.nvim',
         after = { 'nvim-lspconfig' },
         requires = {
             'neovim/nvim-lspconfig',
-            {
-                'jose-elias-alvarez/null-ls.nvim',
-                config = function()
-                    local null_ls = require("null-ls")
-
-                    null_ls.setup({
-                        sources = {
-                            null_ls.builtins.formatting.prettier,
-                            null_ls.builtins.formatting.prettier_eslint,
-                        },
-                    })
-                end
-
-            }
+            'jose-elias-alvarez/null-ls.nvim',
         },
         config = function()
             local prettier = require("prettier")
