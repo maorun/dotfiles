@@ -383,6 +383,8 @@ require('packer').startup(function(use)
         end
     }
     use {
+        -- o -> old version
+        -- O -> new version
         'rhysd/git-messenger.vim',
     }
 

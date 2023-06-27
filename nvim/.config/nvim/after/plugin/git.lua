@@ -33,6 +33,7 @@ wk.register({
             o = {":lua Maorun.git.resetToOrigin()<cr>", "Git Reset origin", noremap = true},
             n = {":G rebase ", "Git Rebase", noremap = true},
         },
+        mm = {"<Plug>(git-messenger-into-popup)", "Git Messenger", noremap = true},
         l = {":lua Maorun.git.log()<cr>", "Git Log", noremap = true},
         n = {":lua Maorun.git.newBranch()<cr>", "Git New Branch", noremap = true},
         f = {":G fetch --prune<cr>", "Git Fetch", noremap = true},
