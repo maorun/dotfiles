@@ -12,7 +12,12 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-require('packer').startup(function(use)
+local packer =require('packer')
+packer.init({
+    max_jobs = 50,
+})
+
+packer.startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use {
