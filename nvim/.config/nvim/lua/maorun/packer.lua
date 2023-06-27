@@ -488,11 +488,15 @@ require('packer').startup(function(use)
 
     -- refactor
     use {
-        disable = true,
+        -- disable = true,
         'ThePrimeagen/refactoring.nvim',
+        requires = {
+            {"nvim-lua/plenary.nvim"},
+            {"nvim-treesitter/nvim-treesitter"}
+        },
         config = function()
-            require('refactoring').setup({})
-        end
+            require('maorun.plugin-config.refactor')
+        end,
     }
 
     -- until https://github.com/ThePrimeagen/refactoring.nvim/pull/372
