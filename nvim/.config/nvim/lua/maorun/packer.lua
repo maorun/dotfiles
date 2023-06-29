@@ -54,6 +54,7 @@ packer.startup(function(use)
 
     use {
         'zbirenbaum/copilot-cmp',
+        event = "InsertEnter",
         after = { "copilot.lua" },
         requires = {
             'zbirenbaum/copilot.lua'
@@ -64,6 +65,7 @@ packer.startup(function(use)
     }
     use {
         'tzachar/cmp-tabnine',
+        event = "InsertEnter",
         run='./install.sh',
         requires = 'hrsh7th/nvim-cmp',
         config = function ()
@@ -80,6 +82,7 @@ packer.startup(function(use)
 
     use {
         "jcdickinson/codeium.nvim",
+        event = "InsertEnter",
         requires = {
             "nvim-lua/plenary.nvim",
             "hrsh7th/nvim-cmp",
