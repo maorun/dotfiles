@@ -381,7 +381,11 @@ packer.startup(function(use)
     use {
         -- o -> old version
         -- O -> new version
+        cmd = 'GitMessenger',
         'rhysd/git-messenger.vim',
+        config = function()
+            require('maorun.plugin-config.git-messenger')
+        end
     }
 
     use {
