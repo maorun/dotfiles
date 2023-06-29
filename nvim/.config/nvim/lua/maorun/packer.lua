@@ -297,13 +297,6 @@ packer.startup(function(use)
     }
 
     use {
-        'preservim/nerdtree',
-        config = function()
-            require('maorun.plugin-config.nerdtree')
-        end
-    }
-
-    use {
         'nvim-telescope/telescope-file-browser.nvim',
         requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
