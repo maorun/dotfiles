@@ -43,9 +43,16 @@ packer.startup(function(use)
 
     use {
         'hrsh7th/nvim-cmp',
+        event = "VimEnter",
         requires = {
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/vim-vsnip'
+            {
+                'hrsh7th/cmp-nvim-lsp',
+                event = "VimEnter",
+            },
+            {
+                'hrsh7th/vim-vsnip', 
+                event = "VimEnter",
+            },
         },
         config = function ()
             require('maorun.plugin-config.cmp')
@@ -95,6 +102,7 @@ packer.startup(function(use)
 
     use 'nvim-lua/plenary.nvim'
     use {
+        event = "VimEnter",
         'nvim-telescope/telescope-project.nvim',
         requires = {
             'nvim-telescope/telescope.nvim',
@@ -105,6 +113,7 @@ packer.startup(function(use)
     }
     use { -- google keep
         'stevearc/gkeep.nvim',
+        event = "VimEnter",
         requires = {
             'nvim-telescope/telescope.nvim',
         },
@@ -127,7 +136,10 @@ packer.startup(function(use)
             require('maorun.plugin-config.telescope')
         end,
         requires = {
-            { 'BurntSushi/ripgrep' }, -- for live_grep and find_files
+            { 
+                'BurntSushi/ripgrep',
+                event = "VimEnter",
+            }, -- for live_grep and find_files
             'nvim-treesitter/nvim-treesitter', -- finder/preview
         },
     }
@@ -167,6 +179,7 @@ packer.startup(function(use)
 
     use {
         'pwntester/octo.nvim',
+        event = 'VimEnter',
         requires = {
             'nvim-lua/plenary.nvim',
             'nvim-tree/nvim-web-devicons',
@@ -183,6 +196,7 @@ packer.startup(function(use)
 
     use {
         'nvim-treesitter/nvim-treesitter-context',
+        event = "VimEnter",
         requires = {
             'nvim-treesitter/nvim-treesitter'
         },
@@ -194,6 +208,7 @@ packer.startup(function(use)
 
     use {
         "SmiteshP/nvim-navbuddy",
+        after = "nvim-lspconfig",
         requires = {
             "neovim/nvim-lspconfig",
             "SmiteshP/nvim-navic",
@@ -218,6 +233,7 @@ packer.startup(function(use)
 
     use {
         'neovim/nvim-lspconfig',
+        event = 'VimEnter',
         config = function()
             require('maorun.plugin-config.lsp')
         end,
@@ -225,6 +241,7 @@ packer.startup(function(use)
 
     use {
         'jose-elias-alvarez/null-ls.nvim',
+        event = "VimEnter",
         requires = {
             'nvim-lua/plenary.nvim'
         },
@@ -302,6 +319,7 @@ packer.startup(function(use)
 
     use {
         'nvim-telescope/telescope-file-browser.nvim',
+        after = {'telescope.nvim'},
         requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
             require('maorun.plugin-config.telescope-file-browser')
@@ -377,6 +395,7 @@ packer.startup(function(use)
     use { -- git-sign
         -- disable = true, -- startup-time-consuming
         'lewis6991/gitsigns.nvim',
+        event = 'VimEnter',
         requires = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('maorun.plugin-config.gitsigns')
@@ -468,6 +487,7 @@ packer.startup(function(use)
     -- testing
     use {
         'vim-test/vim-test',
+        event = 'VimEnter',
     }
 
     use {
@@ -496,6 +516,7 @@ packer.startup(function(use)
     use {
         -- disable = true,
         'ThePrimeagen/refactoring.nvim',
+        event = 'VimEnter',
         requires = {
             {"nvim-lua/plenary.nvim"},
             {"nvim-treesitter/nvim-treesitter"}
@@ -508,6 +529,7 @@ packer.startup(function(use)
     -- until https://github.com/ThePrimeagen/refactoring.nvim/pull/372
     use {
         'napmn/react-extract.nvim',
+        event = 'VimEnter',
         requires = {
             'nvim-treesitter/nvim-treesitter',
             'folke/which-key.nvim',
@@ -532,7 +554,10 @@ packer.startup(function(use)
         end
     }
 
-    use {'kshenoy/vim-signature'} -- show marks
+    use {
+        'kshenoy/vim-signature',
+        event = 'VimEnter',
+    } -- show marks
 
     use({
         disable = true,
@@ -549,6 +574,7 @@ packer.startup(function(use)
 
     use {
         'rgroli/other.nvim',
+        event = 'VimEnter',
         config = function()
             require("other-nvim").setup({
                 rememberBuffers = false,
