@@ -219,6 +219,7 @@ packer.startup(function(use)
     use {
         'neovim/nvim-lspconfig',
         config = function()
+            require('maorun.plugin-config.lsp')
         end,
     }
 

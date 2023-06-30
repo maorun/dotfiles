@@ -1,5 +1,4 @@
 local wk = require("which-key")
-local navbuddy = require("nvim-navbuddy")
 
 local nvim_lsp = require('lspconfig')
 
@@ -9,7 +8,6 @@ local on_attach = function(client, bufnr)
     -- print('on_attach: bufnr: ' .. bufnr .. ' client: ' .. client.name)
     -- print(vim.inspect(client))
 
-    navbuddy.attach(client, bufnr)
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
     -- Enable completion triggered by <c-x><c-o>
@@ -144,3 +142,5 @@ vim.diagnostic.config({
     source = "always",  -- Or "if_many"
   },
 })
+
+
