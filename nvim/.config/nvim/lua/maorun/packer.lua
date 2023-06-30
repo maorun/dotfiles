@@ -47,7 +47,6 @@ packer.startup(function(use)
         requires = {
             {
                 'hrsh7th/cmp-nvim-lsp',
-                event = "VimEnter",
             },
             {
                 'hrsh7th/vim-vsnip', 
@@ -253,7 +252,8 @@ packer.startup(function(use)
                 sources = {
                     null_ls.builtins.formatting.prettier,
                     null_ls.builtins.formatting.prettier_eslint,
-                    null_ls.builtins.diagnostics.eslint,
+                    -- null_ls.builtins.diagnostics.eslint,
+                    -- null_ls.builtins.code_actions.eslint,
                     -- null_ls.builtins.code_actions.gitsigns,
                 },
             })
