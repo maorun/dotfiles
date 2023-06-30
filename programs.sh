@@ -29,6 +29,7 @@ brew install --cask imageoptim
 # npm
 npm install -g @tailwindcss/language-server graphql-language-service-cli intelephense neovim nodemon sonarqube-scanner typescript-language-server typescript sql-language-server vim-language-server
 # eslint
+npm install -g prettier prettier-eslint prettier-eslint-cli
 npm i -g vscode-langservers-extracted
 
 # ai
