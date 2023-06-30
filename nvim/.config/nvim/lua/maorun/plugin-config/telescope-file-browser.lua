@@ -1,3 +1,5 @@
+require("telescope").load_extension "file_browser"
+
 local wk = require("which-key")
 
 wk.register({

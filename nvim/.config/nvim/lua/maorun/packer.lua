@@ -219,7 +219,7 @@ packer.startup(function(use)
             vim.g.navbuddy_silence = 1
             require("nvim-navbuddy").setup({
                 lsp = {
-                    -- auto_attach = true,
+                    auto_attach = true,
                 }
             })
             local wk = require("which-key")
