@@ -39,6 +39,12 @@ if [ "${KCMD}" == "annotate" ]; then
     KCMD="${KCMD} ${RESOURCE} ${POD} kustomize.toolkit.fluxcd.io/reconcile='disabled'"
 fi
 
+if [ "${KCMD}" == "delete" ]; then
+    RESOURCE=`kubectl api-resources -o name | fzf --prompt="Resource: "`
+
+    KCMD="${KCMD} ${RESOURCE} "
+fi
+
 if [ "${KCMD}" == "restart-deployment" ]; then
     DEPLOYMENTS=`kubectl --namespace ac-steam --context bcp-nmacs-stage get deployments.apps -o custom-columns=name:.metadata.name | fzf --prompt="Deployments: "`
     KCMD="rollout restart deployment ${DEPLOYMENTS}"
@@ -51,6 +57,12 @@ if [ "${KCMD}" == "logs" ]; then
 
     KCMD="${KCMD} ${POD} ${CONTAINER} --since=5m -f"
 fi
+if [ "${KCMD}" == "create job" ]; then
+    JOB="--from="`kubectl ${NAMESPACE} ${CONTEXT} get cronjobs.batch -o name | fzf --prompt="Cronjob: "`
+
+    KCMD="${KCMD} ${JOB} "
+fi
+
 
 write_noline() {
   osascript -e "tell application \"iTerm2\" to tell current window to tell current session to write text \"${@}\" newline NO"
