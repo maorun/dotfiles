@@ -26,7 +26,16 @@ vim.api.nvim_set_keymap("n", "<leader>rebf", [[ <Cmd>lua require('refactoring').
 vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
     { noremap = true, silent = true, expr = false })
 
-require('refactoring').setup({})
+require('refactoring').setup({
+    print_var_statements = {
+        typescriptreact = {
+            "console.log('%s', %s);",
+        },
+        typescript = {
+            "console.log('%s', %s);",
+        },
+    }
+})
 local wk = require("which-key")
 
 wk.register({
