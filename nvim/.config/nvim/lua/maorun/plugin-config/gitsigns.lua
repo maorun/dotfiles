@@ -8,8 +8,10 @@ require('gitsigns').setup {
             h = {
                 name = "git Hunk",
                 s = {gs.stage_hunk, "Stage Hunk", noremap =true},
+                a = {gs.stage_hunk, "Stage Hunk", noremap =true},
                 r= { gs.reset_hunk, "Reset Hunk", noremap = true},
                 S={ gs.stage_buffer, "Stage Buffer", noremap = true},
+                A={ gs.stage_buffer, "Stage Buffer", noremap = true},
                 u={ gs.undo_stage_hunk, "Undo Stage Hunk", noremap = true},
                 R={ gs.reset_buffer, "Reset Buffer", noremap = true},
                 p={ gs.preview_hunk, "Preview Hunk", noremap = true},
