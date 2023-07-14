@@ -351,6 +351,18 @@ packer.startup(function(use)
     }
 
     use 'justinmk/vim-sneak' -- replace s with search
+
+    use {
+        -- until https://github.com/phaazon/hop.nvim/pull/340
+        'mistweaverco/hop.nvim',
+        config = function()
+            local hop = require'hop'
+            hop.setup { }
+            vim.keymap.set('', 'f', function ()
+                hop.hint_char2({ multi_windows = true })
+            end, {remap = true})
+        end
+    }
     use 'tpope/vim-commentary' -- gcc
     use {
         disable= true,
