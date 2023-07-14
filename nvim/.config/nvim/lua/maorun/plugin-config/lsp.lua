@@ -33,6 +33,7 @@ local on_attach = function(client, bufnr)
             c = {':lua vim.lsp.buf.code_action()<CR>', 'code-action', noremap = true},
             f = {':lua vim.lsp.buf.format { async = true }<CR>', 'format', noremap = true},
         },
+        ff = {':lua vim.lsp.buf.format { async = true }<CR>', 'format with LSP', noremap = true},
     }, { silent=true, prefix = '<leader>' })
     wk.register({
         g = {
@@ -67,7 +68,10 @@ wk.register({
 local servers = {
     -- 'vimls',
     'lua_ls',
-    'tsserver', 'graphql', 'tailwindcss', 'phpactor', 'sqlls', 'eslint' }
+    'tsserver', 
+    -- 'graphql',
+    'tailwindcss',
+    'phpactor', 'sqlls', 'eslint' }
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 for _, lsp in ipairs(servers) do
