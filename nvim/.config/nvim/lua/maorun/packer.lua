@@ -380,13 +380,15 @@ packer.startup(function(use)
     }
 
     use {
-        'tpope/vim-dadbod', -- Database
+        'kristijanhusak/vim-dadbod-ui', -- Database-UI
         requires = {
-            {
-                'kristijanhusak/vim-dadbod-ui', -- Database-UI
-                cmd = 'DBUI'
-            }
+            'tpope/vim-dadbod'
         },
+        after= {'vim-dadbod'}
+    }
+
+    use {
+        'tpope/vim-dadbod', -- Database
         cmd = 'DBUI',
         config = function ()
             require('maorun.plugin-config.database')
@@ -626,6 +628,11 @@ packer.startup(function(use)
             }, { prefix = "<leader>"})
 
         end
+    }
+
+    use {
+        "folke/trouble.nvim",
+        requires = { "nvim-tree/nvim-web-devicons" },
     }
 
     if packer_bootstrap then
