@@ -1,11 +1,13 @@
 #!/bin/bash -e
 
-PR=$1
-REPO="spring-media/ac-steam"
+PR=`gh pr list -R ${REPO} | fzf | cut -d$'\t' -f 1`
+REPO=`git config --get remote.origin.url`
+REPO=${REPO#*github.com:}
+REPO=${REPO%.git}
 
-TO_DISMISS=$(gh api --method GET repos/${REPO}/pulls/${PR}/reviews --jq '.[] | {user: .user.login, id: .id, state: .state}' | fzf --no-sort --tac)
+TO_DISMISS=$(gh api --method GET repos/${REPO}/pulls/${PR}/reviews --jq '.[] | {user: .user.login, id: .id, state: .state}' | fzf --no-sort --tac | jq '.id')
 
 read -p "Enter Dismiss-Message: " MESSAGE
 
-gh api repos/spring-media/ac-steam/pulls/2970/reviews/1414479382/dismissals --method PUT -f message=${MESSAGE}
+gh api repos/${REPO}/pulls/${PR}/reviews/${TO_DISMISS}/dismissals --method PUT -f message=${MESSAGE}
 
