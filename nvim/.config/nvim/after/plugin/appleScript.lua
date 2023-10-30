@@ -23,7 +23,8 @@ vim.cmd [[
 Maorun = Maorun or {}
 function Maorun.startUp()
     CallAppleScript("Microsoft Outlook", "activate")
-    CallAppleScript("Microsoft Teams", "activate")
+    -- CallAppleScript("Microsoft Teams", "activate")
+    vim.fn.system('open /Applications/Microsoft\\ Teams\\ classic.app')
     CallAppleScript("Google Chrome", "activate")
     -- CallAppleScript("Tunnelblick", 'connect "openvpn"')
     -- CallAppleScript("Tunnelblick", 'disconnect "openvpn"')
