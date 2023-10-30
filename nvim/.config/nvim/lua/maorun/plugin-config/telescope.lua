@@ -6,6 +6,7 @@ require('telescope').setup({
     defaults = {
         file_ignore_patterns = {
             ".cache/",
+            ".next/",
             'vendor/',
             ".git/",
             'node_modules',

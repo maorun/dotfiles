@@ -206,6 +206,7 @@ packer.startup(function(use)
     --  use 'nvim-treesitter/playground'
 
     use {
+        disable = true,
         "SmiteshP/nvim-navbuddy",
         after = "nvim-lspconfig",
         requires = {
@@ -358,7 +359,7 @@ packer.startup(function(use)
         config = function()
             local hop = require'hop'
             hop.setup { }
-            vim.keymap.set('', 'f', function ()
+            vim.keymap.set('', '<c-f>', function ()
                 hop.hint_char2({ multi_windows = true })
             end, {remap = true})
         end
@@ -504,6 +505,9 @@ packer.startup(function(use)
     use {
         'vim-test/vim-test',
         event = 'VimEnter',
+        config = function()
+            require('maorun.plugin-config.vim-test')
+        end,
     }
 
     use {

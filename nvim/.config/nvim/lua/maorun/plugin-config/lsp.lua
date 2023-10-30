@@ -68,9 +68,9 @@ wk.register({
 local servers = {
     -- 'vimls',
     'lua_ls',
-    'tsserver', 
+    'tsserver',
     -- 'graphql',
-    'tailwindcss',
+    -- 'tailwindcss',
     'phpactor', 'sqlls', 'eslint' }
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -104,6 +104,24 @@ for _, lsp in ipairs(servers) do
         }
     }
 end
+
+nvim_lsp['tailwindcss'].setup {
+    root_dir = function(fname)
+        return "/Users/mdriemel/repos/ac-steam/packages/shared"
+            or nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts', './packages/shared/tailwind.config.js' )(
+            fname
+        ) or nvim_lsp.util.root_pattern('postcss.config.js', 'postcss.config.cjs', 'postcss.config.mjs', 'postcss.config.ts')(
+                fname
+            ) or nvim_lsp.util.find_package_json_ancestor(fname) or nvim_lsp.util.find_node_modules_ancestor(fname) or nvim_lsp.util.find_git_ancestor(
+                fname
+            )
+    end,
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150,
+    }
+}
 
 -- local forattingAuGroup = vim.api.nvim_create_augroup('formatting', {})
 -- vim.api.nvim_create_autocmd('BufWritePre', {

@@ -1,3 +1,5 @@
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
 vim.g.mapleader = ' '
 -- disable netrw
 vim.g.loaded_netrw = 1
@@ -14,7 +16,7 @@ vim.cmd [[
 
     function! ShowCmdInNewBuffer (cmd) abort "{{{
         let res = system(a:cmd)
-        lua newBuffer()
+        lua NewBuffer()
         " :call NewBuffer()
         silent put=res
         :normal gg

@@ -40,6 +40,22 @@ NewBuffer = function(args)
     end
 end
 
+local ReloadBuffer = function()
+    local buf = vim.api.nvim_create_buf(false, true)
+    local curr = vim.api.nvim_get_current_win()
+    local col = vim.fn.charcol('.')
+    local line = vim.fn.line('.')
+    vim.api.nvim_command('split')
+    vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+    vim.api.nvim_set_current_win(curr)
+    local file = vim.api.nvim_buf_get_name(0)
+    vim.api.nvim_buf_delete(0, {})
+    vim.api.nvim_command('edit ' .. file)
+-- vim.api.nvim_get_current_buf()
+    vim.api.nvim_win_set_cursor(0, {line, col - 1})
+    print('buffer reload')
+end
+
 function Job(opts)
     local lines = {}
     opts = vim.tbl_deep_extend("keep", opts or {}, {
@@ -140,6 +156,8 @@ wk.register({
     b = {
         name = "Buffer",
         n = { NewBuffer, "new buffer", noremap = true },
+        r = { ReloadBuffer, "reload buffer", noremap = true },
+        d = {':%bd|e#<cr>', "delete all buffers", noremap = true },
     },
 }, { silent=true, prefix = '<leader>' })
 

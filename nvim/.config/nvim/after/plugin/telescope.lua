@@ -28,7 +28,6 @@ wk.register({
     b = {
         name = "Buffer",
         b = {':lua require("telescope.builtin").buffers()<cr>', "show Buffers", noremap = true },
-        d = {':%bd|e#<cr>', "delete all buffers", noremap = true },
     },
 }, { prefix = "<leader>" })
 

@@ -19,8 +19,8 @@ brew install stow
 brew install terminal-notifier thefuck autojump watch htop howdoi # little helper
 brew install fd nvim ctags tmux tmuxinator ripgrep # vim
 brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
-# music: youtube-dl mps-youtube epv
-brew install youtube-dl ffmpeg
+# music: mps-youtube epv
+brew install ffmpeg yt-dlp
 brew install lua-language-server
 
 brew install --cask spotify

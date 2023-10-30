@@ -1,4 +1,16 @@
 local octoGroup = vim.api.nvim_create_augroup('Octo', {})
+function SquashMergeConfirm()
+    vim.ui.select({ 'yes', 'no' }, {
+        prompt = 'Merge Squash?',
+        kind = 'ass'
+    }, function(selected)
+            if (selected == 'yes') then
+                local commands = require("octo.commands")
+                commands.merge_pr("squash")
+            end
+        end
+    )
+end
 function RebaseMergeConfirm()
     vim.ui.select({ 'yes', 'no' }, {
         prompt = 'Merge Rebase?',
@@ -18,6 +30,7 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.api.nvim_buf_set_keymap(0, "i", "@", "@<C-x><C-o>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "i", "#", "#<C-x><C-o>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ':lua RebaseMergeConfirm()<cr>', { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppn", ':lua SquashMergeConfirm()<cr>', { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppc", ":Octo pr checks<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>pps", ":%s/.*\\[\\(\\d\\+\\).*](\\(.*\\))/\\1 \\2<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rs", ":Octo review start<cr>", { silent = true, noremap = true })

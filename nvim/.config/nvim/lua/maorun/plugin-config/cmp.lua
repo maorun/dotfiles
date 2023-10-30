@@ -10,6 +10,7 @@ cmp.setup {
         ['<CR>'] = cmp.mapping.confirm({ select = true }),
         ['<c-j>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
         ['<c-k>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-Space>'] = cmp.mapping.complete(),
     },
     window = {
         completion = cmp.config.window.bordered(),

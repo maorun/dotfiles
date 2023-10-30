@@ -23,6 +23,7 @@ wk.register({
         b = {
             name = "Branches",
             m = {":G branch -m ", "Git branch move", noremap = true },
+            n = {":lua Maorun.git.newBranch()<cr>", "Git New Branch", noremap = true},
         },
         r = {
             name = "Git Rebase",
