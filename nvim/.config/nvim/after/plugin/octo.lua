@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppm", ':lua RebaseMergeConfirm()<cr>', { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppn", ':lua SquashMergeConfirm()<cr>', { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>ppc", ":Octo pr checks<cr>", { silent = true, noremap = true })
-        vim.api.nvim_buf_set_keymap(0, "n", "<leader>pps", ":%s/.*\\[\\(\\d\\+\\).*](\\(.*\\))/\\1 \\2<cr>", { silent = true, noremap = true })
+        vim.api.nvim_buf_set_keymap(0, "n", "<leader>pps", ":%s/.*\\[\\(\\d\\+\\).*](\\(.*\\))/\\1 \\2<cr>:nohlsearch<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rs", ":Octo review start<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rn", ":Octo review resume<cr>", { silent = true, noremap = true })
         vim.api.nvim_buf_set_keymap(0, "n", "<leader>rd", ":Octo pr ready<cr>", { silent = true, noremap = true })
