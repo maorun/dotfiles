@@ -87,7 +87,7 @@ packer.startup(function(use)
     }
 
     use {
-        "jcdickinson/codeium.nvim",
+        "Exafunction/codeium.nvim",
         event = "InsertEnter",
         requires = {
             "nvim-lua/plenary.nvim",
@@ -200,7 +200,9 @@ packer.startup(function(use)
             'nvim-treesitter/nvim-treesitter'
         },
         config = function()
-            require'treesitter-context'.setup{}
+            require'treesitter-context'.setup{
+                max_lines = 10,
+            }
         end
     }
     --  use 'nvim-treesitter/playground'

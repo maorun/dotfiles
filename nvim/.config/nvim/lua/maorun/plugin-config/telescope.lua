@@ -36,6 +36,15 @@ require('telescope').setup({
                 },
             },
         },
+        git_stash = {
+            mappings = {
+                i = {
+                    ['<c-d>'] = gitActions.git_delete_stash,
+                    ['<C-f>'] = actions.preview_scrolling_down,
+                }
+            }
+
+        },
         git_branches = {
             mappings = {
                 i = {
