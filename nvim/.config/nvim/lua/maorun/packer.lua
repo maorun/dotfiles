@@ -59,6 +59,19 @@ packer.startup(function(use)
     }
 
     use {
+        'hrsh7th/cmp-nvim-lua',
+        requires = {
+            'hrsh7th/nvim-cmp',
+        }
+    }
+    use {
+        'hrsh7th/cmp-buffer',
+        requires = {
+            'hrsh7th/nvim-cmp',
+        }
+    }
+
+    use {
         'hrsh7th/cmp-omni',
         requires = {
             'hrsh7th/nvim-cmp',

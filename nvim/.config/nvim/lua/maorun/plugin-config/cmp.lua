@@ -95,18 +95,24 @@ cmp.setup {
             return vim_item
         end,
     },
+    performance = {
+        fetching_timeout = 1000,
+    },
     sources = {
-        { name = 'copilot' },
-        { name = 'cmp_tabnine' },
+        { name = 'copilot', max_item_count = 5 },
+        { name = 'cmp_tabnine', max_item_count = 5 },
         { name = 'luasnip' },
         { name = 'nvim_lsp', max_item_count = 5 },
         { name = "codeium", max_item_count = 5 },
-        -- {
-        --     name = 'omni',
-        --     option = {
-        --         disable_omnifuncs = { 'v:lua.vim.lsp.omnifunc' }
-        --     }
-        -- },
+        { name = 'nvim_lua', max_item_count = 5 },
+        { name = 'buffer', max_item_count = 5 },
+        {
+            name = 'omni',
+            max_item_count = 5,
+            option = {
+                disable_omnifuncs = { 'v:lua.vim.lsp.omnifunc' }
+            }
+        },
     }
 }
 
