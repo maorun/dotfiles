@@ -28,7 +28,7 @@ vim.cmd [[
     let g:list_of_disabled_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 ]]
 
-vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
+-- vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
 require 'maorun.packer'
 require 'maorun'

@@ -5,8 +5,6 @@ local nvim_lsp = require('lspconfig')
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    -- print('on_attach: bufnr: ' .. bufnr .. ' client: ' .. client.name)
-    -- print(vim.inspect(client))
 
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -40,7 +38,6 @@ local on_attach = function(client, bufnr)
             name = "Goto",
             D = {':lua vim.lsp.buf.declaration()<CR>', 'Declaration', noremap = true},
             d = {':lua vim.lsp.buf.definition()<CR>', 'Definition', noremap = true},
-            i = {':lua vim.lsp.buf.implementation()<CR>', 'Implementaion', noremap = true},
             f = {':lua require("telescope.builtin").lsp_references()<CR>', 'References', noremap = true},
             y = {':lua vim.lsp.buf.type_definition()<CR>', 'Type definition', noremap = true},
         },

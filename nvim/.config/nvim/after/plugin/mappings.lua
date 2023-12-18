@@ -1,4 +1,5 @@
 vim.cmd "nnoremap gx yiW:!open '<cWORD>'<CR><CR>"
+vim.cmd "nnoremap gix yib:!open '<c-r>\"'<CR><CR>"
 
 -- got to indention level {{{
 vim.cmd [[
@@ -168,21 +169,62 @@ vim.cmd [[
 
     " yank and paste to/from system-clipboard (Mac)
     vnoremap <silent> ç "+y
+    vnoremap <silent> <M-c> "+y
     nnoremap <silent> ç :set operatorfunc=CopyToSystemClipboard<cr>g@
+    nnoremap <silent> <M-c> :set operatorfunc=CopyToSystemClipboard<cr>g@
     nnoremap <silent> √ "+p
+    nnoremap <silent> <M-v> "+p
     inoremap <silent> √ <Esc>"+pa
+    inoremap <silent> <M-v> <Esc>"+pa
 
     function! CopyToSystemClipboard(type)
-    if a:type ==# 'line'
-        silent execute "normal! mm`[V`]\"+y`m"
-    elseif a:type ==# 'char'
-        silent execute "normal! mm`[v`]\"+y`m"
-    else
-        return
-    endif
+        if a:type ==# 'line'
+            silent execute "normal! `[V`]\"+y"
+        elseif a:type ==# 'char'
+            silent execute "normal! `[v`]\"+y"
+        else
+            return
+        endif
 
-    " echo @@ "yanked into clipboard"
+        " echo @@ "yanked into clipboard"
     endfunction
+
+    function! RequestDeepl(text)
+        let auth = "70166cda-1cd9-afd9-ec8b-f9f2137cd857:fx"
+        let url = "https://api-free.deepl.com/v2/translate"
+        let header = 'Authorization: DeepL-Auth-Key ' .. auth
+        let contentType = 'Content-Type: application/json'
+        let data = '{ "text": [ "' .. a:text .. '" ], "target_lang": "EN" }'
+
+        let command = 'curl -s -X POST "' .. url .. '" --header "' .. header .. '" --header "' .. contentType .. '" --data ' .. shellescape(data) .. ""
+
+        let result = system(command)
+        let resultJson = json_decode(result)
+        return resultJson.translations[0].text
+    endfunction
+
+    function! DeepL(type)
+        if a:type ==# 'line'
+            " execute "echom 'ah'"
+            echom '@todo: line' .. shellescape(@@)
+                " silent execute "normal! `[V`]\"+y"
+        elseif a:type ==# 'char'
+            execute "normal! `[v`]y"
+            let response = RequestDeepl(@@)
+            execute "normal! `<v`>c" .. (response)
+            echom "translated"
+        elseif a:type ==# 'v'
+            normal! `<v`>y
+            let response = RequestDeepl(@@)
+            execute "normal! `<v`>c" .. (response)
+            echom "translated"
+        else
+            return
+        endif
+    endfunction
+
+    nnoremap <silent> <leader>u :set operatorfunc=DeepL<cr>g@
+    vnoremap <leader>u :<c-u>call DeepL(visualmode())<cr>
 ]]
 
 wk.register({

@@ -168,20 +168,6 @@ packer.startup(function(use)
         config = function()
         end,
     }
-    use {
-        disable = false,
-        'nvim-telescope/telescope-github.nvim',
-        requires = {
-            'nvim-telescope/telescope.nvim',
-        },
-        config = function()
-            -- c-f browse modified files
-            -- c-a approve
-            -- c-e view details or diff
-            -- c-r merge
-            -- <cr> checkout
-        end,
-    }
 
     use {
         'nvim-tree/nvim-web-devicons',
@@ -222,10 +208,10 @@ packer.startup(function(use)
             }
         end
     }
-    --  use 'nvim-treesitter/playground'
+     -- use 'nvim-treesitter/playground'
 
     use {
-        disable = true,
+        disable = true, -- because tsserver startet multiple times
         "SmiteshP/nvim-navbuddy",
         after = "nvim-lspconfig",
         requires = {
