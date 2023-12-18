@@ -42,20 +42,37 @@ packer.startup(function(use)
     }
 
     use {
-        'hrsh7th/nvim-cmp',
+        'L3MON4D3/LuaSnip',
         event = "VimEnter",
-        requires = {
-            {
-                'hrsh7th/cmp-nvim-lsp',
-            },
-            {
-                'hrsh7th/vim-vsnip', 
-                event = "VimEnter",
-            },
-        },
+        run = "make install_jsregexp",
+        config = function()
+            require('maorun.plugin-config.luasnip')
+        end
+    }
+
+    use {
+        'hrsh7th/nvim-cmp',
+        -- event = "VimEnter",
         config = function ()
             require('maorun.plugin-config.cmp')
         end
+    }
+
+    use {
+        'hrsh7th/cmp-omni',
+        requires = {
+            'hrsh7th/nvim-cmp',
+        }
+    }
+
+    use {
+        'saadparwaiz1/cmp_luasnip',
+        event = "VimEnter",
+        after = { 'LuaSnip', 'nvim-cmp' },
+        requires = {
+            'hrsh7th/nvim-cmp',
+            'L3MON4D3/LuaSnip',
+        }
     }
 
     use {
@@ -135,7 +152,7 @@ packer.startup(function(use)
             require('maorun.plugin-config.telescope')
         end,
         requires = {
-            { 
+            {
                 'BurntSushi/ripgrep',
                 event = "VimEnter",
             }, -- for live_grep and find_files
@@ -235,6 +252,13 @@ packer.startup(function(use)
 
     use {
         'neovim/nvim-lspconfig',
+        after = {
+            'nvim-cmp',
+        },
+        requires = {
+            'hrsh7th/nvim-cmp',
+            'hrsh7th/cmp-nvim-lsp',
+        },
         event = 'VimEnter',
         config = function()
             require('maorun.plugin-config.lsp')
@@ -319,6 +343,18 @@ packer.startup(function(use)
         event = "InsertEnter",
         config = function()
             require('maorun.plugin-config.copilot')
+            local ns = vim.api.nvim_create_namespace 'user.copilot'
+
+            require('copilot.api').register_status_notification_handler(function(data)
+                vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+                if vim.fn.mode() == 'i' and data.status == 'InProgress' then
+                    vim.api.nvim_buf_set_extmark(0, ns, vim.fn.line '.' - 1, 0, {
+                        virt_text = { { ' 🤖Thinking...', 'Comment' } },
+                        virt_text_pos = 'eol',
+                        hl_mode = 'combine',
+                    })
+                end
+            end)
         end,
     }
 
@@ -520,6 +556,7 @@ packer.startup(function(use)
             require('maorun.snyk').setup()
         end,
     }
+
     use {
         'maorun/code-stats.nvim',
         after = 'dotfiles-personal',
