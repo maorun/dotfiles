@@ -689,6 +689,15 @@ packer.startup(function(use)
         requires = { "nvim-tree/nvim-web-devicons" },
     }
 
+    use {
+        'gsuuon/model.nvim',
+        cmd = { 'M', 'Model', 'Mchat' },
+        ft = 'mchat',
+        config = function()
+            require('maorun.plugin-config.ai-model')
+        end
+    }
+
     if packer_bootstrap then
         require('packer').sync()
     end
