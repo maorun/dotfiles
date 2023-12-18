@@ -30,9 +30,31 @@ local prompts = vim.tbl_extend('force', starterPrompts, {
     }
 })
 
+
+local chats = vim.tbl_extend('force', require('model.prompts.chats') , {
+    review = {
+        provider = require('model.providers.ollama'),
+        system = 'You are an expert programmer that gives constructive feedback. Review the changes in the user\'s git diff. don\'t describe what the user has done. Suggest some improvements if you find some. you should answer in german.',
+        params = {
+            model = 'starling-lm'
+        },
+        create = function()
+            local git_diff = vim.fn.system {'git', 'diff', '--staged'}
+            ---@cast git_diff string
+
+            if not git_diff:match('^diff') then
+                error('Git error:\n' .. git_diff)
+            end
+
+            return git_diff
+        end,
+        run = require('model.format.starling').chat
+    }
+})
+
 require('model').setup({
     default_prompt= hf.default_prompt,
-    -- prompts= starterPrompts,
+    chats = chats,
     prompts= prompts,
 })
 
@@ -40,5 +62,5 @@ local augroup = vim.api.nvim_create_augroup("ai_model", {})
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
     pattern = "mchat",
-    command = "nnoremap <buffer> <leader>w :Mchat<cr>",
+    command = "nnoremap <silent><buffer> <leader>w :Mchat<cr>",
 })
