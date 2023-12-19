@@ -76,7 +76,6 @@ ls.add_snippets("all", {
             async = c(2, {t"async ", t""}),
             begin = i(0)
         }, {
-            repeat_duplicates = true
         }))
 })
 

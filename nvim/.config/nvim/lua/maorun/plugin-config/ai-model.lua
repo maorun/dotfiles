@@ -40,7 +40,6 @@ local chats = vim.tbl_extend('force', require('model.prompts.chats') , {
         },
         create = function()
             local git_diff = vim.fn.system {'git', 'diff', '--staged'}
-            ---@cast git_diff string
 
             if not git_diff:match('^diff') then
                 error('Git error:\n' .. git_diff)
