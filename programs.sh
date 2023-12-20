@@ -22,6 +22,7 @@ brew install pinentry-mac # git gpg-key mit keychain https://gist.github.com/tro
 # music: mps-youtube epv
 brew install ffmpeg yt-dlp
 brew install lua-language-server
+brew install efm-langserver
 
 brew install --cask spotify
 brew install --cask imageoptim

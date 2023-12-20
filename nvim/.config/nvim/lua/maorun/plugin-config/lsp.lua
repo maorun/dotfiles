@@ -94,13 +94,41 @@ for _, lsp in ipairs(servers) do
                 },
             },
         },
-        on_attach = on_attach,
+        on_attach = function(client, bufnr)
+            on_attach(client, bufnr)
+            if (lsp == 'eslint') then
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                    buffer = bufnr,
+                    command = "EslintFixAll",
+                })
+            end
+        end,
         capabilities = capabilities,
         flags = {
             debounce_text_changes = 150,
         }
     }
 end
+
+local formatEfm = {
+    formatCommand = "prettier --stdin --stdin-filepath '${INPUT}' ${--range-start:charStart} ${--range-end:charEnd}",
+    formatCanRange = true,
+    formatStdin = true,
+}
+
+nvim_lsp['efm'].setup {
+    settings = {
+        languages = {
+            html = { formatEfm, },
+            typescript = { formatEfm, },
+            javascript = { formatEfm, },
+            typescriptreact = { formatEfm, },
+            javascriptreact = { formatEfm, },
+        },
+    },
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
 
 nvim_lsp['tailwindcss'].setup {
     root_dir = function(fname)

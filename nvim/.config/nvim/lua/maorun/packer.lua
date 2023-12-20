@@ -257,65 +257,12 @@ packer.startup(function(use)
         requires = {
             'hrsh7th/nvim-cmp',
             'hrsh7th/cmp-nvim-lsp',
+            'mattn/efm-langserver',
         },
         event = 'VimEnter',
         config = function()
             require('maorun.plugin-config.lsp')
         end,
-    }
-
-    use {
-        'jose-elias-alvarez/null-ls.nvim',
-        event = "VimEnter",
-        requires = {
-            'nvim-lua/plenary.nvim'
-        },
-        config = function()
-            local null_ls = require("null-ls")
-
-            null_ls.setup({
-                debug = true,
-                sources = {
-                    null_ls.builtins.formatting.prettier,
-                    null_ls.builtins.formatting.prettier_eslint,
-                    -- null_ls.builtins.diagnostics.eslint,
-                    -- null_ls.builtins.code_actions.eslint,
-                    -- null_ls.builtins.code_actions.gitsigns,
-                },
-            })
-        end
-
-    }
-
-    use {
-        'MunifTanjim/prettier.nvim',
-        after = { 'nvim-lspconfig' },
-        opt = true,
-        requires = {
-            'neovim/nvim-lspconfig',
-            'jose-elias-alvarez/null-ls.nvim',
-        },
-        config = function()
-            local prettier = require("prettier")
-
-            prettier.setup({
-                bin = 'prettier', -- or `'prettierd'` (v0.23.3+)
-                filetypes = {
-                    "css",
-                    "graphql",
-                    "html",
-                    "javascript",
-                    "javascriptreact",
-                    "json",
-                    "less",
-                    "markdown",
-                    "scss",
-                    "typescript",
-                    "typescriptreact",
-                    "yaml",
-                },
-            })
-        end
     }
 
     use {
