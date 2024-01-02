@@ -258,6 +258,7 @@ packer.startup(function(use)
             'hrsh7th/nvim-cmp',
             'hrsh7th/cmp-nvim-lsp',
             'mattn/efm-langserver',
+            'folke/neodev.nvim', -- lsp for neovim
         },
         event = 'VimEnter',
         config = function()
