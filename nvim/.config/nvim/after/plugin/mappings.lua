@@ -32,7 +32,9 @@ vim.cmd [[
 
 NewBuffer = function(args)
     local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+    vim.api.nvim_command('split')
+    local curr = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(curr, buf)
     vim.api.nvim_buf_set_option(0, 'buftype', 'nofile')
     vim.api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
     vim.api.nvim_buf_set_option(0, 'swapfile', false)
@@ -47,7 +49,7 @@ local ReloadBuffer = function()
     local col = vim.fn.charcol('.')
     local line = vim.fn.line('.')
     vim.api.nvim_command('split')
-    vim.api.nvim_command('edit ' .. vim.api.nvim_buf_get_number(buf))
+    vim.api.nvim_win_set_buf(curr, buf)
     vim.api.nvim_set_current_win(curr)
     local file = vim.api.nvim_buf_get_name(0)
     vim.api.nvim_buf_delete(0, {})
@@ -70,12 +72,12 @@ function Job(opts)
         on_stderr = function(error, data)
             table.insert(lines, data)
         end,
-        on_exit = function(signal, failure)
+        on_exit = function()
             vim.schedule(function()
                 vim.api.nvim_command('new')
                 if (opts.silent ~= true) then
                     NewBuffer(lines)
-                end 
+                end
             end)
         end,
     })
@@ -134,19 +136,6 @@ wk.register({
         name = "VimRC",
         r = {":source $MYVIMRC<cr>:echo $MYVIMRC 'loaded'<cr>", "Load VimRC", noremap = true},
     },
-    s = {
-        name = "Session-Handling",
-        s = { function ()
-            local sessionFilename = vim.fn.expand("Session.vim")
-            if (vim.fn.filereadable(sessionFilename) == 1) then
-                -- from vim-obsession
-                vim.cmd('source ' .. sessionFilename)
-            else
-                print("Session.vim not found")
-            end
-            -- ':call LoadSession()<cr>:echo "Session loaded"<cr>'
-        end, "Load Session", noremap = true},
-    },
     f = {
         name = "Formatting",
         j = {":%!jq .<cr>" , "JSON pretty print", noremap = true},
@@ -204,11 +193,7 @@ vim.cmd [[
     endfunction
 
     function! DeepL(type)
-        if a:type ==# 'line'
-            " execute "echom 'ah'"
-            echom '@todo: line' .. shellescape(@@)
-                " silent execute "normal! `[V`]\"+y"
-        elseif a:type ==# 'char'
+        if a:type ==# 'char'
             execute "normal! `[v`]y"
             let response = RequestDeepl(@@)
             execute "normal! `<v`>c" .. (response)
@@ -219,6 +204,8 @@ vim.cmd [[
             execute "normal! `<v`>c" .. (response)
             echom "translated"
         else
+                " silent execute "normal! `[V`]\"+y"
+            echom a:type ' - ' .. shellescape(@@)
             return
         endif
     endfunction
