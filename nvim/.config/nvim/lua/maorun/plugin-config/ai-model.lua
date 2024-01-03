@@ -63,3 +63,16 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "mchat",
     command = "nnoremap <silent><buffer> <leader>w :Mchat<cr>",
 })
+vim.api.nvim_create_autocmd("FileType", {
+    group = augroup,
+    pattern = "git_commit",
+    callback = function()
+        local wk = require("which-key")
+        wk.register({
+            g = {
+                name = "Git",
+                c = { ":M commit<cr>", "generate message", noremap = true },
+            }
+        }, { prefix = "<leader>" })
+    end
+})
