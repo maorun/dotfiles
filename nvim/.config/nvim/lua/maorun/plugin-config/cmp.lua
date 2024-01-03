@@ -4,7 +4,7 @@ local has_words_before = function()
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local cmp = require'cmp'
+local cmp = require 'cmp'
 
 cmp.setup {
     snippet = {
@@ -17,7 +17,7 @@ cmp.setup {
     mapping = {
         ["<Tab>"] = cmp.mapping(function(fallback)
             local luasnip = require("luasnip")
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
             -- that way you will only jump inside the snippet region
             if luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
@@ -51,7 +51,7 @@ cmp.setup {
         }),
         ["<c-l>"] = cmp.mapping(function(fallback)
             local luasnip = require("luasnip")
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
             -- that way you will only jump inside the snippet region
             if luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
@@ -99,13 +99,13 @@ cmp.setup {
         fetching_timeout = 1000,
     },
     sources = {
-        { name = 'copilot', max_item_count = 5 },
+        { name = 'copilot',     max_item_count = 5 },
         { name = 'cmp_tabnine', max_item_count = 5 },
         { name = 'luasnip' },
-        { name = 'nvim_lsp', max_item_count = 5 },
-        { name = "codeium", max_item_count = 5 },
-        { name = 'nvim_lua', max_item_count = 5 },
-        { name = 'buffer', max_item_count = 5 },
+        { name = 'nvim_lsp', },
+        { name = "codeium",     max_item_count = 5 },
+        { name = 'nvim_lua',    max_item_count = 5 },
+        { name = 'buffer',      max_item_count = 5 },
         {
             name = 'omni',
             max_item_count = 5,
@@ -115,4 +115,3 @@ cmp.setup {
         },
     }
 }
-

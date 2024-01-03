@@ -14,3 +14,5 @@
 	name = Marco Driemel
 	email = marco.driemel@axelspringer.com
 	signingkey = D5F7A5B998553EE0
+[init]
+	defaultBranch = master
