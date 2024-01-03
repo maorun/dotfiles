@@ -3,6 +3,7 @@ FILE=~/.local/share/nvim/maorun-time.json
 
 DATA=`cat $FILE`
 WEEKDAY=`date +"%A"`
+YEAR=`date +"%Y"`
 
 if [ $# -eq 1 ]; then
     WEEKNUMBER=$1
@@ -11,17 +12,17 @@ else
 fi
 
 
-JQ_EXPRESSION='.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${WEEKDAY}'"]["summary"]'
+JQ_EXPRESSION='.data["'${YEAR}'"]["'${WEEKNUMBER}'"]["weekdays"]["'${WEEKDAY}'"]["summary"]'
 VALUE=`echo $DATA | jq $JQ_EXPRESSION`
 # VALUE_ROUND=`echo $VALUE | tr '.' ',' | awk  '{ print sprintf("%.2f", $1); }'`
 # echo $VALUE_ROUND
 
-OVERHOUR_WEEK=`echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["summary"].overhour'`
+OVERHOUR_WEEK=`echo $DATA | jq '.data["'${YEAR}'"]["'${WEEKNUMBER}'"]["summary"].overhour'`
 OVERHOUR_MONDAY=``
 getOverview() {
-    echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"]["weekdays"]["'${1}'"]["summary"].overhour' 2> /dev/null
+    echo $DATA | jq '.data["'${YEAR}'"]["'${WEEKNUMBER}'"]["weekdays"]["'${1}'"]["summary"].overhour' 2> /dev/null
     echo "\t"
-    echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${1}'.items[] | "\t\(.startReadable)-\(.endReadable)"' 2> /dev/null
+    echo $DATA | jq '.data["'${YEAR}'"]["'${WEEKNUMBER}'"].weekdays.'${1}'.items[] | "\t\(.startReadable)-\(.endReadable)"' 2> /dev/null
 }
 
 echo -e "Gesammtüberstunden:\t [`echo $DATA | jq '.hoursPerWeekday | add' `]" $OVERHOUR_WEEK
@@ -41,7 +42,7 @@ else
 fi
 
 echo -e "Today: "$IS_PAUSED
-echo $DATA | jq '.data["2023"]["'${WEEKNUMBER}'"].weekdays.'${WEEKDAY}'.items[] | "Start: \(.startReadable) Uhr, End: \(.endReadable) Uhr, Diff: \(.diffInHours)"'
+echo $DATA | jq '.data["'${YEAR}'"]["'${WEEKNUMBER}'"].weekdays.'${WEEKDAY}'.items[] | "Start: \(.startReadable) Uhr, End: \(.endReadable) Uhr, Diff: \(.diffInHours)"'
 
 # say "$VALUE_ROUND Stunden"
 
