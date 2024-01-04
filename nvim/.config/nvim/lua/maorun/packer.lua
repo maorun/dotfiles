@@ -25,15 +25,6 @@ packer.startup(function(use)
         cmd = 'StartupTime'
     }
 
-    -- Speed up loading Lua modules in Neovim to improve startup time.
-    use {
-        disable = true,
-        'lewis6991/impatient.nvim',
-        config = function()
-            require('impatient')
-        end
-    }
-
     use {
         'maorun/dotfiles-personal',
         config = function()
@@ -64,6 +55,7 @@ packer.startup(function(use)
             'hrsh7th/nvim-cmp',
         }
     }
+
     use {
         'hrsh7th/cmp-buffer',
         requires = {
@@ -141,6 +133,7 @@ packer.startup(function(use)
         end
     }
     use { -- google keep
+        disable = true,
         'stevearc/gkeep.nvim',
         event = "VimEnter",
         requires = {
@@ -171,15 +164,6 @@ packer.startup(function(use)
             }, -- for live_grep and find_files
             'nvim-treesitter/nvim-treesitter', -- finder/preview
         },
-    }
-    use {
-        disable = true,
-        'fannheyward/telescope-coc.nvim',
-        requires = {
-            'nvim-telescope/telescope.nvim',
-        },
-        config = function()
-        end,
     }
 
     use {
@@ -336,24 +320,17 @@ packer.startup(function(use)
         end
     }
 
-    use 'justinmk/vim-sneak' -- replace s with search
-
     use {
-        -- until https://github.com/phaazon/hop.nvim/pull/340
-        'mistweaverco/hop.nvim',
+        'smoka7/hop.nvim',
         config = function()
             local hop = require'hop'
             hop.setup { }
-            vim.keymap.set('', '<c-f>', function ()
+            vim.keymap.set('', 's', function ()
                 hop.hint_char2({ multi_windows = true })
             end, {remap = true})
         end
     }
     use 'tpope/vim-commentary' -- gcc
-    use {
-        disable= true,
-        'tpope/vim-obsession', -- vim session
-    }
     use 'tpope/vim-surround' -- add/delete/change surround
 
     -- autocomplete
@@ -379,6 +356,7 @@ packer.startup(function(use)
 
     use {
         'kristijanhusak/vim-dadbod-ui', -- Database-UI
+        cmd = 'DBUI',
         requires = {
             'tpope/vim-dadbod'
         },
@@ -413,38 +391,9 @@ packer.startup(function(use)
         end
     }
 
-    use {
-        disable = true,
-        'neoclide/coc.nvim',
-        branch= 'release',
-        config= function()
-            require('maorun.plugin-config.coc')
-        end,
-        run = function()
-            vim.cmd [[
-            :CocInstall coc-html-css-support coc-tsserver coc-json coc-prettier coc-phpactor coc-phpls coc-tabnine coc-html
-            ]]
-        end,
-        requires = {
-            { 'neoclide/coc-tabnine' },
-            { -- only with 12.22.9 ???
-                'neoclide/coc-html',
-                run= 'npm install'
-            },
-        }
-        -- Plug('rodrigore/coc-tailwind-intellisense', {'do': 'npm install'})  -- only with node 16.X
-        -- Plug('iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'})
-    }
-
-    --  use 'jwalton512/vim-blade' -- Blade-Template (Laravel 4+)
-
     -- % matches also on if/while
     --  use 'andymass/vim-matchup'
-    -- graphql
-    --  use 'jparise/vim-graphql'
 
-    -- typescript
-    --  use 'leafgarland/typescript-vim'
     -- Training
     --  use 'tjdevries/train.nvim'
     use {
@@ -474,7 +423,10 @@ packer.startup(function(use)
 
     -- aa - around argument
     use {
-        'wellle/targets.vim',
+        'echasnovski/mini.ai',
+        config = function()
+            require('mini.ai').setup()
+        end
     }
 
     -- quick Filebrowsing
@@ -532,42 +484,19 @@ packer.startup(function(use)
         end,
     }
 
-    -- until https://github.com/ThePrimeagen/refactoring.nvim/pull/372
     use {
-        'napmn/react-extract.nvim',
-        event = 'VimEnter',
-        requires = {
-            'nvim-treesitter/nvim-treesitter',
-            'folke/which-key.nvim',
-        },
-        config = function()
-            require("react-extract").setup({
-                ts_template_before = "export function [COMPONENT_NAME]([PROPERTIES]:{[TYPE_PROPERTIES]}) {\n"
-                    .. "[INDENT]return (\n",
-
-            })
-            local wk = require("which-key")
-            wk.register({
-                r = {
-                    name = "Refactor Component",
-                    f = { "<cmd>lua require('react-extract').extract_to_new_file()<CR>", "Extract to new file" },
-                    e = { "<cmd>lua require('react-extract').extract_to_current_file()<CR>", "Extract to current file" },
-                },
-            }, { prefix = "<leader>", mode = "v" })
-
-
-
-        end
-    }
-
-    use {
+        disable = true,-- not used
         'kshenoy/vim-signature',
         event = 'VimEnter',
     } -- show marks
 
-    use({
-        disable = true,
+    use {
+        "MunifTanjim/nui.nvim",
+    }
+    use {
+        disable = true, -- only usable with openai
         "jackMort/ChatGPT.nvim",
+        event = 'VimEnter',
         config = function()
             require('maorun.plugin-config.chatgpt')
         end,
@@ -576,7 +505,7 @@ packer.startup(function(use)
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope.nvim"
         }
-    })
+    }
 
     use {
         'rgroli/other.nvim',
@@ -639,8 +568,7 @@ packer.startup(function(use)
 
     use {
         'gsuuon/model.nvim',
-        cmd = { 'M', 'Model', 'Mchat' },
-        ft = 'mchat',
+        ft = {'mchat', 'gitcommit'},
         config = function()
             require('maorun.plugin-config.ai-model')
         end

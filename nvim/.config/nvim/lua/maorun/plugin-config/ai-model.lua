@@ -1,3 +1,4 @@
+local model = require('model')
 vim.filetype.add({
     extension = {
         mchat = 'mchat',
@@ -12,7 +13,8 @@ local prompts = vim.tbl_extend('force', starterPrompts, {
         provider = openai,
         mode = require('model').mode.REPLACE,
         builder = function()
-            local git_diff = vim.fn.system {'git', 'diff', '--staged'}
+            local cwd = vim.fn.expand('%:h:h')
+            local git_diff = vim.fn.system { 'git', '-C', cwd, 'diff', '--staged', '-U0' }
 
             if not git_diff:match('^diff') then
                 error('Git error:\n' .. git_diff)
@@ -22,7 +24,10 @@ local prompts = vim.tbl_extend('force', starterPrompts, {
                 messages = {
                     {
                         role = 'user',
-                        content = 'Your mission is to create clean and comprehensive commit messages as per the conventional commit convention and explain WHAT were the changes and mainly WHY the changes were done. Try to stay below 80 characters total. Staged git diff: ```\n' .. git_diff .. '\n```. After an additional newline, add a short description in 1 to 4 sentences of WHY the changes are done after the commit message. Don\'t start it with "This commit", just describe the changes. Use the present tense. Lines must not be longer than 74 characters.'
+                        content =
+                            'Your mission is to create clean and comprehensive commit messages as per the conventional commit convention and explain WHAT were the changes and mainly WHY the changes were done. Try to stay below 80 characters total. Staged git diff: ```\n' ..
+                            git_diff ..
+                            '\n```. After an additional newline, add a short description in 1 to 4 sentences of WHY the changes are done after the commit message. Don\'t start it with "This commit", just describe the changes. Use the present tense. Lines must not be longer than 74 characters.'
                     }
                 }
             }
@@ -34,12 +39,14 @@ local prompts = vim.tbl_extend('force', starterPrompts, {
 local chats = vim.tbl_extend('force', require('model.prompts.chats') , {
     review = {
         provider = require('model.providers.ollama'),
-        system = 'You are an expert programmer that gives constructive feedback. Review the changes in the user\'s git diff. don\'t describe what the user has done. Suggest some improvements if you find some. you should answer in german.',
+        system =
+        'You are an expert programmer that gives constructive feedback. Review the changes in the user\'s git diff. don\'t describe what the user has done. Suggest some improvements if you find some.',
         params = {
             model = 'starling-lm'
         },
         create = function()
-            local git_diff = vim.fn.system {'git', 'diff', '--staged'}
+            local cwd = vim.fn.expand('%:h:h')
+            local git_diff = vim.fn.system { 'git', '-C', cwd, 'diff', '--staged', '-U0' }
 
             if not git_diff:match('^diff') then
                 error('Git error:\n' .. git_diff)
@@ -65,7 +72,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
-    pattern = "git_commit",
+    pattern = "gitcommit",
     callback = function()
         local wk = require("which-key")
         wk.register({

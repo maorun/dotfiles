@@ -73,10 +73,6 @@ require('telescope').setup({
 
             end
         },
-        gkeep = {
-            find_method = 'all_text',
-            link_method = 'title',
-        },
     },
 })
 -- vim.api.nvim_create_autocmd("TelescopePreviewerLoaded ", {

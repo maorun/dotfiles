@@ -30,6 +30,8 @@ vim.cmd [[
 
 -- vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
 
+vim.loader.enable()
+
 require 'maorun.packer'
 require 'maorun'
 
