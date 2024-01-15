@@ -571,7 +571,6 @@ packer.startup(function(use)
 
     use {
         'gsuuon/model.nvim',
-        ft = {'mchat', 'gitcommit'},
         config = function()
             require('maorun.plugin-config.ai-model')
         end

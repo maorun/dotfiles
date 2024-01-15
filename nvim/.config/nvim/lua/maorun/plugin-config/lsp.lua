@@ -82,6 +82,10 @@ for _, lsp in ipairs(servers) do
                 telemetry = {
                     enable = false,
                 },
+                diagnostics = {
+                    -- Get the language server to recognize the `vim` global
+                    globals = {'vim'},
+                },
                 completion = {
                     callSnippet = "Replace"
                 },

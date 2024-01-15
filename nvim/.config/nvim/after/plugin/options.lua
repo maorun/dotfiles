@@ -28,6 +28,9 @@ vim.opt.smartcase = true
 vim.opt.undodir = vim.fn.stdpath('data') .. "/undodir"
 vim.opt.undofile = true
 
+-- " swapfile
+vim.opt.swapfile = false
+
 vim.opt.termguicolors = true
 
 vim.opt.tabstop=4
