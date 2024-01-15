@@ -88,6 +88,8 @@ wk.register({
                 mappingListPlugin.mappingList {
                     title = "octo",
                     list = {
+                        'maorun/snyk.nvim',
+                        'maorun/code-stats',
                         'spring-media/ac-steam',
                         'spring-media/ac-steam-flux',
                     },
