@@ -27,6 +27,7 @@ wk.register({
         r = {
             name = "Git Rebase",
             m = { ":G fetch --prune | :G rebase origin/master<cr>", "Git Rebase master", noremap = true },
+            M = { ":G fetch --prune | :G merge origin/master<cr>", "Git Merge master", noremap = true },
             r = { ":G rebase -i HEAD~", "Git Rebase interactive", noremap = true },
             c = { ":G rebase --continue<cr>", "Git Rebase continue", noremap = true },
             a = { ":G rebase --abort<cr>", "Git Rebase abort", noremap = true },
@@ -41,9 +42,9 @@ wk.register({
 
     d = {
         name = "Diff",
-        s = { ":Gdiffsplit<cr>", "Diffsplit", noremap = true },
-        h = { ":diffget //2<cr>", "get right diff", noremap = true },
-        l = { ":diffget //3<cr>", "get left diff", noremap = true },
+        s = { ":Gitsigns diffthis<cr>", "Diffthis", noremap = true },
+        h = { ":diffget :2<cr>", "get right diff", noremap = true },
+        l = { ":diffget :3<cr>", "get left diff", noremap = true },
     },
     -- nnoremap ]c ]czz
     -- nnoremap [c [czz

@@ -3,7 +3,6 @@ require("telescope").load_extension "file_browser"
 local wk = require("which-key")
 
 wk.register({
-    [ '<leader>' ] = { ":Telescope file_browser respect_gitignore=true<cr>", "ope file", noremap = true },
     v = {
         e = {function()
             require('telescope').extensions.file_browser.file_browser({
