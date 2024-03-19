@@ -1,9 +1,9 @@
 local ensure_packer = function()
     local fn = vim.fn
-    local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-    vim.opt.packpath =    vim.opt.packpath +  install_path
+    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+    vim.opt.packpath = vim.opt.packpath + install_path
     if fn.empty(fn.glob(install_path)) > 0 then
-        fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
         vim.cmd [[packadd packer.nvim]]
         return true
     end
@@ -12,7 +12,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-local packer =require('packer')
+local packer = require('packer')
 packer.init({
     max_jobs = 50,
 })
@@ -44,7 +44,7 @@ packer.startup(function(use)
     use {
         'hrsh7th/nvim-cmp',
         -- event = "VimEnter",
-        config = function ()
+        config = function()
             require('maorun.plugin-config.cmp')
         end
     }
@@ -87,16 +87,16 @@ packer.startup(function(use)
         requires = {
             'zbirenbaum/copilot.lua'
         },
-        config = function ()
+        config = function()
             require("copilot_cmp").setup()
         end
     }
     use {
         'tzachar/cmp-tabnine',
         event = "InsertEnter",
-        run='./install.sh',
+        run = './install.sh',
         requires = 'hrsh7th/nvim-cmp',
-        config = function ()
+        config = function()
             require('maorun.plugin-config.tabnine')
         end
     }
@@ -161,7 +161,7 @@ packer.startup(function(use)
             {
                 'BurntSushi/ripgrep',
                 event = "VimEnter",
-            }, -- for live_grep and find_files
+            },                                 -- for live_grep and find_files
             'nvim-treesitter/nvim-treesitter', -- finder/preview
         },
     }
@@ -169,7 +169,7 @@ packer.startup(function(use)
     use {
         'nvim-tree/nvim-web-devicons',
         config = function()
-            require'nvim-web-devicons'.setup {
+            require 'nvim-web-devicons'.setup {
                 color_icons = true,
                 default = true
             }
@@ -183,8 +183,8 @@ packer.startup(function(use)
             'nvim-lua/plenary.nvim',
             'nvim-tree/nvim-web-devicons',
         },
-        config = function ()
-            require"octo".setup()
+        config = function()
+            require "octo".setup()
         end
     }
 
@@ -200,12 +200,12 @@ packer.startup(function(use)
             'nvim-treesitter/nvim-treesitter'
         },
         config = function()
-            require'treesitter-context'.setup{
+            require 'treesitter-context'.setup {
                 max_lines = 10,
             }
         end
     }
-     -- use 'nvim-treesitter/playground'
+    -- use 'nvim-treesitter/playground'
 
     use {
         disable = true, -- because tsserver startet multiple times
@@ -227,9 +227,9 @@ packer.startup(function(use)
             local wk = require("which-key")
             wk.register({
                 n = {
-                    v = { "<cmd>lua require('nvim-navbuddy').open()<cr>", ":Navbuddy", noremap = true},
+                    v = { "<cmd>lua require('nvim-navbuddy').open()<cr>", ":Navbuddy", noremap = true },
                 },
-            }, { prefix = "<leader>"})
+            }, { prefix = "<leader>" })
         end
     }
 
@@ -252,7 +252,7 @@ packer.startup(function(use)
 
     use {
         'rafcamlet/nvim-luapad',
-        cmd= 'Luapad'
+        cmd = 'Luapad'
     }
 
     use {
@@ -291,7 +291,7 @@ packer.startup(function(use)
 
     use {
         'nvim-telescope/telescope-file-browser.nvim',
-        after = {'telescope.nvim'},
+        after = { 'telescope.nvim' },
         requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
         config = function()
             require('maorun.plugin-config.telescope-file-browser')
@@ -304,37 +304,37 @@ packer.startup(function(use)
     --  use 'takac/vim-hardtime'
 
     use {
-        'maorun/timeTracking.nvim',
+        'maorun/timeTrack.nvim',
         requires = {
             'nvim-lua/plenary.nvim',
             {
                 'rcarriga/nvim-notify',
                 config = function()
                     vim.opt.termguicolors = true
-                    vim.api.nvim_set_hl(0, "NotifyBackground", { bg="#000000", ctermbg=0})
+                    vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000", ctermbg = 0 })
                 end
             }
         },
         config = function()
-            require'maorun.time'.setup()
+            require 'maorun.time'.setup()
         end
     }
 
     use {
         'smoka7/hop.nvim',
         config = function()
-            local hop = require'hop'
-            hop.setup { }
-            vim.keymap.set('', 'S', function ()
+            local hop = require 'hop'
+            hop.setup {}
+            vim.keymap.set('', 'S', function()
                 hop.hint_char2({ multi_windows = true })
-            end, {remap = true})
-            vim.keymap.set('', 's', function ()
+            end, { remap = true })
+            vim.keymap.set('', 's', function()
                 hop.hint_char2({ multi_windows = true })
-            end, {remap = true})
+            end, { remap = true })
         end
     }
     use 'tpope/vim-commentary' -- gcc
-    use 'tpope/vim-surround' -- add/delete/change surround
+    use 'tpope/vim-surround'   -- add/delete/change surround
 
     -- autocomplete
     use {
@@ -346,7 +346,8 @@ packer.startup(function(use)
     --  use 'stephenway/postcss.vim'
     -- git plugins
     use 'tpope/vim-repeat' -- repeat all plugins with .
-    use { -- Git
+    -- Git
+    use {
         'tpope/vim-fugitive',
         config = function()
             require('maorun.plugin-config.database')
@@ -363,19 +364,20 @@ packer.startup(function(use)
         requires = {
             'tpope/vim-dadbod'
         },
-        after= {'vim-dadbod'}
+        after = { 'vim-dadbod' }
     }
 
     use {
         'tpope/vim-dadbod', -- Database
         cmd = 'DBUI',
-        config = function ()
+        config = function()
             require('maorun.plugin-config.database')
         end,
     }
     use 'vim-scripts/ReplaceWithRegister' -- replace with register - gr
 
-    use { -- git-sign
+    -- git-sign
+    use {
         -- disable = true, -- startup-time-consuming
         'lewis6991/gitsigns.nvim',
         event = 'VimEnter',
@@ -400,7 +402,7 @@ packer.startup(function(use)
     --  use 'tjdevries/train.nvim'
     use {
         'ThePrimeagen/vim-be-good',
-        cmd= 'VimBeGood'
+        cmd = 'VimBeGood'
     }
     -- Vim Script
 
@@ -432,7 +434,7 @@ packer.startup(function(use)
     }
 
     -- quick Filebrowsing
-     use {
+    use {
         disable = true,
         'ThePrimeagen/harpoon',
         config = function()
@@ -478,19 +480,13 @@ packer.startup(function(use)
         'ThePrimeagen/refactoring.nvim',
         event = 'VimEnter',
         requires = {
-            {"nvim-lua/plenary.nvim"},
-            {"nvim-treesitter/nvim-treesitter"}
+            { "nvim-lua/plenary.nvim" },
+            { "nvim-treesitter/nvim-treesitter" }
         },
         config = function()
             require('maorun.plugin-config.refactor')
         end,
     }
-
-    use {
-        disable = true,-- not used
-        'kshenoy/vim-signature',
-        event = 'VimEnter',
-    } -- show marks
 
     use {
         "MunifTanjim/nui.nvim",
@@ -519,31 +515,31 @@ packer.startup(function(use)
                     {
                         pattern = "(.*/)([^%.]+)(%..+)%.tsx$",
                         target = {
-                            {target = "%1%2.tsx", context = "component" },
-                            {target = "%1%2.component.tsx", context = "component" },
-                            {target = "%1%2.test.tsx", context = "test" },
-                            {target = "%1%2.stories.tsx", context = "story" },
-                            {target = "%1%2.mdx", context = "MDX" },
+                            { target = "%1%2.tsx",           context = "component" },
+                            { target = "%1%2.component.tsx", context = "component" },
+                            { target = "%1%2.test.tsx",      context = "test" },
+                            { target = "%1%2.stories.tsx",   context = "story" },
+                            { target = "%1%2.mdx",           context = "MDX" },
                         }
                     },
                     {
                         pattern = "(.*/)([^%.]+)%.mdx$",
                         target = {
-                            {target = "%1%2.tsx", context = "component" },
-                            {target = "%1%2.component.tsx", context = "component" },
-                            {target = "%1%2.test.tsx", context = "test" },
-                            {target = "%1%2.stories.tsx", context = "story" },
-                            {target = "%1%2.mdx", context = "MDX" },
+                            { target = "%1%2.tsx",           context = "component" },
+                            { target = "%1%2.component.tsx", context = "component" },
+                            { target = "%1%2.test.tsx",      context = "test" },
+                            { target = "%1%2.stories.tsx",   context = "story" },
+                            { target = "%1%2.mdx",           context = "MDX" },
                         }
                     },
                     {
                         pattern = "(.*/)([^%.]+)%.tsx$",
                         target = {
-                            {target = "%1%2.tsx", context = "component" },
-                            {target = "%1%2.component.tsx", context = "component" },
-                            {target = "%1%2.test.tsx", context = "test" },
-                            {target = "%1%2.stories.tsx", context = "story" },
-                            {target = "%1%2.mdx", context = "MDX" },
+                            { target = "%1%2.tsx",           context = "component" },
+                            { target = "%1%2.component.tsx", context = "component" },
+                            { target = "%1%2.test.tsx",      context = "test" },
+                            { target = "%1%2.stories.tsx",   context = "story" },
+                            { target = "%1%2.mdx",           context = "MDX" },
                         }
                     }
                 },
@@ -553,13 +549,12 @@ packer.startup(function(use)
                 t = {
                     n = {
                         name = ":Other",
-                        n = { "<cmd>:Other<cr>", ":Other", noremap = true},
-                        s = { "<cmd>:OtherSplit<cr>", ":OtherSplit", noremap = true},
-                        v = { "<cmd>:OtherVSplit<cr>", ":OtherVSplit", noremap = true},
+                        n = { "<cmd>:Other<cr>", ":Other", noremap = true },
+                        s = { "<cmd>:OtherSplit<cr>", ":OtherSplit", noremap = true },
+                        v = { "<cmd>:OtherVSplit<cr>", ":OtherVSplit", noremap = true },
                     }
                 },
-            }, { prefix = "<leader>"})
-
+            }, { prefix = "<leader>" })
         end
     }
 

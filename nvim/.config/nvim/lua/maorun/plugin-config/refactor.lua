@@ -1,7 +1,7 @@
 require("telescope").load_extension("refactoring")
 
 vim.keymap.set(
-    {"n", "x"},
+    { "n", "x" },
     "<leader>rr",
     function() require('telescope').extensions.refactoring.refactors() end,
     { noremap = true }
@@ -20,6 +20,13 @@ require('refactoring').setup({
 local wk = require("which-key")
 
 wk.register({
+    d = {
+        c = { ":lua require('refactoring').debug.cleanup({})<CR>", "delete debugs", { noremap = true } },
+        P = { ":lua require('refactoring').debug.printf({below = false})<CR>", "add print-statement",
+            { noremap = true } },
+        p = { ":lua require('refactoring').debug.printf({below = true})<CR>", "add print-statement",
+            { noremap = true } },
+    },
     r = {
         name = "Refactor",
         d = {

@@ -4,9 +4,9 @@ vim.g.mapleader = ' '
 -- disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.cmd[[colorscheme default]]
+vim.cmd [[colorscheme default]]
 
-vim.cmd[[
+vim.cmd [[
     tnoremap <Esc> <C-\><C-n>
 ]]
 
@@ -39,7 +39,7 @@ require 'maorun'
 vim.cmd [[
     augroup luaReload
         autocmd!
-        autocmd! BufWritePost */nvim/**.lua so %
+        autocmd! BufWritePost */nvim/**(!.spec).lua so %
         au! BufWritePost $MYVIMRC silent source $MYVIMRC
         au! BufWritePost .vimrc_project silent source $MYVIMRC
         au! BufWritePost .vimrc silent source $MYVIMRC

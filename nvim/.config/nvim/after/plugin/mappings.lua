@@ -23,7 +23,7 @@ vim.cmd [[
             let l = min([max([1, l]), x])
             execute 'normal! '. l .'G^'
         endfor
-    endfunction 
+    endfunction
 
     nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
     nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
@@ -54,8 +54,8 @@ local ReloadBuffer = function()
     local file = vim.api.nvim_buf_get_name(0)
     vim.api.nvim_buf_delete(0, {})
     vim.api.nvim_command('edit ' .. file)
--- vim.api.nvim_get_current_buf()
-    vim.api.nvim_win_set_cursor(0, {line, col - 1})
+    -- vim.api.nvim_get_current_buf()
+    vim.api.nvim_win_set_cursor(0, { line, col - 1 })
     print('buffer reload')
 end
 
@@ -64,12 +64,12 @@ function Job(opts)
     opts = vim.tbl_deep_extend("keep", opts or {}, {
         silent = false,
         command = '',
-        args =  {},
+        args = {},
         interactive = false,
-        on_stdout = function(error, data)
+        on_stdout = function(_, data)
             table.insert(lines, data)
         end,
-        on_stderr = function(error, data)
+        on_stderr = function(_, data)
             table.insert(lines, data)
         end,
         on_exit = function()
@@ -82,29 +82,29 @@ function Job(opts)
         end,
     })
 
-    local plenaryJob = require'plenary.job'
+    local plenaryJob = require 'plenary.job'
     if (opts.silent ~= true) then
-        print('start "' .. opts.command .. " " .. table.concat(opts.args,' ') .. '"')
+        print('start "' .. opts.command .. " " .. table.concat(opts.args, ' ') .. '"')
     end
     plenaryJob:new(opts):start()
 end
 
 local wk = require("which-key")
 wk.register({
-    ['<C-E>'] = {"<C-B>", "Scroll up"},
+    ['<C-E>'] = { "<C-B>", "Scroll up" },
     g = {
-        o = {"o<Esc>", "add a line below", noremap = true},
-        O = {"O<Esc>", "add a line above", noremap = true},
+        o = { "o<Esc>", "add a line below", noremap = true },
+        O = { "O<Esc>", "add a line above", noremap = true },
     },
-    cq = {":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true},
-    cx = {":split | terminal opencommit<cr>a", "opencommit", noremap = true},
-    n = {"nzz", "next search"},
-    N = {"Nzz", "prev search"},
-}, { silent=true, prefix = '' })
+    cq = { ":split | terminal aicommits -g 3<cr>a", "aicommit", noremap = true },
+    cx = { ":split | terminal opencommit<cr>a", "opencommit", noremap = true },
+    n = { "nzz", "next search" },
+    N = { "Nzz", "prev search" },
+}, { silent = true, prefix = '' })
 wk.register({
-    [">"] = {">gv", "indent right"},
-    ["<"] = {"<gv", "indent left"},
-}, { silent=true, mode = "x", prefix = '' })
+    [">"] = { ">gv", "indent right" },
+    ["<"] = { "<gv", "indent left" },
+}, { silent = true, mode = "x", prefix = '' })
 
 wk.register({
     q = {
@@ -114,42 +114,46 @@ wk.register({
             b = { NewBuffer, "new buffer", noremap = true },
             g = { ':GkeepNew<cr>', 'new google-note', noremap = true }
         },
-        r =  {
+        r = {
             name = "Run X",
-            t = {function()
-                Job({
-                    command = 'npm',
-                    args = { 'run', 'test', '--ignore-scripts'},
-                }) 
-            end, "run tests", noremap = true },
-            i = { '<c-w>s:terminal npm run image<cr>a', 'run npm-image', noremap = true },
-            d = { '<c-w>s:terminal npm run dev<cr>a', 'run npm-dev', noremap = true },
+            t = {
+                function()
+                    Job({
+                        command = 'npm',
+                        args = { 'run', 'test', '--ignore-scripts' },
+                    })
+                end,
+                "run tests",
+                noremap = true
+            },
+            i = { '<c-w>s:terminal npm run image<cr>', 'run npm-image', noremap = true },
+            d = { '<c-w>s:terminal npm run dev<cr>', 'run npm-dev', noremap = true },
         },
     },
     d = {
         name = "Diff",
-        d = {":diffthis<cr>", "Diff this", noremap = true },
-        q = {":diffoff!<cr>", "Diff off", noremap = true },
+        d = { ":diffthis<cr>", "Diff this", noremap = true },
+        q = { ":diffoff!<cr>", "Diff off", noremap = true },
     },
-    w = {":w<cr>zvzz", "Save", noremap = true},
+    w = { ":w<cr>zvzz", "Save", noremap = true },
     v = {
         name = "VimRC",
-        r = {":source $MYVIMRC<cr>:echo $MYVIMRC 'loaded'<cr>", "Load VimRC", noremap = true},
+        r = { ":source $MYVIMRC<cr>:echo $MYVIMRC 'loaded'<cr>", "Load VimRC", noremap = true },
     },
     f = {
         name = "Formatting",
-        j = {":%!jq .<cr>" , "JSON pretty print", noremap = true},
+        j = { ":%!jq .<cr>", "JSON pretty print", noremap = true },
     },
-    i = { "go to next indent", noremap = true},
-    pi = { "go to previous indent", noremap = true},
-    e = {":execute '!' .(expand(getline('.')))<cr>", "execute line under cursor (shellescape does not work)", noremap = true},
+    i = { "go to next indent", noremap = true },
+    pi = { "go to previous indent", noremap = true },
+    e = { ":execute '!' .(expand(getline('.')))<cr>", "execute line under cursor (shellescape does not work)", noremap = true },
     b = {
         name = "Buffer",
         n = { NewBuffer, "new buffer", noremap = true },
         r = { ReloadBuffer, "reload buffer", noremap = true },
-        d = {':%bd|e#<cr>', "delete all buffers", noremap = true },
+        d = { ':%bd|e#<cr>', "delete all buffers", noremap = true },
     },
-}, { silent=true, prefix = '<leader>' })
+}, { silent = true, prefix = '<leader>' })
 
 vim.cmd [[
     inoremap jk <Esc>
@@ -215,8 +219,8 @@ vim.cmd [[
 ]]
 
 wk.register({
-    ie = {':exec "normal! ggVG"<cr>', "select all", noremap = true},
-}, { mode = 'o', remap = false})
+    ie = { ':exec "normal! ggVG"<cr>', "select all", noremap = true },
+}, { mode = 'o', remap = false })
 
 -- wk.register({
 --     ["<C-L>"] = { "<C-O>l", "move cursor right", noremap = true},
@@ -225,18 +229,18 @@ wk.register({
 
 -- moving lines
 wk.register({
-    J = {":m '>+1<cr>gv=gv", "move line down", noremap = true},
-    K = {":m '<-2<cr>gv=gv", "move line up", noremap = true},
-}, { mode = 'v'})
+    J = { ":m '>+1<cr>gv=gv", "move line down", noremap = true },
+    K = { ":m '<-2<cr>gv=gv", "move line up", noremap = true },
+}, { mode = 'v' })
 wk.register({
-    ["<C-K>"] = { "mk:m .-2<cr>==`k", "move line up", noremap = true},
-    ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true},
-}, { mode = 'n'})
+    ["<C-K>"] = { "mk:m .-2<cr>==`k", "move line up", noremap = true },
+    ["<C-J>"] = { "mk:m .+1<cr>==`k", "move line down", noremap = true },
+}, { mode = 'n' })
 
 wk.register({
     -- " float-menu up and down
-    ["<C-J>"] = { "<Down>", "float-menu down", noremap = true},
-    ["<C-K>"] = { "<Up>", "float-menu up", noremap = true},
---     ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
---     ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
-}, { mode = 'i'})
+    ["<C-J>"] = { "<Down>", "float-menu down", noremap = true },
+    ["<C-K>"] = { "<Up>", "float-menu up", noremap = true },
+    --     ["<C-J>"] = { "<Esc>mk:m .+1<cr>==`ka", "move line down", noremap = true},
+    --     ["<C-K>"] = { "<Esc>mk:m .-2<cr>==`ka", "move line up", noremap = true},
+}, { mode = 'i' })

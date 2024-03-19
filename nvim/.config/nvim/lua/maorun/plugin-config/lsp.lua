@@ -70,6 +70,7 @@ wk.register({
 local servers = {
     'lua_ls',
     'tsserver',
+    'pyright',
     -- 'graphql',
     'phpactor', 'sqlls', 'eslint' }
 
@@ -84,7 +85,7 @@ for _, lsp in ipairs(servers) do
                 },
                 diagnostics = {
                     -- Get the language server to recognize the `vim` global
-                    globals = {'vim'},
+                    globals = { 'vim' },
                 },
                 completion = {
                     callSnippet = "Replace"

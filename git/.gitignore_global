@@ -16,3 +16,4 @@ nodemon*.json
 .dccache
 .luarc.json
 coverage/
+FEED*
