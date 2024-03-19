@@ -5,6 +5,20 @@ local transform_mod = require("telescope.actions.mt").transform_mod
 
 local M = {}
 M.actions = transform_mod({
+    git_delete_stash = function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        print(vim.inspect(selection))
+
+        local _, ret, stderr = utils.get_os_command_output { "git", "stash", "drop", selection.value }
+        if ret == 0 then
+            utils.notify('M.actions.git_delete_stash', {
+                msg = string.format("Deleted stash: %s", selection.value),
+                level = "INFO",
+            })
+        end
+
+        require'telescope.builtin'.git_stash()
+    end,
     git_delete_branch = function(prompt_bufnr)
         local command = function(branch_name)
             return { "git", "branch", "-D", branch_name }
