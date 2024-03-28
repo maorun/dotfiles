@@ -16,3 +16,5 @@
 	signingkey = D5F7A5B998553EE0
 [init]
 	defaultBranch = master
+[gpg]
+	program = /opt/homebrew/bin/gpg
