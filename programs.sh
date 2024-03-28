@@ -87,8 +87,8 @@ git submodule update
 
 ./activate_dotfiles
 
-sh ./axelspringer/programs.sh
-sh ./personal/programs.sh
+cd ./axelspringer && sh ./programs.sh && cd ..
+cd ./personal && sh ./programs.sh && cd ..
 
 # chrome anmeldung
 
@@ -98,3 +98,6 @@ sh ./personal/programs.sh
 # cp ~/Library/autojump/autojump.txt
 # cp all .env
 # outlook signature
+
+git remote remove origin
+git remote add origin git@github.com:maorun/dotfiles.git
