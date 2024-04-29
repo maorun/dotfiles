@@ -4,7 +4,7 @@ return {
         dependencies = {
             {
                 -- 'maorun/dotfiles-personal',
-                dir = '~/dotfiles/personal',
+                dir = '~/real-dotfiles/personal',
                 init = function()
                     require('maorun.personal')
                 end,
