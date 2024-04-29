@@ -1,0 +1,48 @@
+{
+    "tailwindCSS.headwind.runOnSave": false,
+    "diagnostic.enable": false,
+    "diagnostic.floatConfig": { "border" : true, "maxWidth": 110, "title": "CoC-diagnostic" },
+    "hover.floatConfig": {"border": true, "title": "CoC-hover"},
+    "signature.floatConfig": {"border": true, "title": "CoC-Signature"},
+    "codeLens.enable": true,
+    "coc.preferences.formatOnSaveFiletypes": ["typescriptreact", "typescript", "javascript"],
+    "languageserver": {
+        "tailwind-lsp": {
+            "command": "tailwindcss-language-server",
+            "args": ["--stdio"],
+
+            "filetypes": [
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact"
+            ],
+
+            "rootPatterns": [
+                "tailwind.config.js",
+                "tailwind.config.ts",
+                "postcss.config.js",
+                "postcss.config.ts",
+                "package.json",
+                "node_modules",
+                ".git"
+            ],
+            "settings": {
+                "tailwindCSS": {
+                    "validate": true,
+                    "lint": {
+                        "cssConflict": "warning",
+                        "invalidApply": "error",
+                        "invalidScreen": "error",
+                        "invalidVariant": "error",
+                        "invalidConfigPath": "error",
+                        "invalidTailwindDirective": "error",
+                        "recommendedVariantOrder": "warning"
+                    },
+                    "classAttributes": ["class", "className", "classList", "ngClass"],
+                    "experimental": {}
+                }
+            }
+        }
+    }
+}
