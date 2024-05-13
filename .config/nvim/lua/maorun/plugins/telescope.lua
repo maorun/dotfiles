@@ -62,6 +62,7 @@ return {
                         respect_gitignore = false,
                         hidden = true,
                         depth = 4,
+                        auto_depth = true,
                     },
                     project = {
                         base_dirs = {
