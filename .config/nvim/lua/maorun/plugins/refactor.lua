@@ -20,10 +20,10 @@ return {
             require('refactoring').setup({
                 print_var_statements = {
                     typescriptreact = {
-                        "console.log('%s', %s);",
+                        "// %s \nconsole.dir(%s, { depth: 6 });",
                     },
                     typescript = {
-                        "console.log('%s', %s);",
+                        "// %s \nconsole.dir(%s, { depth: 6 });",
                     },
                 }
             })

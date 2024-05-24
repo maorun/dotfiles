@@ -119,8 +119,9 @@ return {
                             mappingListPlugin.mappingList {
                                 title = "octo",
                                 list = {
-                                    'maorun/snyk.nvim',
+                                    'maorun/zinszins-simulation',
                                     'maorun/code-stats',
+                                    'maorun/snyk.nvim',
                                     'spring-media/ac-steam',
                                     'spring-media/ac-steam-flux',
                                 },

@@ -3,6 +3,7 @@ return {
         'gsuuon/model.nvim',
         dependencies = {
             'folke/which-key.nvim',
+            'nvim-treesitter/nvim-treesitter'
         },
         init = function()
             local model = require('model')
