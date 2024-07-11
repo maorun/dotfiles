@@ -5,17 +5,9 @@ return {
             'folke/which-key.nvim',
         },
         event = 'VimEnter',
-        init = function()
-            local wk = require("which-key")
-
-            wk.register({
-                v = {
-                    t = {
-                        n = { ":TestNearest<cr>", "runs the test nearest to the cursor", noremap = true },
-                        s = { ":TestSuite<cr>", "runs the whole test suite", noremap = true },
-                        f = { ":TestFile<cr>", "runs the whole test file", noremap = true },
-                    }
-                }
-            }, { prefix = "<leader>" })
-        end,
+        keys = {
+            { '<leader>vtn', '<cmd>TestNearest<cr>', desc = 'runs the test nearest to the cursor', noremap = true },
+            { '<leader>vts', '<cmd>TestSuite<cr>',   desc = 'runs the whole test suite',          noremap = true },
+            { '<leader>vtf', '<cmd>TestFile<cr>',    desc = 'runs the whole test file',           noremap = true },
+        },
     } }

@@ -176,7 +176,13 @@ return {
                 settings = {
                     -- https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#extension-settings
                     tailwindCSS = {
-                        showPixelEquivalents = false
+                        showPixelEquivalents = false,
+                        -- experimental = {
+                        --     configFile = {
+                        --     [ "./packages/backend/tailwind.config.js" ] = "packages/backend/**",
+                        --     [ "./packages/shared/tailwind.config.js" ] = "packages/**"
+                        --     }
+                        -- },
                     }
                 },
                 root_dir = function(fname)
@@ -184,7 +190,7 @@ return {
                         return '/Users/mdriemel/repos/ac-steam/packages/backend/'
                     else
                         if (string.find(fname, '/Users/mdriemel/repos/ac%-steam')) then
-                            return '/Users/mdriemel/repos/ac-steam/'
+                            return '/Users/mdriemel/repos/'
                         end
                     end
 

@@ -2,7 +2,6 @@ return {
     {
         'maorun/timeTrack.nvim',
         dependencies = {
-            'folke/which-key.nvim',
             'nvim-telescope/telescope.nvim', -- optional
             'nvim-lua/plenary.nvim',
             {
@@ -13,18 +12,12 @@ return {
                 end
             }
         },
-        init = function()
+        keys = {
+            { '<leader>tts', '<cmd>lua Time.TimeStop()<cr>',   desc = 'TimeStop',   noremap = true },
+            { '<leader>ttp', '<cmd>lua Time.TimePause()<cr>',  desc = 'TimePause',  noremap = true },
+            { '<leader>ttr', '<cmd>lua Time.TimeResume()<cr>', desc = 'TimeResume', noremap = true },
+        },
+        config = function()
             require 'maorun.time'.setup()
-            local wk = require('which-key')
-            wk.register({
-                t = {
-                    t = {
-                        name = 'Time',
-                        s = { '<cmd>lua Time.TimeStop()<cr>', 'TimeStop', noremap = true },
-                        p = { '<cmd>lua Time.TimePause()<cr>', 'TimePause', noremap = true },
-                        r = { '<cmd>lua Time.TimeResume()<cr>', 'TimeResume', noremap = true },
-                    }
-                },
-            }, { prefix = '<leader>' })
         end
     } }

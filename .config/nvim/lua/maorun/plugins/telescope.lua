@@ -84,40 +84,23 @@ return {
             --     command = 'setlocal wrap'
             -- })
             -- Load user extension
-            local wk = require("which-key")
-            wk.register({
-                t = {
-                    name = "Telescope",
-                    f = { ":lua require('telescope.builtin').find_files()<cr>", "Find files", noremap = true },
-                    r = { ":lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", "Live Grep", noremap = true },
-                    p = { ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", "Project", noremap = true },
-                    l = { ":lua require('telescope.builtin').oldfiles({cwd_only=true})<cr>", "Find last opened files", noremap = true },
-                },
-                g = {
-                    name = "Git",
-                    s = {
-                        l = { ':Telescope git_stash<cr>', "Stash list", noremap = true },
-                    },
-                    g = { ":lua require'telescope.builtin'.git_files{}<cr>", "Git files", noremap = true },
-                    b = {
-                        name = "Branches",
-                        a = { ":lua require'telescope.builtin'.git_branches()<cr>", "Git all branches", noremap = true },
-                        b = { ":lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", "Git lokal branches", noremap = true },
-                        r = { ":lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>", "Git remote branches", noremap = true },
-                    },
-                    h = {
-                        name = "GitHub",
-                        g = { ':lua require("telescope").extensions.gh.gist()<cr>', "Gist", noremap = true },
-                    },
-                },
-                b = {
-                    name = "Buffer",
-                    b = { ':lua require("telescope.builtin").buffers()<cr>', "show Buffers", noremap = true },
-                },
-            }, { prefix = "<leader>" })
         end,
+        keys = {
+                {'<leader>tf' ,  "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "Find files", noremap = true },
+                {'<leader>tr' ,  "<cmd>lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", desc = "Live Grep", noremap = true },
+                {'<leader>tp' ,  "<cmd>lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", desc = "Project", noremap = true },
+                {'<leader>tl' ,  "<cmd>lua require('telescope.builtin').oldfiles({cwd_only=true})<cr>", desc = "Find last opened files", noremap = true },
+
+                {'<leader>gsl' ,  '<cmd>Telescope git_stash<cr>', desc = "Stash list", noremap = true },
+                {'<leader>gg' ,  "<cmd>lua require'telescope.builtin'.git_files{}<cr>", desc = "Git files", noremap = true },
+                {'<leader>gba' ,  "<cmd>lua require'telescope.builtin'.git_branches()<cr>", desc = "Git all branches", noremap = true },
+                {'<leader>gbb' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", desc = "Git lokal branches", noremap = true },
+                {'<leader>gbr' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>", desc = "Git remote branches", noremap = true },
+                {'<leader>ghg' ,  '<cmd>lua require("telescope").extensions.gh.gist()<cr>', desc = "Gist", noremap = true },
+
+                {'<leader>bb' ,  '<cmd>lua require("telescope.builtin").buffers()<cr>', desc = "show Buffers", noremap = true },
+        },
         dependencies = {
-            'folke/which-key.nvim',
             {
                 'BurntSushi/ripgrep',
                 event = "VimEnter",
@@ -126,43 +109,36 @@ return {
         },
     },
     {
-        'nvim-telescope/telescope-file-browser.nvim',
+        'maorun/telescope-file-browser.nvim',
         dependencies = {
             'nvim-telescope/telescope.nvim',
             'nvim-lua/plenary.nvim'
         },
         config = function()
             require("telescope").load_extension "file_browser"
-
-            local wk = require("which-key")
-
-            wk.register({
-                v = {
-                    e = {
-                        function()
-                            require('telescope').extensions.file_browser.file_browser({
-                                path = "~/dotfiles/",
-                                prompt_title = "* dotfiles *",
-                            })
-                        end,
-                        "find file in dotfiles",
-                        noremap = true
-                    },
-                },
-                n = {
-                    name = "FileTree",
-                    f = { ":Telescope file_browser path=%:p:h select_buffer=true<cr>", "current file", noremap = true },
-                    t = { ":Telescope file_browser respect_gitignore=true<cr>", "open tree", noremap = true },
-                },
-            }, { prefix = "<leader>" })
-        end
+        end,
+        keys = {
+            {
+                '<leader>ve',
+                function()
+                    require('telescope').extensions.file_browser.file_browser({
+                        path = '~/dotfiles/',
+                        prompt_title = '* dotfiles *',
+                    })
+                end,
+                desc = 'find file in dotfiles',
+                noremap = true
+            },
+            { '<leader>nf', ':Telescope file_browser follow_symlink=true path=%:p:h select_buffer=true<cr>', desc = 'current file', noremap = true },
+            { '<leader>nt', ':Telescope file_browser respect_gitignore=true<cr>',                            desc = 'open tree',    noremap = true },
+        },
     },
     {
         event = "VimEnter",
         'nvim-telescope/telescope-project.nvim',
         dependencies = {
             'nvim-telescope/telescope.nvim',
-            'nvim-telescope/telescope-file-browser.nvim'
+            'maorun/telescope-file-browser.nvim',
         },
     }
 }

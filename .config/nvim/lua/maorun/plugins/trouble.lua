@@ -1,6 +1,11 @@
 return {
     {
-        "folke/trouble.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
+        'folke/trouble.nvim',
+        cmd = 'Trouble',
+        opts = {},
+        dependencies = {
+            'nvim-tree/nvim-web-devicons',
+            'neovim/nvim-lspconfig',
+        },
     }
 }
