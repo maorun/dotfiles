@@ -1,6 +1,7 @@
 return {
     {
         'folke/which-key.nvim',
+        dependencies = { 'echasnovski/mini.nvim' },
         init = function()
             require('which-key').setup {}
         end

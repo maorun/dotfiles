@@ -6,52 +6,47 @@ return {
         },
         event = 'VimEnter',
         init = function()
-            require("other-nvim").setup({
+            require('other-nvim').setup({
                 rememberBuffers = false,
                 mappings = {
                     {
-                        pattern = "(.*/)([^%.]+)(%..+)%.tsx$",
+                        pattern = '(.*/)([^%.]+)(%..+)%.tsx$',
                         target = {
-                            { target = "%1%2.tsx",           context = "component" },
-                            { target = "%1%2.component.tsx", context = "component" },
-                            { target = "%1%2.test.tsx",      context = "test" },
-                            { target = "%1%2.stories.tsx",   context = "story" },
-                            { target = "%1%2.mdx",           context = "MDX" },
+                            { target = '%1%2.tsx',           context = 'component' },
+                            { target = '%1%2.component.tsx', context = 'component' },
+                            { target = '%1%2.test.tsx',      context = 'test' },
+                            { target = '%1%2.stories.tsx',   context = 'story' },
+                            { target = '%1%2.mdx',           context = 'MDX' },
                         }
                     },
                     {
-                        pattern = "(.*/)([^%.]+)%.mdx$",
+                        pattern = '(.*/)([^%.]+)%.mdx$',
                         target = {
-                            { target = "%1%2.tsx",           context = "component" },
-                            { target = "%1%2.component.tsx", context = "component" },
-                            { target = "%1%2.test.tsx",      context = "test" },
-                            { target = "%1%2.stories.tsx",   context = "story" },
-                            { target = "%1%2.mdx",           context = "MDX" },
+                            { target = '%1%2.tsx',           context = 'component' },
+                            { target = '%1%2.component.tsx', context = 'component' },
+                            { target = '%1%2.test.tsx',      context = 'test' },
+                            { target = '%1%2.stories.tsx',   context = 'story' },
+                            { target = '%1%2.mdx',           context = 'MDX' },
                         }
                     },
                     {
-                        pattern = "(.*/)([^%.]+)%.tsx$",
+                        pattern = '(.*/)([^%.]+)%.tsx$',
                         target = {
-                            { target = "%1%2.tsx",           context = "component" },
-                            { target = "%1%2.component.tsx", context = "component" },
-                            { target = "%1%2.test.tsx",      context = "test" },
-                            { target = "%1%2.stories.tsx",   context = "story" },
-                            { target = "%1%2.mdx",           context = "MDX" },
+                            { target = '%1%2.tsx',           context = 'component' },
+                            { target = '%1%2.component.tsx', context = 'component' },
+                            { target = '%1%2.test.tsx',      context = 'test' },
+                            { target = '%1%2.stories.tsx',   context = 'story' },
+                            { target = '%1%2.mdx',           context = 'MDX' },
                         }
                     }
                 },
             })
-            local wk = require("which-key")
-            wk.register({
-                t = {
-                    n = {
-                        name = ":Other",
-                        n = { "<cmd>:Other<cr>", ":Other", noremap = true },
-                        s = { "<cmd>:OtherSplit<cr>", ":OtherSplit", noremap = true },
-                        v = { "<cmd>:OtherVSplit<cr>", ":OtherVSplit", noremap = true },
-                    }
-                },
-            }, { prefix = "<leader>" })
-        end
+        end,
+        keys = {
+            { '<leader>tn',  group = ':Other' },
+            { '<leader>tnn', '<cmd>:Other<cr>',       desc = ':Other',       remap = false },
+            { '<leader>tns', '<cmd>:OtherSplit<cr>',  desc = ':OtherSplit',  remap = false },
+            { '<leader>tnv', '<cmd>:OtherVSplit<cr>', desc = ':OtherVSplit', remap = false },
+        }
     }
 }

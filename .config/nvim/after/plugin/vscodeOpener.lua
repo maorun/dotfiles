@@ -6,9 +6,6 @@ function OpenCurrentFileInVisualCode()
 end
 
 local wk = require "which-key"
-wk.register({
-    q = {
-        name = "General Commands",
-        o = {":lua OpenCurrentFileInVisualCode()<CR>", "open current file in visual code", noremap = true},
-    },
-}, { prefix = "<leader>" })
+wk.add({
+    { "<leader>qo", ":lua OpenCurrentFileInVisualCode()<CR>", desc = "open current file in visual code", remap = false },
+})

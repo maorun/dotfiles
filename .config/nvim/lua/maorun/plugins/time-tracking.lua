@@ -17,7 +17,7 @@ return {
             { '<leader>ttp', '<cmd>lua Time.TimePause()<cr>',  desc = 'TimePause',  noremap = true },
             { '<leader>ttr', '<cmd>lua Time.TimeResume()<cr>', desc = 'TimeResume', noremap = true },
         },
-        config = function()
+        init = function()
             require 'maorun.time'.setup()
         end
     } }

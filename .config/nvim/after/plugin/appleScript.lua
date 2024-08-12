@@ -1,11 +1,8 @@
 local wk = require "which-key"
-wk.register({
-    q = {
-        name = "General Commands",
-        u = {":lua Maorun.startUp()<CR>", "StartUp", noremap = true},
-        s = {":call CallAppleScript('Spotify', 'playpause')<cr>", "Spotify play/pause", noremap = true},
-    },
-}, { prefix = "<leader>" })
+wk.add({
+    { "<leader>qs", ":call CallAppleScript('Spotify', 'playpause')<cr>", desc = "Spotify play/pause", remap = false },
+    { "<leader>qu", ":lua Maorun.startUp()<CR>", desc = "StartUp", remap = false },
+})
 
 local function CallAppleScript(application, command)
     local script = "osascript -e 'tell application \"" .. application .. "\"' -e '" .. command .. "' -e 'end tell' >> /dev/null &"

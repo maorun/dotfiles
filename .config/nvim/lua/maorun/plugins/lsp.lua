@@ -66,21 +66,17 @@ return {
                 }, { silent = true })
             end
             -- Diagnostics mapping (should also available without LSP)
-            wk.register({
-                l = {
-                    name = 'LSP',
-                    K = { ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', 'open_float', noremap = true },
-                    q = { ':lua vim.diagnostic.setloclist()<cr>', 'show diagnostics', noremap = true },
-                },
-                o = { ':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', 'Organize imports', noremap = true },
-            }, { silent = true, prefix = '<leader>' })
-            wk.register({
-                g = {
-                    name = 'Goto',
-                    ['['] = { ':lua vim.diagnostic.goto_prev()<CR>', 'next diagnostic', noremap = true },
-                    [']'] = { ':lua vim.diagnostic.goto_next()<CR>', 'prev diagnostic', noremap = true },
-                },
-            }, { silent = true })
+            wk.add({
+                { "<leader>l", group = "LSP" },
+                { "<leader>lK", ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', desc = "open_float", remap = false },
+                { "<leader>lq", ":lua vim.diagnostic.setloclist()<cr>", desc = "show diagnostics", remap = false },
+                { "<leader>o", ':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', desc = "Organize imports", remap = false },
+            })
+            wk.add({
+                { "g", group = "Goto" },
+                { "g[", ":lua vim.diagnostic.goto_prev()<CR>zz", desc = "next diagnostic", remap = false },
+                { "g]", ":lua vim.diagnostic.goto_next()<CR>zz", desc = "prev diagnostic", remap = false },
+            })
 
             local servers = {
                 'lua_ls',
@@ -247,10 +243,10 @@ return {
             -- Show source in diagnostics
             vim.diagnostic.config({
                 virtual_text = {
-                    source = 'always',
+                    source = true
                 },
                 float = {
-                    source = 'always',
+                    source = true
                 },
             })
         end,
