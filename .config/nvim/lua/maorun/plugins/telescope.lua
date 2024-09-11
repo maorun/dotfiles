@@ -16,6 +16,7 @@ return {
                         'node_modules',
                         '__snapshots__',
                         'package%-lock%.json',
+                        'packages/products',
                         'composer%.lock'
                     },
                     mappings = {

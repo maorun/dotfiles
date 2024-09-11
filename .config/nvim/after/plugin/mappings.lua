@@ -112,7 +112,6 @@ wk.add({
     { "<leader>q", group = "General Commands" },
     { "<leader>qn", group = "Create new X" },
     { "<leader>qnb", NewBuffer, desc = "new buffer", remap = false },
-    { "<leader>qng", ":GkeepNew<cr>", desc = "new google-note", remap = false },
     { "<leader>qr", group = "Run X" },
     { "<leader>qrd", "<c-w>s:terminal npm run dev<cr>", desc = "run npm-dev", remap = false },
     { "<leader>qri", "<c-w>s:terminal npm run image<cr>", desc = "run npm-image", remap = false },

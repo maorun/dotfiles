@@ -257,12 +257,9 @@ return {
                 pattern = "gitcommit",
                 callback = function()
                     local wk = require("which-key")
-                    wk.register({
-                        g = {
-                            name = "Git",
-                            c = { ":M commit<cr>", "generate message", noremap = true },
-                        }
-                    }, { prefix = "<leader>" })
+                    wk.add({
+                        { "<leader>gc", ":M commit<cr>", desc = "generate message", remap = true },
+                    } )
                 end
             })
         end

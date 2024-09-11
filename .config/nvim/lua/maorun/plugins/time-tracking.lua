@@ -18,6 +18,15 @@ return {
             { '<leader>ttr', '<cmd>lua Time.TimeResume()<cr>', desc = 'TimeResume', noremap = true },
         },
         init = function()
-            require 'maorun.time'.setup()
+            require 'maorun.time'.setup({
+                hoursPerWeekday = {
+    Monday = 8,
+    Tuesday = 8,
+    Wednesday = 8,
+    Thursday = 7,
+    Friday = 5,
+                },
+
+            })
         end
     } }

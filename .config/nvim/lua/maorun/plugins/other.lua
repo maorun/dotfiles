@@ -1,9 +1,6 @@
 return {
     {
         'rgroli/other.nvim',
-        dependencies = {
-            'folke/which-key.nvim',
-        },
         event = 'VimEnter',
         init = function()
             require('other-nvim').setup({

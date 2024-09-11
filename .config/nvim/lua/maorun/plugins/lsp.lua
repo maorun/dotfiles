@@ -36,34 +36,28 @@ return {
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
                 -- buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
 
-                wk.register({
-                    l = {
-                        name = 'LSP',
-                        g = {
-                            name = 'Goto',
-                            D = { ':lua vim.lsp.buf.declaration()<CR>', 'Declaration', noremap = true },
-                            d = { ':lua vim.lsp.buf.definition()<CR>', 'Definition', noremap = true },
-                            i = { ':lua vim.lsp.buf.implementation()<CR>', 'Implementaion', noremap = true },
-                            r = { ':lua require("telescope.builtin").lsp_references()<CR>', 'References', noremap = true },
-                            t = { ':lua vim.lsp.buf.type_definition()<CR>', 'Type definition', noremap = true },
-                        },
-                        k = { ':lua vim.lsp.buf.hover()<CR>', 'Hover', noremap = true },
-                        ['<C-k>'] = { ':lua vim.lsp.buf.signature_help()<CR>', 'Signature help', noremap = true },
-                        r = { ':lua vim.lsp.buf.rename()<CR>', 'rename', noremap = true },
-                        c = { ':lua vim.lsp.buf.code_action()<CR>', 'code-action', noremap = true },
-                        f = { Lsp_formatting, 'format', noremap = true },
-                    },
-                    ff = { Lsp_formatting, 'format with LSP', noremap = true },
-                }, { silent = true, prefix = '<leader>' })
-                wk.register({
-                    g = {
-                        name = 'Goto',
-                        D = { ':lua vim.lsp.buf.declaration()<CR>', 'Declaration', noremap = true },
-                        d = { ':lua vim.lsp.buf.definition()<CR>', 'Definition', noremap = true },
-                        f = { ':lua require("telescope.builtin").lsp_references()<CR>', 'References', noremap = true },
-                        y = { ':lua vim.lsp.buf.type_definition()<CR>', 'Type definition', noremap = true },
-                    },
-                }, { silent = true })
+                wk.add({
+                    { "<leader>ff", Lsp_formatting, desc = "format with LSP", remap = false },
+                    { "<leader>l", group = "LSP" },
+                    { "<leader>l<C-k>", ":lua vim.lsp.buf.signature_help()<CR>", desc = "Signature help", remap = false },
+                    { "<leader>lc", ":lua vim.lsp.buf.code_action()<CR>", desc = "code-action", remap = false },
+                    { "<leader>lf", Lsp_formatting, desc = "format", remap = false },
+                    { "<leader>lg", group = "Goto" },
+                    { "<leader>lgD", ":lua vim.lsp.buf.declaration()<CR>", desc = "Declaration", remap = false },
+                    { "<leader>lgd", ":lua vim.lsp.buf.definition()<CR>", desc = "Definition", remap = false },
+                    { "<leader>lgi", ":lua vim.lsp.buf.implementation()<CR>", desc = "Implementaion", remap = false },
+                    { "<leader>lgr", ':lua require("telescope.builtin").lsp_references()<CR>', desc = "References", remap = false },
+                    { "<leader>lgt", ":lua vim.lsp.buf.type_definition()<CR>", desc = "Type definition", remap = false },
+                    { "<leader>lk", ":lua vim.lsp.buf.hover()<CR>", desc = "Hover", remap = false },
+                    { "<leader>lr", ":lua vim.lsp.buf.rename()<CR>", desc = "rename", remap = false },
+                })
+                wk.add({
+                    { "g", group = "Goto" },
+                    { "gD", ":lua vim.lsp.buf.declaration()<CR>", desc = "Declaration", remap = false },
+                    { "gd", ":lua vim.lsp.buf.definition()<CR>", desc = "Definition", remap = false },
+                    { "gf", ':lua require("telescope.builtin").lsp_references()<CR>', desc = "References", remap = false },
+                    { "gy", ":lua vim.lsp.buf.type_definition()<CR>", desc = "Type definition", remap = false },
+                })
             end
             -- Diagnostics mapping (should also available without LSP)
             wk.add({

@@ -1,9 +1,6 @@
 return {
     {
         'vim-test/vim-test',
-        dependencies = {
-            'folke/which-key.nvim',
-        },
         event = 'VimEnter',
         keys = {
             { '<leader>vtn', '<cmd>TestNearest<cr>', desc = 'runs the test nearest to the cursor', noremap = true },

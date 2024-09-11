@@ -58,7 +58,6 @@ vim.cmd [[
 
 -- " not waiting too long
 vim.opt.updatetime=1000
-vim.cmd "autocmd FileType php setlocal updatetime=2000"
 
 vim.opt.shortmess=vim.opt.shortmess + "c"
 
