@@ -26,7 +26,7 @@ return {
                     async = true,
                     filter = function(client)
                         -- disable tsserver formating
-                        return client.name ~= 'tsserver'
+                        return client.name ~= 'ts_ls'
                     end,
                 })
             end
@@ -74,7 +74,7 @@ return {
 
             local servers = {
                 'lua_ls',
-                'tsserver',
+                'ts_ls',
                 'pyright',
                 -- 'graphql',
                 'phpactor', 'sqlls', 'eslint' }

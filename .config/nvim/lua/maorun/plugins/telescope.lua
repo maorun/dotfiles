@@ -17,6 +17,7 @@ return {
                         '__snapshots__',
                         'package%-lock%.json',
                         'packages/products',
+                        'packages/mdb-',
                         'composer%.lock'
                     },
                     mappings = {

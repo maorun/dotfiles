@@ -13,7 +13,7 @@ vim.cmd [[
 ]]
 
 vim.cmd [[
-    command! WipeReg for i in range(97, 122) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor
+    command! WipeReg for i in range(97, 122) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor
     set runtimepath^=~/.vim runtimepath+=~/.vim/after
     let &packpath = &runtimepath
 
