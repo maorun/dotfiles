@@ -13,10 +13,10 @@ return {
             require('refactoring').setup({
                 print_var_statements = {
                     typescriptreact = {
-                        '// %s \nconsole.dir(%s, { depth: 6 });',
+                        'console.dir({ where: "%s", var: %s}, { depth: 6 });',
                     },
                     typescript = {
-                        '// %s \nconsole.dir(%s, { depth: 6 });',
+                        'console.dir({ where: "%s", var: %s}, { depth: 6 });',
                     },
                 }
             })
@@ -32,6 +32,7 @@ return {
             { '<leader>rdp', ":lua require('refactoring').debug.printf({below = true})<CR>",       desc = 'add print-statement' },
             { '<leader>rdv', ":lua require('refactoring').debug.print_var({ normal = true })<CR>", desc = 'print variable', },
 
+            { '<leader>rr',  ":lua require('telescope').extensions.refactoring.refactors()<cr>",   desc = 'refactor-telescope', mode = { 'x', 'n' }, },
             -- {
             --     mode = { 'v' },
             --     { '<leader>r',   group = 'Refactor' },
@@ -39,16 +40,6 @@ return {
             --     { '<leader>rdv', ":lua require('refactoring').debug.print_var({})<CR>", desc = 'print visual text' },
             -- },
 
-            -- {
-            --     mode = { "n", "x" },
-            --     {
-            --         "<leader>rr",
-            --         function()
-            --             require('telescope').extensions.refactoring.refactors()
-            --         end,
-            --         noremap = true
-            --     },
-            -- }
         },
     },
 }
