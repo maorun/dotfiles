@@ -28,7 +28,7 @@ return {
             { '<leader>gs',  group = 'Git Stash' },
             { '<leader>gsa', ':G stash<cr>',                                                            desc = 'Git Stash add',          remap = false },
             { '<leader>gsp', ':G stash pop<cr>',                                                        desc = 'Git Stash pop',          remap = false },
-            { '<leader>gw',  ":G add -A | :G commit --no-verify -m 'wip' | :lua Maorun.git.push()<cr>", desc = 'WIP',                    remap = false },
+            { '<leader>gw',  ":G commit --no-verify -m 'wip' | :lua Maorun.git.push()<cr>",             desc = 'WIP',                    remap = false },
         },
         init = function()
             local fugitiveAuGroup = vim.api.nvim_create_augroup('user_fugitive', {})
