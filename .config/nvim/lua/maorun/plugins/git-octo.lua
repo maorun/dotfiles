@@ -126,6 +126,7 @@ return {
                         'maorun/code-stats',
                         'maorun/snyk.nvim',
                         'spring-media/ac-steam',
+                        'spring-media/maps-setup-hh-flux-cd',
                         'spring-media/ac-steam-flux',
                     },
                     action = function(value)
