@@ -38,7 +38,7 @@ return {
                     provider = openai,
                     mode = require('model').mode.REPLACE,
                     builder = function()
-                        local cwd = vim.fn.expand('%:h:h')
+                        local cwd = vim.fn.expand('%:h')
                         local git_diff = vim.fn.system { 'git', '-C', cwd, 'diff', '--staged', '-U0' }
 
                         if not git_diff:match('^diff') then
