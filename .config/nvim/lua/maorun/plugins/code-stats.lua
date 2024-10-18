@@ -11,6 +11,7 @@ return {
             },
         },
         init = function()
+            require('maorun.personal') -- for the auth-key
             require('maorun.code-stats').setup()
         end
     },

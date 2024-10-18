@@ -1,3 +1,5 @@
+require('maorun.personal') -- for the auth-key
+
 vim.cmd [[
     function! RequestDeepl(text)
         let auth = g:deepl_api_key
