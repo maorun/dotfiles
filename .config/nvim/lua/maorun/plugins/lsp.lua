@@ -164,6 +164,7 @@ return {
 
             nvim_lsp['tailwindcss'].setup {
                 settings = {
+                    classAttributes= {"class", "className", "class:list", "classList", "ngClass", "classNames"},
                     -- https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#extension-settings
                     tailwindCSS = {
                         showPixelEquivalents = false,
