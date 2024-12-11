@@ -126,8 +126,8 @@ wk.add({
 
     { "ie", ':exec "normal! ggVG"<cr>', desc = "select all", mode = "o", remap = false },
 
-    { "<C-J>", "<Down>", desc = "float-menu down", mode = "i", remap = false },
-    { "<C-K>", "<Up>", desc = "float-menu up", mode = "i", remap = false },
+    -- { "<C-J>", "<Down>", desc = "float-menu down", mode = "i", remap = false },
+    -- { "<C-K>", "<Up>", desc = "float-menu up", mode = "i", remap = false },
 
   })
 
