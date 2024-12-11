@@ -2,7 +2,6 @@ return {
     'pwntester/octo.nvim',
     event = 'VimEnter',
     dependencies = {
-        'folke/which-key.nvim',
         'nvim-lua/plenary.nvim',
         'nvim-tree/nvim-web-devicons',
     },
@@ -84,34 +83,6 @@ return {
         })
     end,
     keys = {
-        { '<leader>h',   group = 'Help' },
-        {
-            '<leader>ho',
-            function()
-                local mappings = require('octo.config').get_config().mappings
-                local list = {}
-                local k, v = next(mappings)
-                while k do
-                    k, v = next(mappings, k)
-                    if (k ~= nil) then
-                        for key, value in next, v do
-                            -- print(vim.inspect(value))
-                            table.insert(list, k .. ' : ' .. value.lhs .. ' => ' .. value.desc)
-                        end
-                    end
-                end
-                local mappingListPlugin = require('maorun.mappingList')
-                mappingListPlugin.init()
-                mappingListPlugin.mappingList {
-                    title = 'octo',
-                    list = list
-                }
-            end,
-            desc = 'octo',
-            remap = false
-        },
-        { '<leader>t',   group = 'Telescope' },
-        { '<leader>to',  group = 'Octo' },
         { '<leader>toa', ':Octo actions<cr>',         desc = 'Octo actions',    remap = false },
         { '<leader>toc', ':Octo pr create draft<cr>', desc = 'create PR draft', remap = false },
         {
