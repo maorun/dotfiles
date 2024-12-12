@@ -161,6 +161,7 @@ return {
                             copilot = "[Copilot]",
                             cmp_tabnine = "[Tabnine]",
                             codeium = "[Codeium]",
+                            tickets= "[Ticket]"
                         })[entry.source.name]
                         return vim_item
                     end,
@@ -169,6 +170,7 @@ return {
                     fetching_timeout = 1000,
                 },
                 sources = {
+                    { name = "tickets", },
                     { name = 'copilot',     max_item_count = 5 },
                     { name = 'cmp_tabnine', max_item_count = 5 },
                     { name = 'luasnip' },
