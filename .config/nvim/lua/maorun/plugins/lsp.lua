@@ -145,12 +145,14 @@ return {
             }
 
             nvim_lsp['efm'].setup {
-                filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'html' },
+                filetypes = { 'json', 'svg', 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'html' },
                 init_options = { documentFormatting = true },
                 settings = {
                     rootMarkers = { '.git/' },
                     logLevel = 5,
                     languages = {
+                        json = { formatEfm, },
+                        svg = { formatEfm, },
                         html = { formatEfm, },
                         typescript = { formatEfm, },
                         javascript = { formatEfm, },
