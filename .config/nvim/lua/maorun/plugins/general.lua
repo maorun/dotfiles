@@ -91,5 +91,10 @@ return {
                 hop.hint_char2({ multi_windows = true })
             end, { remap = true })
         end
+    },
+    {
+        'stevearc/quicker.nvim',
+        event = "FileType qf",
+        opts = {},
     }
 }
