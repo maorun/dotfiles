@@ -37,39 +37,39 @@ return {
                 -- buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
 
                 wk.add({
-                    { "<leader>ff", Lsp_formatting, desc = "format with LSP", remap = false },
-                    { "<leader>l", group = "LSP" },
-                    { "<leader>l<C-k>", ":lua vim.lsp.buf.signature_help()<CR>", desc = "Signature help", remap = false },
-                    { "<leader>lc", ":lua vim.lsp.buf.code_action()<CR>", desc = "code-action", remap = false },
-                    { "<leader>lf", Lsp_formatting, desc = "format", remap = false },
-                    { "<leader>lg", group = "Goto" },
-                    { "<leader>lgD", ":lua vim.lsp.buf.declaration()<CR>", desc = "Declaration", remap = false },
-                    { "<leader>lgd", ":lua vim.lsp.buf.definition()<CR>", desc = "Definition", remap = false },
-                    { "<leader>lgi", ":lua vim.lsp.buf.implementation()<CR>", desc = "Implementaion", remap = false },
-                    { "<leader>lgr", ':lua require("telescope.builtin").lsp_references()<CR>', desc = "References", remap = false },
-                    { "<leader>lgt", ":lua vim.lsp.buf.type_definition()<CR>", desc = "Type definition", remap = false },
-                    { "<leader>lk", ":lua vim.lsp.buf.hover()<CR>", desc = "Hover", remap = false },
-                    { "<leader>lr", ":lua vim.lsp.buf.rename()<CR>", desc = "rename", remap = false },
+                    { '<leader>ff',     Lsp_formatting,                                           desc = 'format with LSP', remap = false },
+                    { '<leader>l',      group = 'LSP' },
+                    { '<leader>l<C-k>', ':lua vim.lsp.buf.signature_help()<CR>',                  desc = 'Signature help',  remap = false },
+                    { '<leader>lc',     ':lua vim.lsp.buf.code_action()<CR>',                     desc = 'code-action',     remap = false },
+                    { '<leader>lf',     Lsp_formatting,                                           desc = 'format',          remap = false },
+                    { '<leader>lg',     group = 'Goto' },
+                    { '<leader>lgD',    ':lua vim.lsp.buf.declaration()<CR>',                     desc = 'Declaration',     remap = false },
+                    { '<leader>lgd',    ':lua vim.lsp.buf.definition()<CR>',                      desc = 'Definition',      remap = false },
+                    { '<leader>lgi',    ':lua vim.lsp.buf.implementation()<CR>',                  desc = 'Implementaion',   remap = false },
+                    { '<leader>lgr',    ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References',      remap = false },
+                    { '<leader>lgt',    ':lua vim.lsp.buf.type_definition()<CR>',                 desc = 'Type definition', remap = false },
+                    { '<leader>lk',     ':lua vim.lsp.buf.hover()<CR>',                           desc = 'Hover',           remap = false },
+                    { '<leader>lr',     ':lua vim.lsp.buf.rename()<CR>',                          desc = 'rename',          remap = false },
                 })
                 wk.add({
-                    { "g", group = "Goto" },
-                    { "gD", ":lua vim.lsp.buf.declaration()<CR>", desc = "Declaration", remap = false },
-                    { "gd", ":lua vim.lsp.buf.definition()<CR>", desc = "Definition", remap = false },
-                    { "gf", ':lua require("telescope.builtin").lsp_references()<CR>', desc = "References", remap = false },
-                    { "gy", ":lua vim.lsp.buf.type_definition()<CR>", desc = "Type definition", remap = false },
+                    { 'g',  group = 'Goto' },
+                    { 'gD', ':lua vim.lsp.buf.declaration()<CR>',                     desc = 'Declaration',     remap = false },
+                    { 'gd', ':lua vim.lsp.buf.definition()<CR>',                      desc = 'Definition',      remap = false },
+                    { 'gf', ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References',      remap = false },
+                    { 'gy', ':lua vim.lsp.buf.type_definition()<CR>',                 desc = 'Type definition', remap = false },
                 })
             end
             -- Diagnostics mapping (should also available without LSP)
             wk.add({
-                { "<leader>l", group = "LSP" },
-                { "<leader>lK", ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', desc = "open_float", remap = false },
-                { "<leader>lq", ":lua vim.diagnostic.setloclist()<cr>", desc = "show diagnostics", remap = false },
-                { "<leader>o", ':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', desc = "Organize imports", remap = false },
+                { '<leader>l',  group = 'LSP' },
+                { '<leader>lK', ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>',                                              desc = 'open_float',       remap = false },
+                { '<leader>lq', ':lua vim.diagnostic.setloclist()<cr>',                                                                                desc = 'show diagnostics', remap = false },
+                { '<leader>o',  ':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', desc = 'Organize imports', remap = false },
             })
             wk.add({
-                { "g", group = "Goto" },
-                { "g[", ":lua vim.diagnostic.goto_prev()<CR>zz", desc = "next diagnostic", remap = false },
-                { "g]", ":lua vim.diagnostic.goto_next()<CR>zz", desc = "prev diagnostic", remap = false },
+                { 'g',  group = 'Goto' },
+                { 'g[', ':lua vim.diagnostic.goto_prev()<CR>zz', desc = 'next diagnostic', remap = false },
+                { 'g]', ':lua vim.diagnostic.goto_next()<CR>zz', desc = 'prev diagnostic', remap = false },
             })
 
             local servers = {
@@ -109,6 +109,10 @@ return {
                     },
                     on_attach = function(client, bufnr)
                         on_attach(client, bufnr)
+                        vim.api.nvim_create_autocmd('BufWritePre', {
+                            buffer = bufnr,
+                            command = 'lua vim.lsp.buf.format({async=false})',
+                        })
                         if (lsp == 'eslint') then
                             vim.api.nvim_create_autocmd('BufWritePre', {
                                 buffer = bufnr,
@@ -166,7 +170,7 @@ return {
 
             nvim_lsp['tailwindcss'].setup {
                 settings = {
-                    classAttributes= {"class", "className", "class:list", "classList", "ngClass", "classNames"},
+                    classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'classNames' },
                     -- https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#extension-settings
                     tailwindCSS = {
                         showPixelEquivalents = false,
