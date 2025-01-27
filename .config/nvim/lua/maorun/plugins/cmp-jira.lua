@@ -17,8 +17,9 @@ local source = {}
 
 ---Return the keyword pattern for triggering completion (optional).
 function source:get_keyword_pattern()
-    return "ACT-"
+    return 'ACT-'
 end
+
 function source:get_trigger_characters()
     return { 'ACT' }
 end
@@ -26,15 +27,15 @@ end
 ---Invoke completion (required).
 function source:complete(params, callback)
     local input = params.context.cursor_before_line
-    local r = vim.fn.system('jira c-ls')
+    local r = vim.fn.system('jira c-ls-me')
     local t = {}
-    r:gsub("[^\n]+\n",
+    r:gsub('[^\n]+\n',
         function(c)
             if c:match(esc(input)) then
                 table.insert(t, {
-                    label =    string.gsub(c, "(ACT%-%d+)%s+:%s+(.*)", "%1"),
+                    label = string.gsub(c, '(ACT%-%d+)%s+:%s+(.*)', '%1'),
                     cmp = {
-                        kind_text =    string.gsub(c, "(ACT%-%d+)%s+:%s+(.*)", "%2")
+                        kind_text = string.gsub(c, '(ACT%-%d+)%s+:%s+(.*)', '%2')
                     },
 
                 })
@@ -43,7 +44,6 @@ function source:complete(params, callback)
     )
 
     callback(t)
-
 end
 
 require('cmp').register_source('tickets', source)
