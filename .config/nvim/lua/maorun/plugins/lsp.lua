@@ -109,10 +109,10 @@ return {
                     },
                     on_attach = function(client, bufnr)
                         on_attach(client, bufnr)
-                        vim.api.nvim_create_autocmd('BufWritePre', {
-                            buffer = bufnr,
-                            command = 'lua vim.lsp.buf.format({async=false})',
-                        })
+                        -- vim.api.nvim_create_autocmd('BufWritePre', {
+                        --     buffer = bufnr,
+                        --     command = 'lua vim.lsp.buf.format({async=false})',
+                        -- })
                         if (lsp == 'eslint') then
                             vim.api.nvim_create_autocmd('BufWritePre', {
                                 buffer = bufnr,
