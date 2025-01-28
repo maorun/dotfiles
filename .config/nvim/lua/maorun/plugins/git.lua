@@ -19,8 +19,8 @@ return {
             { '<leader>gpu', ':G pull<cr>',                                                 desc = 'Pull',                   remap = false },
             { '<leader>gr',  group = 'Git Rebase' },
             { '<leader>grM', ':G fetch --prune | :G merge origin/master<cr>',               desc = 'Git Merge master',       remap = false },
-            { '<leader>grA', ':G merge --abort<cr>',                                        desc = 'Git Merge abort',       remap = false },
-            { '<leader>grC', ':G merge --continue<cr>',                                     desc = 'Git Merge continue',    remap = false },
+            { '<leader>grA', ':G merge --abort<cr>',                                        desc = 'Git Merge abort',        remap = false },
+            { '<leader>grC', ':G merge --continue<cr>',                                     desc = 'Git Merge continue',     remap = false },
             { '<leader>gra', ':G rebase --abort<cr>',                                       desc = 'Git Rebase abort',       remap = false },
             { '<leader>grc', ':G rebase --continue<cr>',                                    desc = 'Git Rebase continue',    remap = false },
             { '<leader>grm', ':G fetch --prune | :G rebase origin/master<cr>',              desc = 'Git Rebase master',      remap = false },
@@ -173,8 +173,8 @@ return {
     {
         'sindrets/diffview.nvim',
         keys = {
-            { '<leader>dd', ':DiffviewOpen<cr>', desc = 'Diffview Open' },
-            { '<leader>dq', ':DiffviewClose<cr>', desc = 'Diffview Close' },
+            { '<leader>dd', ':DiffviewOpen<cr>',        desc = 'Diffview Open' },
+            { '<leader>dq', ':DiffviewClose<cr>',       desc = 'Diffview Close' },
             { '<leader>df', ':DiffviewFileHistory<cr>', desc = 'Diffview File History' },
         },
     },
