@@ -171,15 +171,11 @@ return {
         end
     },
     {
-        'sindrets/diffview.nvim'
-    },
-    {
-        -- o -> old version
-        -- O -> new version
-        'rhysd/git-messenger.vim',
+        'sindrets/diffview.nvim',
         keys = {
-            { '<c-w>m',     '<Plug>(git-messenger-into-popup)', desc = 'Git Messenger switch', remap = false },
-            { '<leader>gm', ':GitMessenger<cr>',                desc = 'Git Messenger',        remap = false },
-        }
-    }
+            { '<leader>dd', ':DiffviewOpen<cr>', desc = 'Diffview Open' },
+            { '<leader>dq', ':DiffviewClose<cr>', desc = 'Diffview Close' },
+            { '<leader>df', ':DiffviewFileHistory<cr>', desc = 'Diffview File History' },
+        },
+    },
 }
