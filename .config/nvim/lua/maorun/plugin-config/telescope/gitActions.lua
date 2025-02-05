@@ -1,7 +1,7 @@
 local actions = require('telescope.actions')
-local utils = require "telescope.utils"
-local action_state = require "telescope.actions.state"
-local transform_mod = require("telescope.actions.mt").transform_mod
+local utils = require 'telescope.utils'
+local action_state = require 'telescope.actions.state'
+local transform_mod = require('telescope.actions.mt').transform_mod
 
 local M = {}
 M.actions = transform_mod({
@@ -9,41 +9,41 @@ M.actions = transform_mod({
         local selection = action_state.get_selected_entry()
         print(vim.inspect(selection))
 
-        local _, ret, stderr = utils.get_os_command_output { "git", "stash", "drop", selection.value }
+        local _, ret, stderr = utils.get_os_command_output { 'git', 'stash', 'drop', selection.value }
         if ret == 0 then
             utils.notify('M.actions.git_delete_stash', {
-                msg = string.format("Deleted stash: %s", selection.value),
-                level = "INFO",
+                msg = string.format('Deleted stash: %s', selection.value),
+                level = 'INFO',
             })
         end
 
-        require'telescope.builtin'.git_stash()
+        require 'telescope.builtin'.git_stash()
     end,
     git_delete_branch = function(prompt_bufnr)
-        local command = function(branch_name)
-            return { "git", "branch", "-D", branch_name }
-        end
-
-        local cwd = action_state.get_current_picker(prompt_bufnr).cwd
-        local selection = action_state.get_selected_entry()
-
-        actions.close(prompt_bufnr)
-        local _, ret, stderr = utils.get_os_command_output(command(selection.value), cwd)
-        if ret == 0 then
-            utils.notify('M.actions.git_delete_branch', {
-                msg = string.format("Deleted branch: %s", selection.value),
-                level = "INFO",
-            })
-        else
-            utils.notify('M.actions.git_delete_branch', {
-                msg = string.format("Error when deleting branch: %s. Git returned: '%s'", selection.value, table.concat(stderr, " ")),
-                level = "ERROR",
-            })
-        end
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local action_name = 'actions.git_delete_branch'
+        picker:delete_selection(function(selection)
+            local branch = selection.value
+            print('Deleting branch ' .. branch)
+            local _, ret, stderr = utils.get_os_command_output({ 'git', 'branch', '-D', branch },
+                picker.cwd)
+            if ret == 0 then
+                utils.notify(action_name, {
+                    msg = string.format('Deleted branch: %s', branch),
+                    level = 'INFO',
+                })
+            else
+                utils.notify(action_name, {
+                    msg = string.format("Error when deleting branch: %s. Git returned: '%s'", branch,
+                        table.concat(stderr, ' ')),
+                    level = 'ERROR',
+                })
+            end
+            return ret == 0
+        end)
     end,
     showGitBranches = function(prompt_bufnr)
-        return require'telescope.builtin'.git_branches({pattern = 'refs/heads'})
+        return require 'telescope.builtin'.git_branches({ pattern = 'refs/heads' })
     end,
 })
 return M
-
