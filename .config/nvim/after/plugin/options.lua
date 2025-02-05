@@ -39,9 +39,49 @@ vim.opt.shiftwidth=4
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 
+function GetSize()
+    local calc = tonumber(vim.fn.system('calc-diff-num'))
+    local size = ''
+    if (calc < 10) then
+        size = 'XS'
+    elseif (calc < 30) then
+        size = 'S'
+    elseif (calc < 100) then
+        size = 'M'
+    elseif (calc < 500) then
+        size = 'L'
+    elseif (calc < 1000) then
+        size = 'XL'
+    else
+        size = 'XXL'
+    end
+    return calc .. ' => ' .. size
+end
+
+function GetSizeStaged()
+    local calc = tonumber(vim.fn.system('calc-diff-num --staged'))
+    local size = ''
+    if (calc < 10) then
+        size = 'XS'
+    elseif (calc < 30) then
+        size = 'S'
+    elseif (calc < 100) then
+        size = 'M'
+    elseif (calc < 500) then
+        size = 'L'
+    elseif (calc < 1000) then
+        size = 'XL'
+    else
+        size = 'XXL'
+    end
+    return calc .. ' => ' .. size
+end
+
 vim.opt.statusline="%<"
 vim.opt.statusline=vim.opt.statusline + "%="
 vim.opt.statusline=vim.opt.statusline + "%{get(b:,'gitsigns_head','')}%="
+vim.opt.statusline=vim.opt.statusline + "Unstaged: %{luaeval(\"GetSize()\")}%="
+vim.opt.statusline=vim.opt.statusline + "Staged: %{luaeval(\"GetSizeStaged()\")}%="
 vim.opt.statusline=vim.opt.statusline + "%f" -- the filename
 vim.opt.statusline=vim.opt.statusline + " %h" -- help-buffer
 vim.opt.statusline=vim.opt.statusline + "%m" -- modified-flag
@@ -57,7 +97,7 @@ vim.cmd [[
 ]]
 
 -- " not waiting too long
-vim.opt.updatetime=1000
+vim.opt.updatetime=2000
 
 vim.opt.shortmess=vim.opt.shortmess + "c"
 
