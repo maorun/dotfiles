@@ -107,6 +107,8 @@ vim.opt.wildmode= "longest,list,full"
 vim.opt.wildmenu = true
 vim.opt.wildignore= vim.opt.wildignore + "**/node_modules/*,**/vendor/*"
 
+vim.opt.diffopt="internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
+
 vim.opt.foldenable=true
 vim.opt.foldlevelstart=999
 vim.opt.foldmethod="expr"
