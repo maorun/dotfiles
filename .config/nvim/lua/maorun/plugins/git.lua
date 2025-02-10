@@ -175,7 +175,8 @@ return {
         keys = {
             { '<leader>dd', ':DiffviewOpen<cr>',        desc = 'Diffview Open' },
             { '<leader>dq', ':DiffviewClose<cr>',       desc = 'Diffview Close' },
-            { '<leader>df', ':DiffviewFileHistory<cr>', desc = 'Diffview File History' },
+            { '<leader>df', ':DiffviewFileHistory %<cr>', desc = 'Diffview File History' },
+            { '<leader>d', '<cmd>\'<,\'>DiffviewFileHistory<cr>', desc = 'Diffview File History', mode = 'v' },
         },
     },
 }
