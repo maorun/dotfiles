@@ -46,6 +46,10 @@ function source:complete(params, callback)
     callback(t)
 end
 
-require('cmp').register_source('tickets', source)
+local cmp = require('cmp')
+if vim.g.jiraSourceId then
+    cmp.unregister_source(vim.g.jiraSourceId)
+end
+vim.g.jiraSourceId = cmp.register_source('tickets', source)
 
 return {}
