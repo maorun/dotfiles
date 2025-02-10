@@ -98,7 +98,6 @@ return {
                 {'<leader>gba' ,  "<cmd>lua require'telescope.builtin'.git_branches()<cr>", desc = "Git all branches", noremap = true },
                 {'<leader>gbb' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", desc = "Git lokal branches", noremap = true },
                 {'<leader>gbr' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>", desc = "Git remote branches", noremap = true },
-                {'<leader>ghg' ,  '<cmd>lua require("telescope").extensions.gh.gist()<cr>', desc = "Gist", noremap = true },
 
                 {'<leader>bb' ,  '<cmd>lua require("telescope.builtin").buffers()<cr>', desc = "show Buffers", noremap = true },
         },
