@@ -9,10 +9,10 @@ return {
             require('telescope').setup({
                 defaults = {
                     file_ignore_patterns = {
-                        ".cache/",
-                        ".next/",
+                        '.cache/',
+                        '.next/',
                         'vendor/',
-                        ".git/",
+                        '.git/',
                         'node_modules',
                         '__snapshots__',
                         'package%-lock%.json',
@@ -35,10 +35,36 @@ return {
                     },
                 },
                 pickers = {
+                    oldfiles = {
+                        mappings = {
+                            i = {
+                                ['<C-d>'] = function(prompt_bufnr)
+                                    local action_state = require('telescope.actions.state')
+                                    local telescope_builtin = require('telescope.builtin')
+
+                                    -- Get the selected entry
+                                    local entry = action_state.get_selected_entry()
+                                    if not entry then return end
+
+                                    -- Remove the selected file from v:oldfiles
+                                    vim.v.oldfiles = vim.tbl_filter(function(file)
+                                        return file ~= entry.value
+                                    end, vim.v.oldfiles)
+
+                                    -- don't save changes to ShaDa file because everything is lost after restart of vim (also the entries not in cwd)
+                                    -- vim.cmd('wshada!')
+
+                                    -- Schließe den Picker und öffne ihn neu **mit cwd_only = true**
+                                    actions._close(prompt_bufnr, true)              -- Schließt den Picker sauber
+                                    telescope_builtin.oldfiles({ cwd_only = true }) -- Neu mit Filter
+                                end,
+                            },
+                        },
+                    },
                     buffers = {
                         mappings = {
                             i = {
-                                ["<c-d>"] = actions.delete_buffer,
+                                ['<c-d>'] = actions.delete_buffer,
                             },
                         },
                     },
@@ -54,7 +80,8 @@ return {
                     git_branches = {
                         mappings = {
                             i = {
-                                ['<c-d>'] = gitActions.git_delete_branch + gitActions.showGitBranches,
+                                ['<c-d>'] = gitActions.git_delete_branch + gitActions
+                                    .showGitBranches,
                             }
                         }
                     }
@@ -72,7 +99,7 @@ return {
                         },
                         hidden_files = true,
                         on_project_selected = function(prompt_bufnr)
-                            local project_actions = require("telescope._extensions.project.actions")
+                            local project_actions = require('telescope._extensions.project.actions')
                             project_actions.change_working_directory(prompt_bufnr, false)
                             -- require "telescope".extensions.file_browser.file_browser({
                             --     respect_gitignore = true,
@@ -88,23 +115,24 @@ return {
             -- Load user extension
         end,
         keys = {
-                {'<leader>tf' ,  "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "Find files", noremap = true },
-                {'<leader>tr' ,  "<cmd>lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", desc = "Live Grep", noremap = true },
-                {'<leader>tp' ,  "<cmd>lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>", desc = "Project", noremap = true },
-                {'<leader>tl' ,  "<cmd>lua require('telescope.builtin').oldfiles({cwd_only=true})<cr>", desc = "Find last opened files", noremap = true },
+            { '<leader>tf',  "<cmd>lua require('telescope.builtin').find_files()<cr>",                                                                                                                                                            desc = 'Find files',             noremap = true },
+            { '<leader>tr',  "<cmd>lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", desc = 'Live Grep',              noremap = true },
+            { '<leader>tp',  "<cmd>lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>",                                                                                                                               desc = 'Project',                noremap = true },
+            { '<leader>tl',  "<cmd>lua require('telescope.builtin').oldfiles({cwd_only=true})<cr>",                                                                                                                                               desc = 'Find last opened files', noremap = true },
 
-                {'<leader>gsl' ,  '<cmd>Telescope git_stash<cr>', desc = "Stash list", noremap = true },
-                {'<leader>gg' ,  "<cmd>lua require'telescope.builtin'.git_files{}<cr>", desc = "Git files", noremap = true },
-                {'<leader>gba' ,  "<cmd>lua require'telescope.builtin'.git_branches()<cr>", desc = "Git all branches", noremap = true },
-                {'<leader>gbb' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", desc = "Git lokal branches", noremap = true },
-                {'<leader>gbr' ,  "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>", desc = "Git remote branches", noremap = true },
+            { '<leader>gsl', '<cmd>Telescope git_stash<cr>',                                                                                                                                                                                      desc = 'Stash list',             noremap = true },
+            { '<leader>gss', '<cmd>Telescope git_status<cr>',                                                                                                                                                                                     desc = 'changed files',          noremap = true },
+            { '<leader>gg',  "<cmd>lua require'telescope.builtin'.git_files{}<cr>",                                                                                                                                                               desc = 'Git files',              noremap = true },
+            { '<leader>gba', "<cmd>lua require'telescope.builtin'.git_branches()<cr>",                                                                                                                                                            desc = 'Git all branches',       noremap = true },
+            { '<leader>gbb', "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>",                                                                                                                                    desc = 'Git lokal branches',     noremap = true },
+            { '<leader>gbr', "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>",                                                                                                                                  desc = 'Git remote branches',    noremap = true },
 
-                {'<leader>bb' ,  '<cmd>lua require("telescope.builtin").buffers()<cr>', desc = "show Buffers", noremap = true },
+            { '<leader>bb',  '<cmd>lua require("telescope.builtin").buffers()<cr>',                                                                                                                                                               desc = 'show Buffers',           noremap = true },
         },
         dependencies = {
             {
                 'BurntSushi/ripgrep',
-                event = "VimEnter",
+                event = 'VimEnter',
             },                                 -- for live_grep and find_files
             'nvim-treesitter/nvim-treesitter', -- finder/preview
         },
@@ -116,7 +144,7 @@ return {
             'nvim-lua/plenary.nvim'
         },
         config = function()
-            require("telescope").load_extension "file_browser"
+            require('telescope').load_extension 'file_browser'
         end,
         keys = {
             {
@@ -135,7 +163,7 @@ return {
         },
     },
     {
-        event = "VimEnter",
+        event = 'VimEnter',
         'nvim-telescope/telescope-project.nvim',
         dependencies = {
             'nvim-telescope/telescope.nvim',
