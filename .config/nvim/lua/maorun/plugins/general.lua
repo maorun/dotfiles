@@ -7,6 +7,7 @@ return {
         end
     },
     'nvim-lua/plenary.nvim',
+    'tpope/vim-sleuth',                -- adjust 'shiftwidth' and 'expandtab'
     'tpope/vim-commentary',            -- gcc
     'tpope/vim-surround',              -- add/delete/change surround
     'tpope/vim-repeat',                -- repeat all plugins with .
@@ -94,7 +95,7 @@ return {
     },
     {
         'stevearc/quicker.nvim',
-        event = "FileType qf",
+        event = 'FileType qf',
         opts = {},
     }
 }

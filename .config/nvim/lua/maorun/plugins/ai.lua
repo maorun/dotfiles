@@ -1,6 +1,7 @@
 return {
     {
-        'Exafunction/codeium.nvim',
+        'maorun/codeium.nvim',
+        enabled = false, -- only online usable and cannot be disabled on-the-fly
         -- event = 'InsertEnter',
         dependencies = {
             'nvim-lua/plenary.nvim',

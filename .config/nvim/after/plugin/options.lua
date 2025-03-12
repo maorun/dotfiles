@@ -80,8 +80,9 @@ end
 vim.opt.statusline="%<"
 vim.opt.statusline=vim.opt.statusline + "%="
 vim.opt.statusline=vim.opt.statusline + "%{get(b:,'gitsigns_head','')}%="
-vim.opt.statusline=vim.opt.statusline + "Unstaged: %{luaeval(\"GetSize()\")}%="
-vim.opt.statusline=vim.opt.statusline + "Staged: %{luaeval(\"GetSizeStaged()\")}%="
+vim.opt.statusline=vim.opt.statusline + " Unstaged: %{luaeval(\"GetSize()\")} %="
+vim.opt.statusline=vim.opt.statusline + "Staged: %{luaeval(\"GetSizeStaged()\")} %="
+-- vim.opt.statusline=vim.opt.statusline + "%t" -- the filename
 vim.opt.statusline=vim.opt.statusline + "%f" -- the filename
 vim.opt.statusline=vim.opt.statusline + " %h" -- help-buffer
 vim.opt.statusline=vim.opt.statusline + "%m" -- modified-flag

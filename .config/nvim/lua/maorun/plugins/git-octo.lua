@@ -36,6 +36,12 @@ return {
             )
         end
 
+        function DismissReview()
+            vim.cmd.split()
+            vim.cmd.terminal('grd ' .. vim.fn.expand('%:t'))
+            -- ':split | terminal grd "%:t"<cr>a',
+        end
+
         vim.api.nvim_create_autocmd('FileType', {
             group = octoGroup,
             pattern = 'octo',
@@ -93,7 +99,6 @@ return {
                 mappingListPlugin.mappingList {
                     title = 'octo',
                     list = {
-                        'maorun/zinszins-simulation',
                         'maorun/code-stats',
                         'maorun/snyk.nvim',
                         'spring-media/ac-steam',
