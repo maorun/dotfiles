@@ -14,37 +14,28 @@ vim.cmd [[
 
 vim.cmd [[
     command! WipeReg for i in range(97, 122) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor | for i in range(65, 90) | silent! call setreg(nr2char(i), []) | endfor
-    set runtimepath^=~/.vim runtimepath+=~/.vim/after
     let &packpath = &runtimepath
-
-    function! ShowCmdInNewBuffer (cmd) abort "{{{
-        let res = system(a:cmd)
-        lua NewBuffer()
-        " :call NewBuffer()
-        silent put=res
-        :normal gg
-        silent :normal dd
-    endfunction "}}}
 
     " Hardtime
     let g:hardtime_default_on = 0
     let g:list_of_disabled_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 ]]
 
--- vim.cmd("let $PATH = '~/.nvm/versions/node/v17.4.0/bin:' . $PATH")
-
 vim.loader.enable()
 
 require 'maorun.lazy'
 require 'maorun'
 
-vim.cmd [[
-    augroup luaReload
-        autocmd!
-        autocmd! BufWritePost */nvim/**(!.spec).lua so %
-        " au! BufWritePost $MYVIMRC silent source $MYVIMRC
-        " au! BufWritePost .vimrc_project silent source $MYVIMRC
-        " au! BufWritePost .vimrc silent source $MYVIMRC
-        " au! BufWritePost ~/.vimrc_personal.vim silent source $MYVIMRC
-    augroup END
-]]
+vim.api.nvim_create_autocmd('BufWritePost', {
+    group = vim.api.nvim_create_augroup('luaReload', {}),
+    pattern = '*.lua',
+    callback = function()
+        local file = vim.fn.expand('<afile>') -- Get the full path of the written file
+
+        -- Exclude files ending with .spec.lua
+        if not file:match('%.spec%.lua$') then
+            vim.cmd('source ' .. file) -- Source the Lua file
+        end
+    end,
+})
+
