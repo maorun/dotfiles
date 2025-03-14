@@ -30,6 +30,7 @@ return {
                 group = augroup,
                 pattern = 'gitcommit',
                 callback = function()
+                    vim.opt.spell = true
                     local wk = require('which-key')
                     wk.add({
                         { '<leader>gc', ':M commit<cr>', desc = 'generate message', remap = true },

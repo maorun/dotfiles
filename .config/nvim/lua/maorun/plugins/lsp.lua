@@ -77,7 +77,10 @@ return {
                 'ts_ls',
                 'pyright',
                 -- 'graphql',
-                'phpactor', 'sqlls', 'eslint' }
+                -- 'phpactor',
+                'sqlls',
+                'eslint',
+            }
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             for _, lsp in ipairs(servers) do
@@ -109,10 +112,23 @@ return {
                     },
                     on_attach = function(client, bufnr)
                         on_attach(client, bufnr)
-                        -- vim.api.nvim_create_autocmd('BufWritePre', {
-                        --     buffer = bufnr,
-                        --     command = 'lua vim.lsp.buf.format({async=false})',
-                        -- })
+                        vim.api.nvim_create_autocmd('BufWritePre', {
+                            group = vim.api.nvim_create_augroup('format', {}),
+                            buffer = bufnr,
+                            command = 'lua vim.lsp.buf.format({async=false})',
+                        })
+                        if (client.name == 'ts_ls') then
+                            vim.api.nvim_create_autocmd('BufWritePre', {
+                                group = vim.api.nvim_create_augroup('ts-organise', {}),
+                                buffer = bufnr,
+                                callback = function()
+                                    client.request('workspace/executeCommand', {
+                                        command = '_typescript.organizeImports',
+                                        arguments = { vim.fn.expand('%:p') }
+                                    })
+                                end
+                            })
+                        end
                         if (lsp == 'eslint') then
                             vim.api.nvim_create_autocmd('BufWritePre', {
                                 buffer = bufnr,
@@ -129,7 +145,7 @@ return {
 
             local formatEfm = {
                 formatCommand =
-                "prettier --stdin --stdin-filepath '${INPUT}' ${--range-start:charStart} ${--range-end:charEnd}",
+                "prettierd --stdin --stdin-filepath '${INPUT}' ${--range-start:charStart} ${--range-end:charEnd}",
                 formatCanRange = true,
                 formatStdin = true,
                 rootMarkers = {
@@ -164,7 +180,14 @@ return {
                         javascriptreact = { formatEfm, },
                     },
                 },
-                on_attach = on_attach,
+                on_attach = function(client, bufnr)
+                    on_attach(client, bufnr)
+                    vim.api.nvim_create_autocmd('BufWritePre', {
+                        group = vim.api.nvim_create_augroup('efm-format', {}),
+                        buffer = bufnr,
+                        command = 'lua vim.lsp.buf.format({async=false})',
+                    })
+                end,
                 capabilities = capabilities,
             }
 
