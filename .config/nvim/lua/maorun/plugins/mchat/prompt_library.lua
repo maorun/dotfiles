@@ -1,29 +1,9 @@
 local openai = require('model.providers.openai')
 
-local starterPrompts = require('model.prompts.starters')
-local prompts = vim.tbl_extend('force', starterPrompts, {
-
-})
 return {
-    nodejsConvert = {
-        provider = openai,
-        mode = require('model').mode.INSERT_OR_REPLACE,
-        builder = function(input, context)
-            local code = input
-            return {
-                messages = {
-                    {
-                        role = 'user',
-                        content =
-                            'Your mission is to convert given code to a nodejs-code. Don\'t describe or hinting the code. Only clean code. Here is the code to convert: ``` ' ..
-                            code .. ' ```'
-                    }
-                }
-            }
-        end,
-    },
     commit = {
         provider = openai,
+        model = 'gpt-4o-mini',
         mode = require('model').mode.REPLACE,
         builder = function()
             local cwd = vim.fn.expand('%:h')
