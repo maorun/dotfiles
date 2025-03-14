@@ -1,17 +1,5 @@
 return {
     {
-        'maorun/codeium.nvim',
-        enabled = false, -- only online usable and cannot be disabled on-the-fly
-        -- event = 'InsertEnter',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'hrsh7th/nvim-cmp',
-        },
-        init = function()
-            require('codeium').setup({})
-        end
-    },
-    {
         'zbirenbaum/copilot.lua',
         cmd = 'Copilot',
         event = 'InsertEnter',
@@ -40,31 +28,4 @@ return {
             end)
         end,
     },
-    {
-        enabled = false, -- only usable with openai
-        'jackMort/ChatGPT.nvim',
-        event = 'VimEnter',
-        init = function()
-            package.loaded['chatgpt.api'] = nil
-            package.loaded['chatgpt.flows.chat.base'] = nil
-            package.loaded['chatgpt.flows.chat'] = nil
-            package.loaded['chatgpt.module'] = nil
-            package.loaded['chatgpt.settings'] = nil
-            package.loaded['chatgpt.config'] = nil
-            package.loaded['chatgpt'] = nil
-            require('chatgpt').setup({
-                api_host_cmd = 'echo -n http://0.0.0.0:8000',
-                api_key_cmd = 'noting',
-                openai_params = {
-                    stream = false,
-                }
-            })
-        end,
-        dependencies = {
-            'MunifTanjim/nui.nvim',
-            'nvim-lua/plenary.nvim',
-            'folke/trouble.nvim',
-            'nvim-telescope/telescope.nvim'
-        },
-    }
 }
