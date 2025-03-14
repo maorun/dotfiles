@@ -31,7 +31,7 @@ return {
                 })
             end
 
-            local on_attach = function(_, bufnr)
+            local on_attach = function(client, bufnr)
                 -- Enable completion triggered by <c-x><c-o>
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
                 -- buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
@@ -58,13 +58,26 @@ return {
                     { 'gf', ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References',      remap = false },
                     { 'gy', ':lua vim.lsp.buf.type_definition()<CR>',                 desc = 'Type definition', remap = false },
                 })
+                if (client.name == 'ts_ls') then
+                    wk.add({
+                        {
+                            '<leader>o',
+                            function()
+                                client.request('workspace/executeCommand', {
+                                    command = '_typescript.organizeImports',
+                                    arguments = { vim.fn.expand('%:p') }
+                                })
+                            end,
+                            desc = 'Organize imports'
+                        },
+                    })
+                end
             end
             -- Diagnostics mapping (should also available without LSP)
             wk.add({
                 { '<leader>l',  group = 'LSP' },
-                { '<leader>lK', ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>',                                              desc = 'open_float',       remap = false },
-                { '<leader>lq', ':lua vim.diagnostic.setloclist()<cr>',                                                                                desc = 'show diagnostics', remap = false },
-                { '<leader>o',  ':lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<cr>', desc = 'Organize imports', remap = false },
+                { '<leader>lK', ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', desc = 'open_float', },
+                { '<leader>lq', ':lua vim.diagnostic.setloclist()<cr>',                                   desc = 'show diagnostics', },
             })
             wk.add({
                 { 'g',  group = 'Goto' },
@@ -258,8 +271,10 @@ return {
             }
 
             local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+            ---@diagnostic disable-next-line: duplicate-set-field
             function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
                 opts = opts or {}
+                ---@diagnostic disable-next-line: inject-field
                 opts.border = opts.border or border
                 return orig_util_open_floating_preview(contents, syntax, opts, ...)
             end
