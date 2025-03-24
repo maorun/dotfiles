@@ -11,7 +11,17 @@ return {
     'tpope/vim-commentary',            -- gcc
     'tpope/vim-surround',              -- add/delete/change surround
     'tpope/vim-repeat',                -- repeat all plugins with .
-    'vim-scripts/ReplaceWithRegister', -- replace with register - gr
+    -- 'vim-scripts/ReplaceWithRegister', -- replace with register - gr
+    {
+        'gbprod/substitute.nvim',
+        config = function()
+            require("substitute").setup()
+            vim.keymap.set('n', '<leader>s', require('substitute').operator, { noremap = true })
+            vim.keymap.set('n', '<leader>ss', require('substitute').line, { noremap = true })
+            vim.keymap.set('n', '<leader>S', require('substitute').eol, { noremap = true })
+            vim.keymap.set('x', '<leader>s', require('substitute').visual, { noremap = true })
+        end,
+    },
 
     -- multi-select
     --  , 'mg979/vim-visual-multi', {'branch': 'master'}
