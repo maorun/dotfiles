@@ -5,8 +5,14 @@ return {
         'nvim-lua/plenary.nvim',
         'nvim-tree/nvim-web-devicons',
     },
-    init = function()
-        require 'octo'.setup()
+    config = function()
+        require 'octo'.setup({
+            mappings = {
+                file_panel = {
+                    toggle_viewed = { lhs = '<localleader><space>', desc = 'toggle viewer viewed state' },
+                }
+            }
+        })
         vim.g.octo_viewer = 'maorun' -- https://github.com/pwntester/octo.nvim/issues/466
 
         local octoGroup = vim.api.nvim_create_augroup('Octo', {})
