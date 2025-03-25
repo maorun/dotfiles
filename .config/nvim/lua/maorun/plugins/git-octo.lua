@@ -29,19 +29,6 @@ return {
             )
         end
 
-        function RebaseMergeConfirm()
-            vim.ui.select({ 'yes', 'no' }, {
-                prompt = 'Merge Rebase?',
-                kind = 'ass'
-            }, function(selected)
-                if (selected == 'yes') then
-                    local commands = require('octo.commands')
-                    commands.merge_pr('rebase')
-                end
-            end
-            )
-        end
-
         function DismissReview()
             vim.cmd.split()
             vim.cmd.terminal('grd ' .. vim.fn.expand('%:t'))
@@ -56,9 +43,7 @@ return {
                     { silent = true, noremap = true })
                 vim.api.nvim_buf_set_keymap(0, 'i', '#', '#<C-x><C-o>',
                     { silent = true, noremap = true })
-                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>ppm', ':lua RebaseMergeConfirm()<cr>',
-                    { silent = true, noremap = true })
-                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>ppn', ':lua SquashMergeConfirm()<cr>',
+                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>ppm', ':lua SquashMergeConfirm()<cr>',
                     { silent = true, noremap = true })
                 vim.api.nvim_buf_set_keymap(0, 'n', '<leader>ppc', ':Octo pr checks<cr>',
                     { silent = true, noremap = true })
