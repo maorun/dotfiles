@@ -37,26 +37,29 @@ return {
                 -- buf_set_keymap('i', '<C-Space>', '<c-x><c-o>', {noremap = true})
 
                 wk.add({
-                    { '<leader>ff',     Lsp_formatting,                                           desc = 'format with LSP', remap = false },
-                    { '<leader>l',      group = 'LSP' },
-                    { '<leader>l<C-k>', ':lua vim.lsp.buf.signature_help()<CR>',                  desc = 'Signature help',  remap = false },
-                    { '<leader>lc',     ':lua vim.lsp.buf.code_action()<CR>',                     desc = 'code-action',     remap = false },
-                    { '<leader>lf',     Lsp_formatting,                                           desc = 'format',          remap = false },
-                    { '<leader>lg',     group = 'Goto' },
-                    { '<leader>lgD',    ':lua vim.lsp.buf.declaration()<CR>',                     desc = 'Declaration',     remap = false },
-                    { '<leader>lgd',    ':lua vim.lsp.buf.definition()<CR>',                      desc = 'Definition',      remap = false },
-                    { '<leader>lgi',    ':lua vim.lsp.buf.implementation()<CR>',                  desc = 'Implementaion',   remap = false },
-                    { '<leader>lgr',    ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References',      remap = false },
-                    { '<leader>lgt',    ':lua vim.lsp.buf.type_definition()<CR>',                 desc = 'Type definition', remap = false },
-                    { '<leader>lk',     ':lua vim.lsp.buf.hover()<CR>',                           desc = 'Hover',           remap = false },
-                    { '<leader>lr',     ':lua vim.lsp.buf.rename()<CR>',                          desc = 'rename',          remap = false },
+                    { '<leader>ff', Lsp_formatting, desc = 'format with LSP', },
+                    {
+                        'K',
+                        function()
+                            vim.lsp.buf.hover({
+                                border = {
+                                    { '╔', 'LspFloatWinBorder' },
+                                    { '═', 'LspFloatWinBorder' },
+                                    { '╗', 'LspFloatWinBorder' },
+                                    { '║', 'LspFloatWinBorder' },
+                                    { '╝', 'LspFloatWinBorder' },
+                                    { '═', 'LspFloatWinBorder' },
+                                    { '╚', 'LspFloatWinBorder' },
+                                    { '║', 'LspFloatWinBorder' },
+                                },
+                            })
+                        end,
+                        desc = 'LSP - hover with border'
+                    },
                 })
+
                 wk.add({
-                    { 'g',  group = 'Goto' },
-                    { 'gD', ':lua vim.lsp.buf.declaration()<CR>',                     desc = 'Declaration',     remap = false },
-                    { 'gd', ':lua vim.lsp.buf.definition()<CR>',                      desc = 'Definition',      remap = false },
-                    { 'gf', ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References',      remap = false },
-                    { 'gy', ':lua vim.lsp.buf.type_definition()<CR>',                 desc = 'Type definition', remap = false },
+                    { 'grr', ':lua require("telescope.builtin").lsp_references()<CR>', desc = 'References' },
                 })
                 if (client.name == 'ts_ls') then
                     wk.add({
@@ -73,16 +76,11 @@ return {
                     })
                 end
             end
+
             -- Diagnostics mapping (should also available without LSP)
             wk.add({
                 { '<leader>l',  group = 'LSP' },
-                { '<leader>lK', ':lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})<cr>', desc = 'open_float', },
-                { '<leader>lq', ':lua vim.diagnostic.setloclist()<cr>',                                   desc = 'show diagnostics', },
-            })
-            wk.add({
-                { 'g',  group = 'Goto' },
-                { 'g[', ':lua vim.diagnostic.goto_prev()<CR>zz', desc = 'next diagnostic', remap = false },
-                { 'g]', ':lua vim.diagnostic.goto_next()<CR>zz', desc = 'prev diagnostic', remap = false },
+                { '<leader>lq', ':lua vim.diagnostic.setloclist()<cr>', desc = 'show diagnostics', },
             })
 
             local servers = {
@@ -128,18 +126,7 @@ return {
                         vim.api.nvim_create_autocmd('BufWritePre', {
                             group = vim.api.nvim_create_augroup('format', {}),
                             buffer = bufnr,
-                            callback = function(event)
-                                local ts_clients = vim.lsp.get_clients({
-                                    name = 'ts_ls',
-                                    bufnr = event.buf,
-                                })
-
-                                if (ts_clients) then
-                                    ts_clients[1].request('workspace/executeCommand', {
-                                        command = '_typescript.organizeImports',
-                                        arguments = { vim.fn.expand('%:p') }
-                                    })
-                                end
+                            callback = function()
                                 vim.lsp.buf.format({
                                     async = false,
                                     filter = function(formatClient)
@@ -265,34 +252,26 @@ return {
                 command = 'setlocal signcolumn=yes',
             })
 
-            local border = {
-                { '╔', 'LspFloatWinBorder' },
-                { '═', 'LspFloatWinBorder' },
-                { '╗', 'LspFloatWinBorder' },
-                { '║', 'LspFloatWinBorder' },
-                { '╝', 'LspFloatWinBorder' },
-                { '═', 'LspFloatWinBorder' },
-                { '╚', 'LspFloatWinBorder' },
-                { '║', 'LspFloatWinBorder' },
-            }
-
-            local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-            ---@diagnostic disable-next-line: duplicate-set-field
-            function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-                opts = opts or {}
-                ---@diagnostic disable-next-line: inject-field
-                opts.border = opts.border or border
-                return orig_util_open_floating_preview(contents, syntax, opts, ...)
-            end
-
             -- Show source in diagnostics
             vim.diagnostic.config({
+                virtual_lines = {
+                    current_line = true,
+                    format = function(diagnostic)
+                        local source = diagnostic.source
+                        if source and source ~= 'null' then
+                            return string.format('[%s]: %s', source, diagnostic.message)
+                        else
+                            return diagnostic.message
+                        end
+                    end
+                },
+                underline = true,
                 virtual_text = {
-                    source = true
+                    format = function()
+                        return '!'
+                    end,
                 },
-                float = {
-                    source = true
-                },
+                signs = false,
             })
         end,
     }
