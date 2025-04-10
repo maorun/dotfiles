@@ -4,7 +4,7 @@ return {
         build = ':TSUpdate',
         config = function()
             require 'nvim-treesitter.configs'.setup {
-                ensure_installed = { 'mchat', 'graphql', 'lua', 'html', 'php', 'javascript', 'tsx', 'typescript', 'bash', 'make', 'markdown', 'regex', 'vim', 'vimdoc', 'yaml' },
+                ensure_installed = { 'mchat', 'graphql', 'lua', 'html', 'javascript', 'tsx', 'typescript', 'bash', 'make', 'markdown', 'regex', 'vim', 'vimdoc', 'yaml' },
                 syncinstall = true,
                 -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/plugin/nvim-treesitter.vim
                 highlight = {
@@ -21,7 +21,7 @@ return {
                 playground = {
                     enable = false,
                     disable = {},
-                    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+                    updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
                     persist_queries = false, -- Whether the query persists across vim sessions
                     keybindings = {
                         toggle_query_editor = 'o',
@@ -63,7 +63,7 @@ return {
     },
     {
         'nvim-treesitter/nvim-treesitter-context',
-        event = "VimEnter",
+        event = 'VimEnter',
         dependencies = {
             'nvim-treesitter/nvim-treesitter'
         },
