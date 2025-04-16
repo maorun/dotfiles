@@ -93,8 +93,6 @@ local wk = require('which-key')
 wk.add({
     { '<C-E>',      '<C-B>',                                    desc = 'Scroll up' }, -- because of tmux
     { 'N',          'Nzz',                                      desc = 'prev search' },
-    { 'gO',         'O<Esc>',                                   desc = 'add a line above', },
-    { 'go',         'o<Esc>',                                   desc = 'add a line below', },
     { 'n',          'nzz',                                      desc = 'next search' },
     { '<',          '<gv',                                      desc = 'indent left',                                           mode = 'x' },
     { '>',          '>gv',                                      desc = 'indent right',                                          mode = 'x' },

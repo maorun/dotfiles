@@ -66,6 +66,10 @@ return {
                 vim.api.nvim_buf_set_keymap(0, 'n', '<leader>sf',
                     ':%s/.*\\[\\(\\d\\+\\).*](\\(.*\\))/\\1 \\2/<cr><C-l>',
                     { silent = true, noremap = true })
+                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>rs', ':Octo review submit<cr>',
+                    { silent = true, noremap = true })
+                vim.api.nvim_buf_set_keymap(0, 'n', '<leader>rq', ':Octo review discard<cr>',
+                    { silent = true, noremap = true })
             end,
         })
         vim.api.nvim_create_autocmd('FileType', {
