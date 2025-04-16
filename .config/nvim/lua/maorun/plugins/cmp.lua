@@ -37,35 +37,14 @@ return {
         dependencies = {
             'zbirenbaum/copilot.lua'
         },
-        init = function()
-            require('copilot_cmp').setup()
-        end
-    },
-    {
-        'tzachar/cmp-tabnine',
-        event = 'InsertEnter',
-        build = './install.sh',
-        dependencies = 'hrsh7th/nvim-cmp',
-        init = function()
-            local tabnine = require('cmp_tabnine.config')
-
-            tabnine:setup({
-                max_lines = 1000,
-                max_num_results = 20,
-                sort = true,
-                run_on_every_keystroke = true,
-                snippet_placeholder = '..',
-                ignored_file_types = {
-                    -- uncomment to ignore in lua:
-                    -- lua = true
-                },
-                show_prediction_strength = false
-            })
-        end
+        opts = {},
     },
     {
         'hrsh7th/nvim-cmp',
         -- event = "VimEnter",
+        dependencies = {
+            'L3MON4D3/LuaSnip'
+        },
         init = function()
             local has_words_before = function()
                 unpack = unpack or table.unpack
@@ -160,7 +139,6 @@ return {
                             luasnip = '[LuaSnip]',
                             treesitter = '[Treesitter]',
                             copilot = '[Copilot]',
-                            cmp_tabnine = '[Tabnine]',
                             codeium = '[Codeium]',
                             tickets = '[Ticket]'
                         })[entry.source.name]
@@ -173,12 +151,11 @@ return {
                 sources = {
                     { name = 'nvim_lsp', },
                     { name = 'tickets', },
-                    { name = 'copilot',     max_item_count = 5 },
-                    { name = 'cmp_tabnine', max_item_count = 5 },
+                    { name = 'copilot',  max_item_count = 5 },
                     { name = 'luasnip' },
-                    { name = 'codeium',     max_item_count = 5 },
-                    { name = 'nvim_lua',    max_item_count = 5 },
-                    { name = 'buffer',      max_item_count = 5 },
+                    { name = 'codeium',  max_item_count = 5 },
+                    { name = 'nvim_lua', max_item_count = 5 },
+                    { name = 'buffer',   max_item_count = 5 },
                     {
                         name = 'omni',
                         max_item_count = 5,

@@ -12,11 +12,6 @@ return {
                 end
             }
         },
-        keys = {
-            { '<leader>tts', '<cmd>lua Time.TimeStop()<cr>',   desc = 'TimeStop',   noremap = true },
-            { '<leader>ttp', '<cmd>lua Time.TimePause()<cr>',  desc = 'TimePause',  noremap = true },
-            { '<leader>ttr', '<cmd>lua Time.TimeResume()<cr>', desc = 'TimeResume', noremap = true },
-        },
         init = function()
             require 'maorun.time'.setup({
                 hoursPerWeekday = {

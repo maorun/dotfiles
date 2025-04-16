@@ -114,21 +114,6 @@ return {
             -- })
             -- Load user extension
         end,
-        keys = {
-            { '<leader>tf',  "<cmd>lua require('telescope.builtin').find_files()<cr>",                                                                                                                                                            desc = 'Find files',             noremap = true },
-            { '<leader>tr',  "<cmd>lua require('telescope.builtin').live_grep { vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--hidden', '-g', '!git/**'} }<cr>", desc = 'Live Grep',              noremap = true },
-            { '<leader>tp',  "<cmd>lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>",                                                                                                                               desc = 'Project',                noremap = true },
-            { '<leader>tl',  "<cmd>lua require('telescope.builtin').oldfiles({cwd_only=true})<cr>",                                                                                                                                               desc = 'Find last opened files', noremap = true },
-
-            { '<leader>gsl', '<cmd>Telescope git_stash<cr>',                                                                                                                                                                                      desc = 'Stash list',             noremap = true },
-            { '<leader>gss', '<cmd>Telescope git_status<cr>',                                                                                                                                                                                     desc = 'changed files',          noremap = true },
-            { '<leader>gg',  "<cmd>lua require'telescope.builtin'.git_files{}<cr>",                                                                                                                                                               desc = 'Git files',              noremap = true },
-            { '<leader>gba', "<cmd>lua require'telescope.builtin'.git_branches()<cr>",                                                                                                                                                            desc = 'Git all branches',       noremap = true },
-            { '<leader>gbb', "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>",                                                                                                                                    desc = 'Git lokal branches',     noremap = true },
-            { '<leader>gbr', "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/remotes'})<cr>",                                                                                                                                  desc = 'Git remote branches',    noremap = true },
-
-            { '<leader>bb',  '<cmd>lua require("telescope.builtin").buffers()<cr>',                                                                                                                                                               desc = 'show Buffers',           noremap = true },
-        },
         dependencies = {
             {
                 'BurntSushi/ripgrep',
@@ -146,21 +131,6 @@ return {
         config = function()
             require('telescope').load_extension 'file_browser'
         end,
-        keys = {
-            {
-                '<leader>ve',
-                function()
-                    require('telescope').extensions.file_browser.file_browser({
-                        path = '~/dotfiles/',
-                        prompt_title = '* dotfiles *',
-                    })
-                end,
-                desc = 'find file in dotfiles',
-                noremap = true
-            },
-            { '<leader>nf', ':Telescope file_browser follow_symlink=true path=%:p:h select_buffer=true<cr>', desc = 'current file', noremap = true },
-            { '<leader>nt', ':Telescope file_browser respect_gitignore=true<cr>',                            desc = 'open tree',    noremap = true },
-        },
     },
     {
         event = 'VimEnter',

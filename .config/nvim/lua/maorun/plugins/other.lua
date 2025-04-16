@@ -39,11 +39,5 @@ return {
                 },
             })
         end,
-        keys = {
-            { '<leader>tn',  group = ':Other' },
-            { '<leader>tnn', '<cmd>:Other<cr>',       desc = ':Other',       remap = false },
-            { '<leader>tns', '<cmd>:OtherSplit<cr>',  desc = ':OtherSplit',  remap = false },
-            { '<leader>tnv', '<cmd>:OtherVSplit<cr>', desc = ':OtherVSplit', remap = false },
-        }
     }
 }

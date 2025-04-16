@@ -1,26 +1,17 @@
 return {
     {
         'folke/which-key.nvim',
-        dependencies = { 'echasnovski/mini.nvim' },
-        init = function()
-            require('which-key').setup {}
-        end
+        event = 'VeryLazy',
     },
     'nvim-lua/plenary.nvim',
-    'tpope/vim-sleuth',                -- adjust 'shiftwidth' and 'expandtab'
-    'tpope/vim-commentary',            -- gcc
-    'tpope/vim-surround',              -- add/delete/change surround
-    'tpope/vim-repeat',                -- repeat all plugins with .
+    'tpope/vim-sleuth',     -- adjust 'shiftwidth' and 'expandtab'
+    'tpope/vim-commentary', -- gcc
+    'tpope/vim-surround',   -- add/delete/change surround
+    'tpope/vim-repeat',     -- repeat all plugins with .
     -- 'vim-scripts/ReplaceWithRegister', -- replace with register - gr
     {
         'gbprod/substitute.nvim',
-        config = function()
-            require("substitute").setup()
-            vim.keymap.set('n', '<leader>s', require('substitute').operator, { noremap = true })
-            vim.keymap.set('n', '<leader>ss', require('substitute').line, { noremap = true })
-            vim.keymap.set('n', '<leader>S', require('substitute').eol, { noremap = true })
-            vim.keymap.set('x', '<leader>s', require('substitute').visual, { noremap = true })
-        end,
+        opts ={}
     },
 
     -- multi-select
@@ -41,12 +32,10 @@ return {
     },
     {
         'nvim-tree/nvim-web-devicons',
-        init = function()
-            require 'nvim-web-devicons'.setup {
-                color_icons = true,
-                default = true
-            }
-        end
+        opts = {
+            color_icons = true,
+            default = true
+        },
     },
     {
         enabled = false,
@@ -92,16 +81,7 @@ return {
     },
     {
         'smoka7/hop.nvim',
-        init = function()
-            local hop = require 'hop'
-            hop.setup {}
-            vim.keymap.set('', 'S', function()
-                hop.hint_char2({ multi_windows = true })
-            end, { remap = true })
-            vim.keymap.set('', 's', function()
-                hop.hint_char2({ multi_windows = true })
-            end, { remap = true })
-        end
+        opts = {}
     },
     {
         'stevearc/quicker.nvim',

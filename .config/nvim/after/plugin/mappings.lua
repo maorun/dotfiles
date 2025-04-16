@@ -1,6 +1,3 @@
-vim.cmd "nnoremap gx yiW:!open '<cWORD>'<CR><CR>"
-vim.cmd "nnoremap gix yib:!open '<c-r>\"'<CR><CR>"
-
 -- got to indention level {{{
 vim.cmd [[
     function! s:indent_len(str)
@@ -25,8 +22,6 @@ vim.cmd [[
         endfor
     endfunction
 
-    nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
-    nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
 ]]
 -- }}}
 
@@ -43,7 +38,7 @@ NewBuffer = function(args)
     end
 end
 
-local ReloadBuffer = function()
+ReloadBuffer = function()
     local buf = vim.api.nvim_create_buf(false, true)
     local curr = vim.api.nvim_get_current_win()
     local col = vim.fn.charcol('.')
@@ -89,53 +84,3 @@ function Job(opts)
     plenaryJob:new(opts):start()
 end
 
-local wk = require('which-key')
-wk.add({
-    { '<C-E>',      '<C-B>',                                    desc = 'Scroll up' }, -- because of tmux
-    { 'N',          'Nzz',                                      desc = 'prev search' },
-    { 'n',          'nzz',                                      desc = 'next search' },
-    { '<',          '<gv',                                      desc = 'indent left',                                           mode = 'x' },
-    { '>',          '>gv',                                      desc = 'indent right',                                          mode = 'x' },
-    { '<leader>b',  group = 'Buffer' },
-    { '<leader>bd', ':%bd|e#<cr>',                              desc = 'delete all buffers', },
-    { '<leader>br', ReloadBuffer,                               desc = 'reload buffer', },
-    { '<leader>e',  ":execute '!' .(expand(getline('.')))<cr>", desc = 'execute line under cursor (shellescape does not work)', },
-    { '<leader>f',  group = 'Formatting' },
-    { '<leader>fj', ':%!jq .<cr>',                              desc = 'JSON pretty print', },
-    { '<leader>i',  desc = 'go to next indent', },
-    { '<leader>pi', desc = 'go to previous indent', },
-    { '<leader>q',  group = 'General Commands' },
-    { '<leader>w',  ':w<cr>zvzz',                               desc = 'Save', },
-
-    { 'ihe',        ':exec "normal! ggVG"<cr>',                 desc = 'select all',                                            mode = 'o', },
-
-    { '<C-h>',      '<C-g>u<Esc>[s1z=`]a<C-g>u',                desc = 'fix prev spelling mistake',                             mode = 'i' },
-    { 'jk',         '<Esc>',                                    desc = 'to normal mode',                                        mode = { 'i', 'v', 'c' } },
-})
-
-
-vim.cmd [[
-
-    " yank and paste to/from system-clipboard (Mac)
-    vnoremap <silent> ç "+y
-    vnoremap <silent> <M-c> "+y
-    nnoremap <silent> ç :set operatorfunc=CopyToSystemClipboard<cr>g@
-    nnoremap <silent> <M-c> :set operatorfunc=CopyToSystemClipboard<cr>g@
-    nnoremap <silent> √ "+p
-    nnoremap <silent> <M-v> "+p
-    inoremap <silent> √ <Esc>"+pa
-    inoremap <silent> <M-v> <Esc>"+pa
-
-    function! CopyToSystemClipboard(type)
-        if a:type ==# 'line'
-            silent execute "normal! `[V`]\"+y"
-        elseif a:type ==# 'char'
-            silent execute "normal! `[v`]\"+y"
-        else
-            return
-        endif
-
-        " echo @@ "yanked into clipboard"
-    endfunction
-
-]]

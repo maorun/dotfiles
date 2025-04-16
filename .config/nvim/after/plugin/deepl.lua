@@ -33,7 +33,4 @@ vim.cmd [[
         endif
     endfunction
 
-    nnoremap <silent> <leader>u :set operatorfunc=DeepL<cr>g@
-    vnoremap <leader>u :<c-u>call DeepL(visualmode())<cr>
-
 ]]
