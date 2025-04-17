@@ -1,9 +1,9 @@
 require('maorun.personal') -- for the auth-key
 
 vim.cmd [[
-    function! RequestDeepl(text)
+    function! RequestDeepl(text, path = '/v2/translate')
         let auth = g:deepl_api_key
-        let url = "https://api-free.deepl.com/v2/translate"
+        let url = "https://api-free.deepl.com" .. a:path
         let header = 'Authorization: DeepL-Auth-Key ' .. auth
         let contentType = 'Content-Type: application/json'
         let data = '{ "text": [ "' .. a:text .. '" ], "target_lang": "EN" }'
@@ -15,15 +15,15 @@ vim.cmd [[
          return resultJson.translations[0].text
     endfunction
 
-    function! DeepL(type)
+    function! DeepL(type, path = '/v2/translate')
         if a:type ==# 'char'
             execute "normal! `[v`]y"
-            let response = RequestDeepl(@@)
+            let response = RequestDeepl(@@, a:path)
             execute "normal! `<v`>c" .. (response)
             echom "translated c"
         elseif a:type ==# 'v'
             normal! `<v`>y
-            let response = RequestDeepl(@@)
+            let response = RequestDeepl(@@, a:path)
             execute "normal! `<v`>c" .. (response)
             echom "translated v"
         else
