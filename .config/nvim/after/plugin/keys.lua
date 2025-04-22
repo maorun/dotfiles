@@ -33,7 +33,11 @@ wk.add({
     { '<',           '<gv',                                                                              desc = 'indent left',                                           mode = 'x' },
     { '>',           '>gv',                                                                              desc = 'indent right',                                          mode = 'x' },
     { '<C-E>',       '<C-B>',                                                                            desc = 'Scroll up' }, -- because of tmux
+    { '<C-d>',       '<C-d>zz' },
     { '<C-h>',       '<C-g>u<Esc>[s1z=`]a<C-g>u',                                                        desc = 'fix prev spelling mistake',                             mode = 'i' },
+    { '<C-i>',       '<C-i>zz' },
+    { '<C-o>',       '<C-o>zz' },
+    { '<C-u>',       '<C-u>zz' },
     { '<leader>b',   group = 'Buffer' },
     { '<leader>bb',  '<cmd>lua require("telescope.builtin").buffers()<cr>',                              desc = 'show Buffers', },
     { '<leader>bd',  ':%bd|e#<cr>',                                                                      desc = 'delete all buffers', },
@@ -183,6 +187,22 @@ wk.add({
     { 'N',           'Nzz',                                     desc = 'prev search' },
     { mode = 'i',    { '<C-n>', '<Plug>luasnip-next-choice', }, { '<C-p>', '<Plug>luasnip-prev-choice', } },
 })
+
+-- add j to jumplist
+vim.keymap.set('n', 'j', function()
+    if vim.v.count > 0 then
+        return "m'" .. vim.v.count .. 'jzz'
+    end
+    return 'j'
+end, { expr = true })
+
+-- add k to jumplist
+vim.keymap.set('n', 'k', function()
+    if vim.v.count > 0 then
+        return "m'" .. vim.v.count .. 'kzz'
+    end
+    return 'k'
+end, { expr = true })
 
 -- vim.cmd[[inoremap <c-u> <cmd>lua require("luasnip.extras.select_choice")()<cr>]]
 vim.keymap.set('', 'S', function() require('hop').hint_char2({ multi_windows = true }) end,
