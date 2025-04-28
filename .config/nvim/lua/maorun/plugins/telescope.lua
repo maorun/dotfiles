@@ -10,6 +10,8 @@ return {
                 defaults = {
                     file_ignore_patterns = {
                         '.cache/',
+                        '.obsidian/',
+                        '.trash/',
                         '.next/',
                         'vendor/',
                         '.git/',
@@ -123,7 +125,7 @@ return {
         },
     },
     {
-        'maorun/telescope-file-browser.nvim',
+        'nvim-telescope/telescope-file-browser.nvim',
         dependencies = {
             'nvim-telescope/telescope.nvim',
             'nvim-lua/plenary.nvim'

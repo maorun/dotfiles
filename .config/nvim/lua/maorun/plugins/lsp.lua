@@ -12,7 +12,7 @@ return {
             'folke/neodev.nvim', -- lsp for neovim
         },
         event = 'VimEnter',
-        init = function()
+        config = function()
             local wk = require('which-key')
 
             require('neodev').setup({
@@ -203,32 +203,28 @@ return {
                     -- https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#extension-settings
                     tailwindCSS = {
                         showPixelEquivalents = false,
-                        -- experimental = {
-                        --     configFile = {
-                        --     [ "./packages/backend/tailwind.config.js" ] = "packages/backend/**",
-                        --     [ "./packages/shared/tailwind.config.js" ] = "packages/**"
-                        --     }
-                        -- },
+                        classFunctions = { 'tw', 'clsx', 'classNames' },
+                        experimental = {
+                            configFile = {
+                                ['/Users/mdriemel/repos/ac-steam/packages/tailwindcss/bildkaufberater/tailwind.css'] = '**/BildKaufberater/**',
+                                ['/Users/mdriemel/repos/ac-steam/packages/tailwindcss/bild/tailwind.css'] = '**/Bild/**',
+                                ['/Users/mdriemel/repos/ac-steam/packages/tailwindcss/computerbild/tailwind.css'] = '**/ComputerBild/**',
+                                ['/Users/mdriemel/repos/ac-steam/packages/tailwindcss/autobild/tailwind.css'] = '**/AutoBild/**',
+                                ['/Users/mdriemel/repos/ac-steam/packages/backend/app/tailwind.css'] = '**/backend/**',
+                            }
+                        }
                     }
                 },
                 root_dir = function(fname)
-                    if (string.find(fname, '/Users/mdriemel/repos/ac%-steam/packages/backend')) then
-                        return '/Users/mdriemel/repos/ac-steam/packages/backend/'
-                    else
-                        if (string.find(fname, '/Users/mdriemel/repos/ac%-steam')) then
-                            return '/Users/mdriemel/repos/'
-                        end
+                    if (string.find(fname, '/Users/mdriemel/repos/ac%-steam')) then
+                        return '/Users/mdriemel/repos/ac-steam/'
                     end
 
                     local rootPath = nvim_lsp.util.root_pattern('tailwind.config.js',
                             'tailwind.config.cjs',
-                            'tailwind.config.mjs', 'tailwind.config.ts'
+                            'tailwind.config.mjs', 'tailwind.config.ts',
+                            'tailwind.css'
                         )(
-                            fname
-                        ) or
-                        nvim_lsp.util.root_pattern('postcss.config.js', 'postcss.config.cjs',
-                            'postcss.config.mjs',
-                            'postcss.config.ts')(
                             fname
                         ) or nvim_lsp.util.find_package_json_ancestor(fname) or
                         nvim_lsp.util.find_node_modules_ancestor(fname) or
