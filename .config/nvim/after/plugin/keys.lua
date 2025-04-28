@@ -114,8 +114,7 @@ wk.add({
         '<leader>gpf',
         function()
             vim.cmd [[
-        :execute ":G push origin " . FugitiveHead()
-        :execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
+        :execute ":G push --force origin " . FugitiveHead()
         ]]
         end,
         desc = 'Force Push',
@@ -124,7 +123,8 @@ wk.add({
         '<leader>gpp',
         function()
             vim.cmd [[
-        :execute ":G push --force origin " . FugitiveHead()
+        :execute ":G push origin " . FugitiveHead()
+        :execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
         ]]
         end,
         desc = 'Push',
