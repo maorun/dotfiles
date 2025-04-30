@@ -1,13 +1,59 @@
 vim.cmd "nnoremap gx yiW:!open '<cWORD>'<CR><CR>"
 vim.cmd "nnoremap gix yib:!open '<c-r>\"'<CR><CR>"
-vim.cmd [[
-    nnoremap <silent> <leader>i :<c-u>call <SID>go_indent(v:count1, 1)<cr>
-    nnoremap <silent> <leader>pi :<c-u>call <SID>go_indent(v:count1, -1)<cr>
-]]
+-- got to indention level
+local function Indent_len(str)
+    if type(str) == 'string' then
+        return #str:match('^%s*') or 0
+    else
+        return 0
+    end
+end
+
+local function Go_indent(times, dir)
+    for _ = 1, times do
+        local l = vim.fn.line('.')
+        local x = vim.fn.line('$')
+        local i = Indent_len(vim.fn.getline(l))
+        local e = vim.fn.getline(l) == ''
+
+        while l >= 1 and l <= x do
+            local line = vim.fn.getline(l + dir)
+            l = l + dir
+            local indentOfLine = Indent_len(line)
+            if (
+                    indentOfLine > 0 and indentOfLine < i)
+                or (dir > 0 and indentOfLine ~= i)
+                or ((line == '') == false and (line == '') ~= e)
+            then
+                break
+            end
+        end
+
+        l = math.min(math.max(1, l), x)
+        vim.cmd('normal! ' .. l .. 'G^')
+    end
+end
+
 -- local gs = require('gitsigns')
 local gs = package.loaded.gitsigns
 local wk = require('which-key')
 wk.add({
+    {
+        '[i',
+        function()
+            Go_indent(vim.v.count1, -1)
+        end,
+        desc = 'go to indention level -1',
+        silent = true
+    },
+    {
+        ']i',
+        function()
+            Go_indent(vim.v.count1, 1)
+        end,
+        desc = 'go to indention level 1',
+        silent = true
+    },
     {
         '[h',
         function()
@@ -41,7 +87,7 @@ wk.add({
     { '<leader>b',   group = 'Buffer' },
     { '<leader>bb',  '<cmd>lua require("telescope.builtin").buffers()<cr>', desc = 'show Buffers', },
     { '<leader>bd',  ':%bd|e#<cr>',                                         desc = 'delete all buffers', },
-    { '<leader>br',  ReloadBuffer,                                          desc = 'reload buffer', },
+    { '<leader>br',  ':edit!<cr>',                                          desc = 'reload buffer', },
     { '<leader>d',   group = 'Diff' },
     { '<leader>dd',  ':diffthis<cr>',                                       desc = 'Diff this', },
     { '<leader>df',  ':DiffviewFileHistory %<cr>',                          desc = 'Diffview File History' },
@@ -334,6 +380,8 @@ vim.api.nvim_create_autocmd('FileType', {
                         if (selected == 'yes') then
                             local commands = require('octo.commands')
                             commands.merge_pr('squash')
+                            print('branch squasched')
+                            vim.api.nvim_command('edit!') -- reload current buffer
                         end
                     end
                     )
