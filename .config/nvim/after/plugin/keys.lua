@@ -346,8 +346,6 @@ vim.api.nvim_create_autocmd('FileType', {
                 desc = 'dismissReview'
             }
         })
-        -- vim.api.nvim_buf_set_keymap(0, 'n', ,
-        --     { silent = true, })
         vim.api.nvim_buf_set_keymap(0, 'n', '<C-N>', ':Octo pr browser<cr>',
             { silent = true, })
         vim.api.nvim_buf_set_keymap(0, 'n', '<leader>sf',
