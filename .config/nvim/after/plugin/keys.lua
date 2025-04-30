@@ -123,8 +123,9 @@ wk.add({
         '<leader>gpp',
         function()
             vim.cmd [[
-        :execute ":G push origin " . FugitiveHead()
-        :execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
+        :silent execute ":G push origin " . FugitiveHead()
+        :silent execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
+        :echom 'git-push finished'
         ]]
         end,
         desc = 'Push',
