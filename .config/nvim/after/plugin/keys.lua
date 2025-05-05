@@ -1,3 +1,5 @@
+local notify = require('notify')
+
 vim.cmd "nnoremap gx yiW:!open '<cWORD>'<CR><CR>"
 vim.cmd "nnoremap gix yib:!open '<c-r>\"'<CR><CR>"
 -- got to indention level
@@ -133,10 +135,11 @@ wk.add({
                 if branch == nil then
                     return
                 end
-                vim.cmd(':G fetch --prune')
+                vim.cmd(':silent G fetch --prune')
                 -- create branch
-                vim.cmd(string.format(':G branch %s origin/master', branch))
-                vim.cmd(string.format(':G checkout %s', branch))
+                vim.cmd(string.format(':silent G branch %s origin/master', branch))
+                vim.cmd(string.format(':silent G checkout %s', branch))
+                notify('new branch created')
             end)
         end,
         desc = 'Git New Branch',
@@ -171,8 +174,8 @@ wk.add({
             vim.cmd [[
         :silent execute ":G push origin " . FugitiveHead()
         :silent execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
-        :echom 'git-push finished'
         ]]
+            notify('git-push finished')
         end,
         desc = 'Push',
     },
@@ -380,8 +383,8 @@ vim.api.nvim_create_autocmd('FileType', {
                         if (selected == 'yes') then
                             local commands = require('octo.commands')
                             commands.merge_pr('squash')
-                            print('branch squasched')
-                            vim.api.nvim_command('edit!') -- reload current buffer
+                            -- print('branch squasched')
+                            -- vim.api.nvim_command('edit!') -- reload current buffer
                         end
                     end
                     )
