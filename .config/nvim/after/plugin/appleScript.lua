@@ -1,6 +1,6 @@
 function CallAppleScript(application, command)
     local script = "osascript -e 'tell application \"" ..
-    application .. "\"' -e '" .. command .. "' -e 'end tell' >> /dev/null &"
+        application .. "\"' -e '" .. command .. "' -e 'end tell' >> /dev/null &"
     vim.fn.system(script)
     vim.cmd ':redraw!'
 end
@@ -8,6 +8,7 @@ end
 Maorun = Maorun or {}
 function Maorun.startUp()
     CallAppleScript('Microsoft Outlook', 'activate')
+    CallAppleScript('Pieces', 'activate')
     CallAppleScript('Microsoft Teams', 'activate')
     -- vim.fn.system('open /Applications/Microsoft\\ Teams\\ classic.app')
     -- vim.fn.system('open /Applications/Microsoft\\ Teams\\ \\(work\\ or\\ school\\).app')
