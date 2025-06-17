@@ -78,6 +78,22 @@ wk.add({
         expr = true,
         replace_keycodes = false
     },
+    {
+        ']d',
+        function()
+            vim.diagnostic.jump({ count = 1, float = true })
+            vim.cmd('normal! zz')
+        end,
+        desc = 'Jump to the next diagnostic in the current buffer'
+    },
+    {
+        '[d',
+        function()
+            vim.diagnostic.jump({ count = -1, float = true })
+            vim.cmd('normal! zz')
+        end,
+        desc = 'Jump to the previous diagnostic in the current buffer'
+    },
     { '<',           '<gv',                                                 desc = 'indent left',                                           mode = 'x' },
     { '>',           '>gv',                                                 desc = 'indent right',                                          mode = 'x' },
     { '<C-E>',       '<C-B>',                                               desc = 'Scroll up' }, -- because of tmux
@@ -172,14 +188,18 @@ wk.add({
         '<leader>gpp',
         function()
             vim.cmd [[
-        :silent execute ":G push origin " . FugitiveHead()
-        :silent execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
+        :execute ":G push origin " . FugitiveHead()
+        :execute ":G branch --set-upstream-to=origin/" . FugitiveHead() . " " . FugitiveHead()
         ]]
             notify('git-push finished')
         end,
         desc = 'Push',
     },
-    { '<leader>gpu', ':G pull<cr>',                                    desc = 'Pull', },
+    {
+        '<leader>gpu',
+        ':G pull | :lua  require("notify")("git-pull finished")<cr>',
+        desc = 'Pull',
+    },
     { '<leader>gr',  group = 'Git Rebase' },
     { '<leader>grA', ':G merge --abort<cr>',                           desc = 'Git Merge abort', },
     { '<leader>gra', ':G rebase --abort<cr>',                          desc = 'Git Rebase abort', },
@@ -265,7 +285,7 @@ wk.add({
             local mappingListPlugin = require('maorun.mappingList')
             mappingListPlugin.init()
             mappingListPlugin.mappingList {
-                title = 'octo',
+                title = 'Repositories',
                 list = { 'maorun/code-stats', 'maorun/snyk.nvim', 'spring-media/ac-steam', 'spring-media/maps-setup-hh-flux-cd', 'spring-media/ac-steam-flux', },
                 action = function(value)
                     vim.cmd('Octo pr list ' .. value)
@@ -274,8 +294,120 @@ wk.add({
         end,
         desc = 'list pr of a list of repos',
     },
+    {
+        '<leader>tol',
+        function()
+            local plenaryJob = require 'plenary.job'
+            local lines = {}
+            plenaryJob:new({
+                silent = false,
+                command = 'gh',
+                args = {
+                    'pr', 'list', '--state', 'open', '--json',
+                    'author,number,title,reviewDecision',
+                },
+                interactive = false,
+                on_stdout = function(_, data)
+                    table.insert(lines, data)
+                end,
+                on_stderr = function(_, data)
+                    table.insert(lines, data)
+                end,
+                on_exit = function()
+                    vim.schedule(function()
+                        local item = (vim.json.decode(lines[1]))
+                        if #item == 0 then
+                            notify('no PRs to review in ' .. vim.loop.cwd())
+                            return
+                        end
 
-    { '<leader>tol', ':Octo pr list<cr>',                                                                     desc = 'list PR', },
+                        local prs = {}
+                        for _, value in pairs(item) do
+                            if (
+                                    value.reviewDecision ~= 'APPROVED'
+                                    and value.author.login ~= 'app/renovate'
+                                ) then
+                                table.insert(prs,
+                                    value.number .. ' | ' ..
+                                    value.author.login .. ' | ' ..
+                                    value.title .. ' | ' ..
+                                    value.reviewDecision
+                                )
+                            end
+                        end
+                        local mappingListPlugin = require('maorun.mappingList')
+                        mappingListPlugin.init()
+                        mappingListPlugin.mappingList {
+                            title = 'PR list',
+                            list = prs,
+                            action = function(value)
+                                local pr = vim.split(value, '|')[1]
+                                vim.cmd('Octo pr edit ' .. pr)
+                            end
+                        }
+                    end)
+                end,
+            }):start()
+        end,
+        desc = 'list PR',
+    },
+    {
+        '<leader>too',
+        function()
+            local plenaryJob = require 'plenary.job'
+            local lines = {}
+            plenaryJob:new({
+                silent = false,
+                command = 'gh',
+                args = {
+                    'pr', 'list', '--state', 'open', '--json',
+                    'author,number,title,reviewDecision',
+                },
+                interactive = false,
+                on_stdout = function(_, data)
+                    table.insert(lines, data)
+                end,
+                on_stderr = function(_, data)
+                    table.insert(lines, data)
+                end,
+                on_exit = function()
+                    vim.schedule(function()
+                        local item = (vim.json.decode(lines[1]))
+                        if #item == 0 then
+                            notify('no PRs to review in ' .. vim.loop.cwd())
+                            return
+                        end
+
+                        local prs = {}
+                        for _, value in pairs(item) do
+                            if (
+                                    value.reviewDecision == 'APPROVED'
+                                    and value.author.login == 'maorun'
+                                ) then
+                                table.insert(prs,
+                                    value.number .. ' | ' ..
+                                    value.author.login .. ' | ' ..
+                                    value.title .. ' | ' ..
+                                    value.reviewDecision
+                                )
+                            end
+                        end
+                        local mappingListPlugin = require('maorun.mappingList')
+                        mappingListPlugin.init()
+                        mappingListPlugin.mappingList {
+                            title = 'PR list',
+                            list = prs,
+                            action = function(value)
+                                local pr = vim.split(value, '|')[1]
+                                vim.cmd('Octo pr edit ' .. pr)
+                            end
+                        }
+                    end)
+                end,
+            }):start()
+        end,
+        desc = 'list approved PRs from me',
+    },
     { '<leader>top', function() require 'telescope'.extensions.project.project { display_type = 'full' } end, desc = 'should be keybind of tp fur Project', },
     { '<leader>tp',  function() require 'telescope'.extensions.project.project { display_type = 'full' } end, desc = 'Project', },
 
@@ -373,6 +505,24 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.api.nvim_buf_set_keymap(0, 'n', '<leader>pr', ':Octo thread resolve<cr>',
             { silent = true, })
         wk.add({
+            {
+                'K',
+                function()
+                    local w = vim.fn.expand('<cword>')
+                    if tonumber(w) then
+                        vim.notify('open pr #' .. w)
+
+                        vim.schedule(function()
+                            vim.cmd('Octo pr edit ' .. w)
+                        end)
+
+                        return ''
+                    else
+                        return 'K'
+                    end
+                end,
+                expr = true,
+            },
             {
                 '<leader>ppm',
                 function()
