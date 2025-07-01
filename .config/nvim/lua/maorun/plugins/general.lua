@@ -3,6 +3,13 @@ return {
         'folke/which-key.nvim',
         event = 'VeryLazy',
     },
+    {
+        'rcarriga/nvim-notify', -- better notifications
+        init = function()
+            vim.opt.termguicolors = true
+            vim.api.nvim_set_hl(0, 'NotifyBackground', { bg = '#000000', ctermbg = 0 })
+        end
+    },
     'nvim-lua/plenary.nvim',
     'tpope/vim-sleuth',     -- adjust 'shiftwidth' and 'expandtab'
     'tpope/vim-commentary', -- gcc
