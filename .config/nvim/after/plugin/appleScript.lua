@@ -10,9 +10,8 @@ function Maorun.startUp()
     CallAppleScript('Microsoft Outlook', 'activate')
     CallAppleScript('Pieces', 'activate')
     CallAppleScript('Microsoft Teams', 'activate')
-    -- vim.fn.system('open /Applications/Microsoft\\ Teams\\ classic.app')
-    -- vim.fn.system('open /Applications/Microsoft\\ Teams\\ \\(work\\ or\\ school\\).app')
-    CallAppleScript('Google Chrome', 'activate')
+    -- CallAppleScript('Google Chrome', 'activate')
+    CallAppleScript('Zen', 'activate')
     CallAppleScript('Cisco Secure Client', 'activate')
     -- vim.ui.select({ 'yes', 'no' }, {
     --     prompt = 'Spotify?',

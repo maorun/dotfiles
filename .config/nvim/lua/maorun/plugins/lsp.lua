@@ -91,7 +91,9 @@ return {
                 -- 'phpactor',
                 'sqlls',
                 'eslint',
+                'rust_analyzer',
             }
+            vim.lsp.enable('oxlint')
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             for _, lsp in ipairs(servers) do
@@ -104,12 +106,11 @@ return {
                             },
                             format = {
                                 defaultConfig = {
-                                    indent_style = 'space',
-                                    indent_size = '4',
-                                    -- trailing_table_separator = 'always',
-                                    quote_style = 'single',
-                                    call_arg_parentheses = 'keep',
-                                    max_line_length = '100'
+                                    column_width = 100,
+                                    indent_type = "Spaces",
+                                    indent_width = 4,
+                                    quote_style = "AutoPreferSingle",
+                                    call_parentheses = "Always",
                                 }
                             },
                             diagnostics = {
@@ -200,10 +201,12 @@ return {
             nvim_lsp['tailwindcss'].setup {
                 settings = {
                     classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'classNames' },
+                    classFunctions = { 'tw', 'clsx', 'classNames' },
                     -- https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#extension-settings
                     tailwindCSS = {
-                        showPixelEquivalents = false,
+                        classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'classNames' },
                         classFunctions = { 'tw', 'clsx', 'classNames' },
+                        showPixelEquivalents = false,
                         experimental = {
                             configFile = {
                                 ['/Users/mdriemel/repos/ac-steam/packages/tailwindcss/techbook/tailwind.css'] = '**/Techbook/**',

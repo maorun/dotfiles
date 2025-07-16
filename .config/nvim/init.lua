@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd('BufWritePost', {
         local file = vim.fn.expand('<afile>') -- Get the full path of the written file
 
         -- Exclude files ending with .spec.lua
-        if not file:match('%.spec%.lua$') then
+        if not file:match('spec%.lua$') then
             vim.cmd('source ' .. file) -- Source the Lua file
         end
     end,

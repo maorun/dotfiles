@@ -506,7 +506,7 @@ vim.api.nvim_create_autocmd('FileType', {
             { silent = true, })
         wk.add({
             {
-                'K',
+                '<leader>k',
                 function()
                     local w = vim.fn.expand('<cword>')
                     if tonumber(w) then

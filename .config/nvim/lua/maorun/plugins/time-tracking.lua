@@ -12,8 +12,8 @@ return {
                     Monday = 8,
                     Tuesday = 8,
                     Wednesday = 8,
-                    Thursday = 7,
-                    Friday = 5,
+                    Thursday = 8,
+                    Friday = 0,
                 },
 
             })

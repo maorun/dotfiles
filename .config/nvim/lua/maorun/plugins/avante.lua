@@ -15,7 +15,7 @@ return {
             auto_suggestions_provider = 'openai',
             -- auto_suggestions_provider = 'ollama',
             -- max_tokens = 4096,
-            vendors = {
+            providers = {
                 codellama = {
                     __inherited_from = 'ollama',
                     model = 'codellama:13b'
@@ -28,14 +28,14 @@ return {
                     __inherited_from = 'ollama',
                     model = 'qwen2.5-coder:32b',
                 },
-            },
-            ollama = {
-                endpoint = 'http://127.0.0.1:11434',
-                model = 'codellama',
-                -- deepseek-coder-v2
-                -- codestral
-                -- codellama
-                -- qwen2.5-coder:32b
+                ollama = {
+                    endpoint = 'http://127.0.0.1:11434',
+                    model = 'codellama',
+                    -- deepseek-coder-v2
+                    -- codestral
+                    -- codellama
+                    -- qwen2.5-coder:32b
+                },
             },
         },
         -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

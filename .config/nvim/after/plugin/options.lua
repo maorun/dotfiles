@@ -118,8 +118,8 @@ vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algori
 
 vim.opt.foldenable = true
 vim.opt.foldlevelstart = 999
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldmethod = 'indent'
+-- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.spelllang = 'en,de'
 
 vim.cmd [[

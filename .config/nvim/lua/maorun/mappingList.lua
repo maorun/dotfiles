@@ -1,12 +1,14 @@
-local finders = require "telescope.finders"
-local pickers = require "telescope.pickers"
-local previewers = require "telescope.previewers"
-local actions = require "telescope.actions"
-local conf = require("telescope.config").values
-local action_state = require("telescope.actions.state")
-local entry_display = require("telescope.pickers.entry_display")
+package.loaded['maorun.mappingList'] = nil
+
+local finders = require 'telescope.finders'
+local pickers = require 'telescope.pickers'
+local previewers = require 'telescope.previewers'
+local actions = require 'telescope.actions'
+local conf = require('telescope.config').values
+local action_state = require('telescope.actions.state')
+local entry_display = require('telescope.pickers.entry_display')
 local displayer = entry_display.create({
-    separator = " ",
+    separator = ' ',
     items = {
         { remaining = true },
     },
@@ -17,16 +19,16 @@ local make_display = function(entry)
     })
 end
 
-local mappingList= function(opts)
-    opts = vim.tbl_deep_extend("keep", opts or {}, {
+local mappingList = function(opts)
+    opts = vim.tbl_deep_extend('keep', opts or {}, {
         title = '',
         list = {},
         action = function()
         end
     })
     pickers.new(opts, {
-        prompt_title = "Mappings for " .. opts.title,
-        attach_mappings = function(propt_bufnr, map)
+        prompt_title = opts.title,
+        attach_mappings = function(propt_bufnr)
             actions.select_default:replace(function()
                 actions.close(propt_bufnr)
                 opts.action(action_state.get_selected_entry().value)
@@ -50,9 +52,11 @@ local mappingList= function(opts)
 end
 
 local M = {}
-function M.init(opts)
+function M.init()
 end
+
 function M.mappingList(opts)
     mappingList(opts)
 end
+
 return M

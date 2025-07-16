@@ -18,7 +18,7 @@ return {
     -- 'vim-scripts/ReplaceWithRegister', -- replace with register - gr
     {
         'gbprod/substitute.nvim',
-        opts ={}
+        opts = {}
     },
 
     -- multi-select

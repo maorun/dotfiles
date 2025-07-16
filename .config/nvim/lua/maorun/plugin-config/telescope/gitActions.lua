@@ -7,7 +7,6 @@ local M = {}
 M.actions = transform_mod({
     git_delete_stash = function(prompt_bufnr)
         local selection = action_state.get_selected_entry()
-        print(vim.inspect(selection))
 
         local _, ret, stderr = utils.get_os_command_output { 'git', 'stash', 'drop', selection.value }
         if ret == 0 then
