@@ -139,7 +139,6 @@ return {
                             luasnip = '[LuaSnip]',
                             treesitter = '[Treesitter]',
                             copilot = '[Copilot]',
-                            codeium = '[Codeium]',
                             tickets = '[Ticket]'
                         })[entry.source.name]
                         return vim_item
@@ -153,7 +152,6 @@ return {
                     { name = 'tickets', },
                     { name = 'copilot',  max_item_count = 5 },
                     { name = 'luasnip' },
-                    { name = 'codeium',  max_item_count = 5 },
                     { name = 'nvim_lua', max_item_count = 5 },
                     { name = 'buffer',   max_item_count = 5 },
                     {

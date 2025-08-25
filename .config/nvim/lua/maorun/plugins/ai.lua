@@ -20,9 +20,31 @@ return {
     {
         'olimorris/codecompanion.nvim',
         opts = {
+            adapters = {
+                nmt = function()
+                    return require("codecompanion.adapters").extend("openai_compatible", {
+                        name = 'nmt',
+                        env = {
+                            url = "https://llm.tech.as-nmt.de/v1",
+                            api_key = "sk-0ad3393c-a097-45b2-baa8-ffa11203ec9f",
+                            chat_url = "/chat/completions",
+                            models_endpoint = "/models",
+                        },
+                        headers = {
+                            ["Content-Type"] = "application/json",
+                            ["Authorization"] = "Bearer ${api_key}",
+                        },
+                        schema = {
+                            model = {
+                                default = "us.deepseek.r1-v1:0",
+                            },
+                        },
+                    })
+                end,
+            },
             strategies = {
                 chat = {
-                    adapter = 'openai',
+                    adapter = 'nmt',
                 },
                 inline = {
                     adapter = 'copilot',
@@ -46,29 +68,5 @@ return {
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
         },
-    },
-    {
-        'zbirenbaum/copilot.lua',
-        cmd = 'Copilot',
-        event = 'InsertEnter',
-        init = function()
-            require('copilot').setup({
-                suggestion = {
-                    -- auto_trigger = true,
-                    keymap = {
-                        next = '<C-l>',
-                        prev = '<C-h>',
-                        accept = '<C-;>',
-                    }
-                },
-                -- should_attach = function(_, bufname)
-                --     if string.match(bufname, "env") then
-                --         return false
-                --     end
-
-                --     return true
-                -- end
-            })
-        end,
     },
 }

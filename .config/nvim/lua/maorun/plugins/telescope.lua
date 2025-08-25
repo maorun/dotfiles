@@ -10,6 +10,7 @@ return {
                 defaults = {
                     file_ignore_patterns = {
                         '.cache/',
+                        '.documented/',
                         '.obsidian/',
                         '.trash/',
                         '.next/',
@@ -90,6 +91,7 @@ return {
                 },
                 extensions = {
                     file_browser = {
+                        hijack_netrw = true,
                         respect_gitignore = false,
                         hidden = true,
                         depth = 4,

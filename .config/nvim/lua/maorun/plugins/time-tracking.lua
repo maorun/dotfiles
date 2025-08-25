@@ -8,14 +8,7 @@ return {
         },
         init = function()
             require 'maorun.time'.setup({
-                hoursPerWeekday = {
-                    Monday = 8,
-                    Tuesday = 8,
-                    Wednesday = 8,
-                    Thursday = 8,
-                    Friday = 0,
-                },
-
+                workModel = 'fourDayWeek',
             })
         end
     } }
