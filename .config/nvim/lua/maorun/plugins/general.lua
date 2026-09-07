@@ -28,6 +28,7 @@ return {
     -- aa - around argument
     {
         'echasnovski/mini.ai',
+        enabled = false,
         init = function()
             require('mini.ai').setup({
                 mappings = {
@@ -89,6 +90,13 @@ return {
     {
         'smoka7/hop.nvim',
         opts = {}
+    },
+    {
+        'folke/snacks.nvim',
+        opts = {
+            input = {},
+            picker = {},
+        }
     },
     {
         'stevearc/quicker.nvim',

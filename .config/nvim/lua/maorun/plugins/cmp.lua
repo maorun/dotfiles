@@ -11,18 +11,18 @@ return {
             'hrsh7th/nvim-cmp',
         }
     },
-    {
-        'hrsh7th/cmp-buffer',
-        dependencies = {
-            'hrsh7th/nvim-cmp',
-        }
-    },
-    {
-        'hrsh7th/cmp-omni',
-        dependencies = {
-            'hrsh7th/nvim-cmp',
-        }
-    },
+    -- {
+    --     'hrsh7th/cmp-buffer',
+    --     dependencies = {
+    --         'hrsh7th/nvim-cmp',
+    --     }
+    -- },
+    -- {
+    --     'hrsh7th/cmp-omni',
+    --     dependencies = {
+    --         'hrsh7th/nvim-cmp',
+    --     }
+    -- },
     {
         'saadparwaiz1/cmp_luasnip',
         event = 'VimEnter',
@@ -31,14 +31,14 @@ return {
             'L3MON4D3/LuaSnip',
         }
     },
-    {
-        'zbirenbaum/copilot-cmp',
-        event = 'InsertEnter',
-        dependencies = {
-            'zbirenbaum/copilot.lua'
-        },
-        opts = {},
-    },
+    -- {
+    --     'zbirenbaum/copilot-cmp',
+    --     event = 'InsertEnter',
+    --     dependencies = {
+    --         'zbirenbaum/copilot.lua'
+    --     },
+    --     opts = {},
+    -- },
     {
         'hrsh7th/nvim-cmp',
         -- event = "VimEnter",
@@ -134,7 +134,7 @@ return {
                         vim_item.menu = ({
                             nvim_lsp = '[LSP]',
                             nvim_lua = '[Lua]',
-                            buffer = '[Buf]',
+                            -- buffer = '[Buf]',
                             vsnip = '[Vsnip]',
                             luasnip = '[LuaSnip]',
                             treesitter = '[Treesitter]',
@@ -153,14 +153,14 @@ return {
                     { name = 'copilot',  max_item_count = 5 },
                     { name = 'luasnip' },
                     { name = 'nvim_lua', max_item_count = 5 },
-                    { name = 'buffer',   max_item_count = 5 },
-                    {
-                        name = 'omni',
-                        max_item_count = 5,
-                        option = {
-                            disable_omnifuncs = { 'v:lua.vim.lsp.omnifunc' }
-                        }
-                    },
+                    -- { name = 'buffer',   max_item_count = 5 },
+                    -- {
+                    --     name = 'omni',
+                    --     max_item_count = 5,
+                    --     option = {
+                    --         disable_omnifuncs = { 'v:lua.vim.lsp.omnifunc' }
+                    --     }
+                    -- },
                 }
             }
         end

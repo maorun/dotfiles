@@ -145,7 +145,22 @@ wk.add({
     { '<leader>gb',  group = 'Branches' },
     { '<leader>gba', "<cmd>lua require'telescope.builtin'.git_branches()<cr>",                         desc = 'Git all branches', },
     { '<leader>gbb', "<cmd>lua require'telescope.builtin'.git_branches({pattern = 'refs/heads'})<cr>", desc = 'Git lokal branches', },
-    { '<leader>gbm', ':G branch -m ',                                                                  desc = 'Git branch move', },
+    {
+        '<leader>gbm',
+        function()
+            local old = vim.fn.FugitiveHead()
+            vim.ui.input({
+                prompt = 'branch name: ' .. old .. ' -> '
+            }, function(branch)
+                if branch == nil then
+                    return
+                end
+                vim.cmd(string.format(':silent G branch -m %s', branch))
+                notify('branch renamed')
+            end)
+        end,
+        desc = 'Git branch move',
+    },
     {
         '<leader>gbn',
         function()

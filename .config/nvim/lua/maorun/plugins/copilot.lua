@@ -1,8 +1,8 @@
 return {
     {
         'zbirenbaum/copilot.lua',
-        cmd = 'Copilot',
-        event = 'InsertEnter',
+        -- cmd = 'Copilot',
+        -- event = 'InsertEnter',
         init = function()
             require('copilot').setup({
                 suggestion = {
@@ -37,6 +37,7 @@ return {
     },
     {
         "copilotlsp-nvim/copilot-lsp",
+        enabled = false,
         init = function()
             vim.g.copilot_nes_debounce = 500
             vim.lsp.enable("copilot_ls")
