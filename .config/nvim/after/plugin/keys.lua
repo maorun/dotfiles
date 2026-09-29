@@ -338,7 +338,7 @@ wk.add({
                     vim.schedule(function()
                         local item = (vim.json.decode(lines[1]))
                         if #item == 0 then
-                            notify('no PRs to review in ' .. vim.loop.cwd())
+                            notify('no PRs to review in ' .. vim.uv.cwd())
                             return
                         end
 
@@ -395,7 +395,7 @@ wk.add({
                     vim.schedule(function()
                         local item = (vim.json.decode(lines[1]))
                         if #item == 0 then
-                            notify('no PRs to review in ' .. vim.loop.cwd())
+                            notify('no PRs to review in ' .. vim.uv.cwd())
                             return
                         end
 

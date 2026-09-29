@@ -93,10 +93,18 @@ return {
     },
     {
         'folke/snacks.nvim',
+        lazy = false,
+        priority = 1000,
         opts = {
             input = {},
             picker = {},
-        }
+        },
+        config = function(_, opts)
+            local snacks = require('snacks')
+            snacks.setup(opts)
+            vim.ui.input = snacks.input
+            vim.ui.select = snacks.picker.select
+        end,
     },
     {
         'stevearc/quicker.nvim',

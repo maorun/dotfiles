@@ -18,7 +18,7 @@ return {
                     resolver = function()
                         local packagefolder = vim.fs.find('packages/', {
                             upward = true,
-                            stop = vim.loop.os_homedir(),
+                            stop = vim.uv.os_homedir(),
                         })
                         if #packagefolder == 0 then
                             return

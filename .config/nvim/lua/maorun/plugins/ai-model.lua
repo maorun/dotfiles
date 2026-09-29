@@ -1,18 +1,21 @@
 return {
     {
         'gsuuon/model.nvim',
+        cmd = { 'Mchat', 'Model' },
+        ft = 'mchat',
         dependencies = {
             'folke/which-key.nvim',
-            'nvim-treesitter/nvim-treesitter'
+            'nvim-treesitter/nvim-treesitter',
         },
         init = function()
-            local model = require('model')
             vim.filetype.add({
                 extension = {
                     mchat = 'mchat',
-                }
+                },
             })
-
+        end,
+        config = function()
+            local model = require('model')
             local util = require('model.util')
             model.setup({
                 default_prompt = require('model.providers.huggingface').default_prompt,

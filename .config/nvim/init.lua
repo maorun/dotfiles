@@ -26,16 +26,3 @@ vim.loader.enable()
 
 require 'maorun.lazy'
 require 'maorun'
-
-vim.api.nvim_create_autocmd('BufWritePost', {
-    group = vim.api.nvim_create_augroup('luaReload', {}),
-    pattern = '*.lua',
-    callback = function()
-        local file = vim.fn.expand('<afile>') -- Get the full path of the written file
-
-        -- Exclude files ending with .spec.lua
-        if not file:match('spec%.lua$') then
-            vim.cmd('source ' .. file) -- Source the Lua file
-        end
-    end,
-})
