@@ -3,62 +3,42 @@ return {
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
         config = function()
-            require 'nvim-treesitter.configs'.setup {
-                ensure_installed = { 'mchat', 'graphql', 'lua', 'html', 'javascript', 'tsx', 'typescript', 'bash', 'make', 'markdown', 'regex', 'vim', 'vimdoc', 'yaml' },
-                syncinstall = true,
-                -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/plugin/nvim-treesitter.vim
-                highlight = {
-                    enable = true
-                },
-                textobjects = {
-                    select = {
-                        enable = true
-                    }
-                },
-                indent = {
-                    enable = true
-                },
-                playground = {
-                    enable = false,
-                    disable = {},
-                    updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
-                    persist_queries = false, -- Whether the query persists across vim sessions
-                    keybindings = {
-                        toggle_query_editor = 'o',
-                        toggle_hl_groups = 'i',
-                        toggle_injected_languages = 't',
-                        toggle_anonymous_nodes = 'a',
-                        toggle_language_display = 'I',
-                        focus_language = 'f',
-                        unfocus_language = 'F',
-                        update = 'R',
-                        goto_node = '<cr>',
-                        show_help = '?',
-                    }
-                },
-                matchup = {
-                    enable = true
-                },
+            local treesitter = require('nvim-treesitter')
+            local parsers = {
+                'graphql',
+                'lua',
+                'html',
+                'javascript',
+                'tsx',
+                'typescript',
+                'bash',
+                'make',
+                'markdown',
+                'regex',
+                'vim',
+                'vimdoc',
+                'yaml',
             }
 
-            -- require'nvim-treesitter.configs'.setup {
-            --     autotag = {
-            --     enable = true,
-            --     filetypes = {
-            --         'html',
-            --         'xml',
-            --         'javascript',
-            --         'javascriptreact',
-            --         'typescript',
-            --         'typescriptreact',
-            --         'vue',
-            --         'svelte'
-            --         }
-            --     },
-            --     matchup = {
-            --     enable = true,
-            --     },
-            -- }
+            treesitter.setup()
+            treesitter.install(parsers)
+
+            -- mchat is a custom filetype, not an nvim-treesitter parser.
+            vim.treesitter.language.register('markdown', 'mchat')
+
+            vim.api.nvim_create_autocmd('FileType', {
+                group = vim.api.nvim_create_augroup('treesitter', { clear = true }),
+                callback = function()
+                    if not pcall(vim.treesitter.start) then
+                        return
+                    end
+
+                    local language = vim.treesitter.language.get_lang(vim.bo.filetype) or vim.bo.filetype
+                    if vim.treesitter.query.get(language, 'indents') then
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
+                end,
+            })
         end,
     },
     {
