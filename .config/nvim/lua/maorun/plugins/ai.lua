@@ -77,9 +77,7 @@ return {
         config = function()
             local token_path = vim.fs.joinpath(
                 vim.env.HOME,
-                '.rovodev',
-                'services',
-                'gbrain',
+                '.gbrain',
                 'rovodev.token'
             )
             if vim.fn.filereadable(token_path) == 1 then
