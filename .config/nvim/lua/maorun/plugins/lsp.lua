@@ -62,7 +62,47 @@ return {
 
             vim.lsp.enable('lua_ls')
 
-            vim.lsp.enable({ 'prettier', 'eslint', 'oxlint', 'ts_ls', })
+            -- TypeScript 7 ships a native binary and provides no `tsserver.js`.
+            -- `ts_ls` needs `tsserver.js`, so route such projects to `tsc --lsp`.
+            local function uses_native_typescript(bufnr)
+                local fname = vim.api.nvim_buf_get_name(bufnr)
+                if fname == '' then
+                    return false
+                end
+                -- vim.fs.parents yields the nearest directory first.
+                -- The nearest installation decides, as in a package manager.
+                for dir in vim.fs.parents(fname) do
+                    local lib = vim.fs.joinpath(dir, 'node_modules', 'typescript', 'lib')
+                    if vim.uv.fs_stat(lib) then
+                        return vim.uv.fs_stat(vim.fs.joinpath(lib, 'tsserver.js')) == nil
+                    end
+                end
+                return false
+            end
+
+            local ts_ls_root_dir = vim.lsp.config.ts_ls.root_dir
+            vim.lsp.config('ts_ls', {
+                root_dir = function(bufnr, on_dir)
+                    -- Skip activation: do not call on_dir.
+                    if uses_native_typescript(bufnr) or not ts_ls_root_dir then
+                        return
+                    end
+                    return ts_ls_root_dir(bufnr, on_dir)
+                end,
+            })
+
+            local tsc_root_dir = vim.lsp.config.tsc.root_dir
+            vim.lsp.config('tsc', {
+                root_dir = function(bufnr, on_dir)
+                    -- Skip activation: do not call on_dir.
+                    if not uses_native_typescript(bufnr) or not tsc_root_dir then
+                        return
+                    end
+                    return tsc_root_dir(bufnr, on_dir)
+                end,
+            })
+
+            vim.lsp.enable({ 'prettier', 'eslint', 'oxlint', 'ts_ls', 'tsc', })
             -- vim.lsp.inline_completion.enable()
 
             local base_root_dir = vim.lsp.config.tailwindcss.root_dir
@@ -83,7 +123,6 @@ return {
                     if base_root_dir then
                         return base_root_dir(bufnr, on_dir)
                     end
-                    return on_dir(nil)
                 end,
             })
             vim.lsp.enable('tailwindcss')
