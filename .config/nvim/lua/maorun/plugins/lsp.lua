@@ -64,27 +64,39 @@ return {
 
             -- TypeScript 7 ships a native binary and provides no `tsserver.js`.
             -- `ts_ls` needs `tsserver.js`, so route such projects to `tsc --lsp`.
-            local function uses_native_typescript(bufnr)
+            -- Classic TypeScript installs the executables `tsc` and `tsserver`.
+            -- TypeScript 7 installs only `tsc`.
+            ---@param bufnr integer
+            ---@return 'ts_ls'|'tsc'|nil
+            local function typescript_server(bufnr)
                 local fname = vim.api.nvim_buf_get_name(bufnr)
-                if fname == '' then
-                    return false
-                end
                 -- vim.fs.parents yields the nearest directory first.
                 -- The nearest installation decides, as in a package manager.
-                for dir in vim.fs.parents(fname) do
-                    local lib = vim.fs.joinpath(dir, 'node_modules', 'typescript', 'lib')
-                    if vim.uv.fs_stat(lib) then
-                        return vim.uv.fs_stat(vim.fs.joinpath(lib, 'tsserver.js')) == nil
+                if fname ~= '' then
+                    for dir in vim.fs.parents(fname) do
+                        local lib = vim.fs.joinpath(dir, 'node_modules', 'typescript', 'lib')
+                        if vim.uv.fs_stat(lib) then
+                            if vim.uv.fs_stat(vim.fs.joinpath(lib, 'tsserver.js')) then
+                                return 'ts_ls'
+                            end
+                            return 'tsc'
+                        end
                     end
                 end
-                return false
+                -- The project holds no TypeScript. Use the global installation.
+                if vim.fn.executable('tsserver') == 1 then
+                    return 'ts_ls'
+                end
+                if vim.fn.executable('tsc') == 1 then
+                    return 'tsc'
+                end
             end
 
             local ts_ls_root_dir = vim.lsp.config.ts_ls.root_dir
             vim.lsp.config('ts_ls', {
                 root_dir = function(bufnr, on_dir)
                     -- Skip activation: do not call on_dir.
-                    if uses_native_typescript(bufnr) or not ts_ls_root_dir then
+                    if typescript_server(bufnr) ~= 'ts_ls' or not ts_ls_root_dir then
                         return
                     end
                     return ts_ls_root_dir(bufnr, on_dir)
@@ -95,7 +107,7 @@ return {
             vim.lsp.config('tsc', {
                 root_dir = function(bufnr, on_dir)
                     -- Skip activation: do not call on_dir.
-                    if not uses_native_typescript(bufnr) or not tsc_root_dir then
+                    if typescript_server(bufnr) ~= 'tsc' or not tsc_root_dir then
                         return
                     end
                     return tsc_root_dir(bufnr, on_dir)
