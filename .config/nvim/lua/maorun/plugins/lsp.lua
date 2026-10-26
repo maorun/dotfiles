@@ -69,16 +69,21 @@ return {
             local ac_steam_root = vim.fs.joinpath(vim.env.HOME, 'repos', 'ac-steam')
             -- Custom root_dir for tailwindcss to work in monorepo (couldn't set in lsp/tailwindcss.lua)
             vim.lsp.config('tailwindcss', {
-                root_dir = function(fname, on_dir)
-                    if vim.fs.root(fname, 'tailwind.css') then
-                        return on_dir(vim.fn.getcwd())
-                    end
-                    if vim.startswith(vim.fs.normalize(fname), ac_steam_root .. '/') then
-                        return ac_steam_root
+                -- Neovim calls root_dir with the buffer number, not the file name.
+                root_dir = function(bufnr, on_dir)
+                    local fname = vim.api.nvim_buf_get_name(bufnr)
+                    if fname ~= '' then
+                        if vim.fs.root(fname, 'tailwind.css') then
+                            return on_dir(vim.fn.getcwd())
+                        end
+                        if vim.startswith(vim.fs.normalize(fname), ac_steam_root .. '/') then
+                            return on_dir(ac_steam_root)
+                        end
                     end
                     if base_root_dir then
-                        return base_root_dir(fname, on_dir)
+                        return base_root_dir(bufnr, on_dir)
                     end
+                    return on_dir(nil)
                 end,
             })
             vim.lsp.enable('tailwindcss')
