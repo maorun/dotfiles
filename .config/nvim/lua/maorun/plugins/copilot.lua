@@ -4,7 +4,10 @@ return {
         cmd = 'Copilot',
         event = 'InsertEnter',
         opts = {
+            -- Native inline suggestions replace the unmaintained `copilot-cmp`.
             suggestion = {
+                enabled = true,
+                auto_trigger = true,
                 keymap = {
                     next = '<C-l>',
                     prev = '<C-h>',

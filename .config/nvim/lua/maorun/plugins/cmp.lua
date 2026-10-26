@@ -7,13 +7,6 @@ return {
             'hrsh7th/cmp-nvim-lua',
             'saadparwaiz1/cmp_luasnip',
             'L3MON4D3/LuaSnip',
-            {
-                'zbirenbaum/copilot-cmp',
-                dependencies = {
-                    'zbirenbaum/copilot.lua',
-                },
-                opts = {},
-            },
         },
         config = function()
             local cmp = require('cmp')
@@ -76,7 +69,6 @@ return {
                             nvim_lsp = '[LSP]',
                             nvim_lua = '[Lua]',
                             luasnip = '[LuaSnip]',
-                            copilot = '[Copilot]',
                             tickets = '[Ticket]',
                         })[entry.source.name]
                         return vim_item
@@ -85,7 +77,6 @@ return {
                 sources = {
                     { name = 'nvim_lsp' },
                     { name = 'tickets' },
-                    { name = 'copilot', max_item_count = 5 },
                     { name = 'luasnip' },
                     { name = 'nvim_lua', max_item_count = 5 },
                 },
